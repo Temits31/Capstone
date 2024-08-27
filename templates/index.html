@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LimeLine</title>
+    <link rel="stylesheet" href="../static/index.css">
+</head>
+<body>
+    <header>
+        <div class="navwh">
+        <div class="nav_brand">
+                <a href="/" class="navbar_brand">LimeLine</a>
+            </div>
+        
+        <nav id="navbar">
+            
+                <ul> 
+                  <li><a href="/home" class="nav_link">Home</a></li>
+                  <li><a href="#" class="nav_link">About</a></li>
+                  <li><a href="#" class="nav_link">Services</a></li>
+                  <li><a href="#" class="nav_link">Contact</a></li>
+                </ul>
+                  
+            </nav>
+            <a href="{{ url_for('login')}}" class="button-link">Login</a>  
+                
+
+            <div id="burger-icon" class="burger-icon">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        
+        <div class="dropdown">
+            <li><a href="#" >Home</a></li>
+            <li><a href="#" >About</a></li>
+            <li><a href="#" >Services</a></li>
+            <li><a href="#" >Contact</a></li>
+            <li><a href="{{ url_for('login')}}" class="buttonlink">Login</a></li>
+        </div> 
+
+    </header>
+
+   
+    <div class="content">
+    <div class="index-container">
+        <div class="image">
+            <picture>
+                <source media="(max-width: 480px)" srcset="../static/farmer-299.png" />
+                <source media="(min-width: 789px)" srcset="../static/farmer.png" />
+                <img src="../static/farmer.png" alt="farmer"/>
+              </picture>
+        </div>
+    <div class="text">
+        <h1>LIMELINE ON THE LOOSE</h1>
+        <div class="des">Welcome to LimeLine, the ultimate platform for identifying and managing diseases affecting your 
+            calamansi plants. Our advanced technology helps you keep your plants healthy and productive by providing 
+            accurate and timely disease detection.</div><br>
+        <div>
+        <a href="/" class = "button">Register</a>
+        </div>
+    </div>
+    </div>
+
+    <div class="objectives">
+        <h2 class="tt">Our Objectives</h2>
+        <div class="objectives-content">
+            
+            <ul class="objectives-list">
+                <li class="objective-item">
+                    <label><h3><b>Enhance Calamansi Plant Health</b></h3></label>
+                    <p>Provide reliable and efficient tools to detect diseases early, <br>ensuring healthier 
+                    calamansi plants and higher yields.</p>
+                </li>
+                <li class="objective-item">
+                    <label><h3><b>Educate Farmers and Gardeners</b></h3></label>
+                    <p>Offer comprehensive resources and expert advice to educate <br>farmers and gardeners about disease 
+                    prevention and management.</p>
+                </li>
+                <li class="objective-item">
+                    <label><h3><b>Convenient</b></h3></label>
+                    <p>Ensures users have a convenient way to identify diseases and <br> 
+                    their solutions instead of searching through the internet.</p>
+                </li>
+            </ul>
+            <picture>
+                <source media="(max-width: 480px)" srcset="../static/Screenshot.png" />
+                <source media="(min-width: 789px)" srcset="../static/calamansi.png" />
+                <img src="../static/calamansi.png" alt="Objectives Image" class="objectives-image"/>
+            </picture>
+            
+        </div>
+    </div>
+    
+    <div class="offers-container">
+        <h2><b>What We Offer</b></h2>
+        <div class="offers">
+        <div class="offer">
+            <label><strong>Disease Detection Tool</strong></label> 
+                <p>Use our state-of-the-art AI-powered tool to identify diseases affecting your calamansi plants.</p>
+        </div>
+        <div class="offer">
+            <label><strong>Comprehensive Disease Database</strong></label>
+            <p>Access detailed information on various calamansi diseases, including symptoms, 
+                causes, and treatments.</p>
+        </div>
+        <div class="offer">
+            <label><strong>Research-Based Insights</strong></label>
+            <p>Benefit from research-based insights and information on managing and preventing diseases to help you 
+                maintain the health of your calamansi plants.</p>
+        </div>
+        <div class="offer">
+            <label><strong>Easy-to-Use</strong></label>
+            <p>Navigate our website effortlessly with a simple and intuitive interface.</p>
+        </div>
+        <div class="offer">
+            <label><strong>Quick Results</strong></label>
+            <p>Get instant results with our fast disease detection algorithm.</p>
+        </div>
+    </div>
+    </div>
+    <div class="howto">
+        <h2 class="hh">How To Use LimeLine</h2>
+        <div class="row">
+            <div class="box box1">
+                <div class="circle">
+                    <h2>1</h2>
+                </div>
+                <p><b> Upload a Photo:</b> Take a clear photo of the affected <br>
+                part of your calamansi plant and upload it to our platform.</p>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="box box2" style="margin-left: auto;">
+            <p style="margin-left: auto; margin-right: -20px; text-align: right;"><b>Analyze:</b> Our AI-powered tool analyzes the image and<br>
+                identifies the disease.</p>  
+                <div class="circle right">
+                    <h2>2</h2>
+                </div>
+            
+            </div>
+        </div>
+        <div class="row">
+            <div class="box box3">
+                <div class="circle">
+                    <h2>3</h2>
+                </div>
+                <p><b>Get Results:</b> Receive a detailed report with the disease<br>
+                     name, symptoms, causes, and treatment options.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="box box4" style="margin-left: auto;">
+                <p style="margin-left: auto; margin-right: -20px; text-align: right;"><b>Take Action:</b> Follow the given advice and treatment <br>
+                    recommendations to restore your plant's health.</p>
+                    <div class="circle right">
+                        <h2>4</h2>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="why-container">
+        <div class="left-div">
+          <h2>Why Choose Us</h2>
+          <p>Our project focuses on developing an advanced calamansi disease detection 
+            platform that is both user-friendly and highly effective. Here’s why you should choose us:
+          </p>
+        </div>
+        <div class="right-div">
+            <div class="grid-container">
+                <div class="grid-item">
+                    <img src="../static/user.png" alt="User Icon" style="width: 50px; height: 50px; margin-bottom: 20px; margin-top: 10px;">
+                    <label><b>User-friendly</b></label>
+                    <p>Our platform is designed to be user-friendly and easy to navigate, ensuring a seamless experience for all users.</p>
+                </div>
+                <div class="grid-item">
+                    <img src="../static/reliable.png" alt="reliable" style="width: 50px; height: 50px; margin-bottom: 20px; margin-top: -10px;">
+                    <label><b>Reliable Information</b></label>
+                    <p>Access reliable and well-researched information on calamansi diseases.</p>
+                </div>
+                <div class="grid-item">
+                    <img src="../static/resources.png" alt="resources" style="width: 50px; height: 50px; margin-bottom: 20px; margin-top: 10px;">
+                    <label><b>Comprehensive Resources</b></label>
+                    <p>Find all the information you need in one place, from disease symptoms to management strategies.</p>
+                </div>
+                <div class="grid-item">
+                    <img src="../static/emotion.png" alt="emotion" style="width: 50px; height: 50px; margin-bottom: 20px; margin-top: 10px;">
+                    <label><b>Efficient Detection</b></label>
+                    <p>Efficient Detection: Quickly identify diseases affecting your calamansi plants with our advanced detection tool.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-container">
+        <h1>Get in touch</h1>
+      	<p>Have questions or need support? Contact us today!</p><br>
+        <div class="contact-info">
+            <p><img src="../static/email.png" alt="e-mail" /> <br>limeline@gmail.com</p>
+            <p><img src="../static/telephone.png" alt="telephone" /><br>+1 (555) 123-4567</p>
+            <p><strong>Follow Us:</strong></p>
+            <div class="social-media">
+                <a href="https://www.facebook.com/calamansicare" target="_blank"><img src="../static/facebook.png" alt="Facebook" ></a>
+                <a href="https://twitter.com/calamansicare" target="_blank"><img src="../static/twitter.png" alt="Twitter" ></a>
+                <a href="https://www.instagram.com/calamansicare/" target="_blank"><img src="../static/instagram.png" alt="Instagram" ></a>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+    <footer class="footer">
+        <p>Thank you for choosing LimeLine. We're here to help you keep your calamansi plants thriving and 
+            healthy with our innovative disease detection solutions.</p>
+        <p>Created by Josh Pogi, 2024</p>
+      </footer>
+
+      <script>
+        const burgerIcon = document.getElementById('burger-icon');
+        const navbar = document.getElementById('navbar');
+        const dropdown = document.querySelector('.dropdown');
+        const navLinks = document.querySelectorAll('.nav_link');
+    
+        burgerIcon.addEventListener('click', () => {
+            navbar.classList.toggle('open');
+            dropdown.classList.toggle('open');
+        });
+    
+        navLinks.forEach((link) => {
+            link.addEventListener('click', () => {
+                navbar.classList.remove('open');
+                dropdown.classList.remove('open');
+            });
+        });
+    </script>
+</body>
+</html>

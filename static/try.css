@@ -1,0 +1,196 @@
+.container {
+    width: 85%;
+    height: 80%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
+
+}
+
+.curve {
+    top: 0;
+    left: 0;
+    width: 700px; /* Adjust the width as needed */
+    height: 775px; /* Double the width for a perfect half-circle */
+    background: linear-gradient(to right, #E1F0DA, #99BC85); /* Change the color as needed */
+    border-top-left-radius: 0; /* Half of the height */
+    border-bottom-left-radius: 0; /* Half of the height */
+    border-top-right-radius: 900px;
+    border-bottom-right-radius: 900px;
+    position: absolute;
+    display: block;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
+  }  
+
+  .overlapping-img {
+    position: absolute;
+    top: 50%; /* Adjust this value to position the image vertically */
+    left: 50%; /* Adjust this value to position the image horizontally */
+    transform: translate(-50%, -50%); /* Center the image */
+    width: 500px; /* Adjust the size of the image as needed */
+    height: auto; /* Maintain the aspect ratio of the image */
+  }
+
+.logincontainer {
+    width: 600px;
+    height: 800px;
+    margin-top: 100px;
+    margin-right: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.links {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .links a {
+    color: #3498db;
+    text-decoration: none;
+  }
+  
+  .links a:hover {
+    text-decoration: underline;
+  }
+
+.input-container {
+    position: relative;
+    width: 100%;
+    margin: 10px 0;
+}
+
+label {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    font-size: 18px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    cursor: text;
+}
+
+input[type="text"], input[type="password"] {
+    width: 300px;
+    padding: 10px 10px 10px 5px;
+    border: none;
+    border-bottom: 2px solid #99BC85;
+    font-size: 16px;
+    box-sizing: border-box;
+    background: transparent;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    outline: none;
+}
+
+input[type="text"]:focus + label, input[type="password"]:focus + label, input[type="text"]:valid + label, 
+input[type="password"]:valid + label {
+    top: -20px;
+    left: 0;
+    font-size: 14px;
+    color: #99BC85;
+    pointer-events: none;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #99BC85;
+}
+
+img {
+    margin-bottom: -30px;
+}
+
+.btn {
+    background: linear-gradient(to right, #E1F0DA, #BFD8AF);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 50px;
+    font: 1.2em 'Roboto', sans-serif;
+    width: 300px;
+}
+
+.btn[type="submit"]:hover {
+    background: linear-gradient(to right, #E1F0DA, #BFD8AF);
+}
+
+@media (max-width: 768px) {
+    .curve,
+    .overlapping-img {
+        display: none; /* Hide the curve and the overlapping image on mobile devices */
+    }
+
+    .container {
+        width: 80%;
+        height: 90%;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logincontainer {
+        width: 80%;
+        height: 90%;
+        padding: 10px;
+        margin-right: 0;
+        align-items: center;
+    }
+
+    label {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        font-size: 16px;
+        color: #999;
+        display: flex;
+        align-items: center;
+        cursor: text;
+    }
+
+    .input-container {
+        width: 100%;
+        position: relative;
+        margin: 10px 0;
+        justify-content: center;
+    }
+
+    input[type="text"], input[type="password"]
+    {
+        width: 250px;
+        padding: 10px 10px 10px 5px;
+        border: none;
+        border-bottom: 2px solid #99BC85;
+        font-size: 14px;
+        box-sizing: border-box;
+        background: transparent;
+    }
+
+    .btn {
+        background: linear-gradient(to right, #E1F0DA, #BFD8AF);
+        border: none;
+        border-radius: 10px;
+        padding: 10px 50px;
+        font: 1.2em 'Roboto', sans-serif;
+        width: 250px;
+    }
+    
+    .btn[type="submit"]:hover {
+        background: linear-gradient(to right, #E1F0DA, #BFD8AF);
+    }
+    
+
+}

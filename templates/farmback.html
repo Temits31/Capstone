@@ -1,0 +1,538 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm - Backyard</title>
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #e6ecde;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    }
+
+header {
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+    padding:10px;
+    background-color: #E6ECDE;
+    height: 80px;
+    width: 100%;
+    z-index: 1000;
+    margin-top: 0;
+}
+
+.navwh {
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100px;
+    width: 100%;
+}
+
+.burger-icon {
+    display: none;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999;
+}
+
+#navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100px;
+    display: flex;
+    width: 50%;
+    flex-grow: 1;
+}
+
+#navbar ul{
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-end;
+    margin-right: 100px;
+}
+
+#navbar li {
+    margin-right: 80px;
+    align-items: center;
+}
+
+
+#navbar a {
+    color: #182E17;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    float: left;
+    display: block;
+    text-align: center;
+}
+
+.nav_brand {
+    margin-left: 50px;
+    display: flex;
+    padding-left: 20px;
+}
+
+.navbar_brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #182E17;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 2rem;
+    top: 60px;
+    height: 0;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dropdown.open {
+    display: block;
+    height: 240px;
+    text-decoration: none;
+}
+
+.dropdown li {
+    padding: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    list-style: none;
+}
+
+.dropdown a {
+    text-decoration: none; /* Ensure no text decoration */
+    color: #182E17; /* Text color for dropdown links */
+}
+
+.popup-container {
+    padding: 2rem;
+    width: 35%;
+    height: auto;
+    justify-content: center;
+    background: #bbc5ad;
+    align-items: center;
+    border-radius: 30px;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    top: 200px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+}
+
+.popup-container .popup {
+    text-align: center;
+    position: relative;
+}
+
+
+.popup-container .popup h1 {
+    color: #182E17;
+    font-size: 1.5rem;
+    padding: 1rem;
+    font-weight: bold;
+}
+
+.popup-container .popup .buttons {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.popup-container .popup .buttons h3 {
+    padding: 1rem;
+}
+
+.popup-container .popup .buttons button {
+    appearance: none;
+    background-color: #FCFCFD;
+    border-radius: 4px;
+    border-width: 0;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #36395A;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+    list-style: none;
+    overflow: hidden;
+    text-align: center;
+    text-decoration: none;
+    transition: box-shadow .15s,transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    will-change: box-shadow,transform;
+    font-size: 16px;
+    flex: 1 1;
+    padding: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-container .popup .buttons button:focus {
+  box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+}
+
+.popup-container .popup .buttons button:hover {
+  box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.popup-container .popup .buttons button:active {
+  box-shadow: #D6D6E7 0 3px 7px inset;
+  transform: translateY(2px);
+}
+
+.footer {
+    background-color: #f8f8f8; /* Example background color */
+    font-family: Arial, sans-serif; /* Example font */
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-content {
+    display: flex; /* Flexbox for layout */
+    justify-content: space-between; /* Space between elements */
+    align-items: center; /* Center items vertically */
+    width: 100%;
+    margin: 0; /* Center content horizontally */
+    padding: 0 20px; /* Padding for responsiveness */
+    flex-direction: row;
+}
+
+.footer-left, .footer-right {
+    padding: 5px;
+}
+
+.footer-left {
+    display: flex; /* Flexbox for layout */
+    text-align: left;
+    left: 0;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.footer-right {
+    display: flex;
+    text-align: right;
+    right: 0;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.footer-support p {
+    margin: 0 0 4px; /* Margin for spacing */
+    font-size: 0.8em; /* Example font size */
+}
+
+.footer-social a {
+    margin: 0 10px; /* Margin between links */
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Link color */
+    font-size: 0.8em;
+}
+
+.footer-social a:hover {
+    color: #007bff; /* Link hover color */
+}
+
+.footer-social img {
+    width: 20px; /* Image width */
+    height: 20px; /* Image height */
+    margin: 0; /* Remove margin */
+}
+
+@media (max-width: 768px) {
+
+    body {
+        padding: 1rem;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    .popup-container {
+        width: 90%;
+        border-radius: 20px;
+    }
+
+    .popup-container .popup {
+        width: 100%;
+    }
+
+    .popup-container .popup h1 {
+        font-size: 1.2rem;
+    }
+
+    .popup-container .popup .buttons {
+        flex-direction: column;
+    }
+
+    .popup-container .popup .buttons button {
+        padding: 1.5rem;
+    }
+
+    header {
+        height: 60px;
+        top: 0;
+        left: 0;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+    
+    .navwh {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
+        position: fixed;
+        top: 20px;
+        left: 0;
+        width: 100%;
+        height: 30px;
+    }
+
+    #navbar .nav_link {
+        display: none;
+    }
+
+    .burger-icon {
+        display: block;
+        cursor: pointer;
+        position: fixed;
+        top: 20px;
+        right: 50px;
+        z-index: 9999;
+    }
+
+    .line {
+        width: 30px;
+        height: 3px;
+        background-color: #fff;
+        margin: 5px 0;
+    }
+    
+    .nav_brand {
+        margin-left: 30px;
+        padding-left: 0;
+    }
+
+    .dropdown {
+        display: block;
+    }
+
+    .popup-container {
+        top: 50px;
+    }
+
+    .footer {
+        position: relative; /* Remove fixed positioning */
+        top: 60px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center; /* Center items vertically */
+        text-align: center; /* Center text */
+        padding: 10px;
+    }
+
+    .footer-left, .footer-right {
+        justify-content: center;
+        width: 100%; /* Full width for each section */
+    }
+
+    .footer-right {
+        margin-top: 10px;
+    }
+
+    .footer-social a {
+        margin: 0 5px; /* Reduce margin between links on smaller screens */
+    }
+
+}
+
+@media (max-width: 480px) {
+    .dropdown {
+        left: 2rem;
+        width: unset;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-left, .footer-right {
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+        align-items: center;
+    }
+
+    .footer-right {
+        margin: 10px 0; /* Add margin between sections */
+    }
+
+    .footer-left {
+        flex-direction: column;
+    }
+
+    .footer-support p {
+        font-size: 0.7em; /* Adjust font size for smaller screens */
+    }
+
+    .footer-social a {
+        margin: 0 5px; /* Reduce margin between links on smaller screens */
+    }
+}
+
+</style>
+</head>
+<body>
+
+    <header>
+        <div class="navwh">
+        <div class="nav_brand">
+                <a href="/" class="navbar_brand">LimeLine</a>
+            </div>
+        
+        <nav id="navbar">
+            
+                <ul> 
+                  <li><a href="/home" class="nav_link">Home</a></li>
+                  <li><a href="#" class="nav_link">About</a></li>
+                  <li><a href="#" class="nav_link">Services</a></li>
+                  <li><a href="#" class="nav_link">Contact</a></li>
+                </ul>
+                    
+            </nav>
+            <div id="burger-icon" class="burger-icon">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <li><a href="#" >Home</a></li>
+            <li><a href="#" >About</a></li>
+            <li><a href="#" >Services</a></li>
+            <li><a href="#" >Contact</a></li>
+        </div>
+    </header>
+    <div class="popup-container">
+        <div class="popup">
+    <form action="/farmback" method="post">
+        <input type="hidden" name="user_id" value="{{ user_id }}">
+
+        
+<h1>
+    Are you a farmer or just a backyard gardener?
+</h1>
+<p>Choose one</p>
+
+    <div class="buttons">
+        <button class="option-button left" value="5" name="role_id">
+            <h3>Farmer</h3>
+            <p>Choose "Farmer" if you cultivate calamansi on a larger scale and need advanced tools for detecting 
+                and managing diseases to maintain healthy orchards and maximize yield.</p>
+        </button>
+        <button class="option-button right" value="1" name="role_id"><h3>Backyard Gardener</h3>
+            <p>Choose "Backyard Farmer" if you grow calamansi trees in your garden or 
+                backyard for personal use, or if you just want to try out the website's features.</p>
+            </button>
+    </div>
+    </form>
+</div>
+</div>
+<footer class="footer"> 
+    <div class="footer-content">
+    <div class="footer-left">
+    <div class="footer-support">
+    <p>Contact us: support@example.com | +123 456 7890</p>
+    <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+    </div>
+    <div class="footer-right">
+    <div class="footer-social">
+    <a href="https://facebook.com" target="_blank"><img src="../static/facebook.png" alt="Facebook" ></a>
+    <a href="https://twitter.com" target="_blank"><img src="../static/twitter.png" alt="twitter"></a>
+    <a href="https://instagram.com" target="_blank"><img src="../static/instagram.png" alt="instagram"></a>
+    </div>
+    </div>
+</div>
+</div>
+</footer>
+<script>
+    const burgerIcon = document.getElementById('burger-icon');
+    const navbar = document.getElementById('navbar');
+    const dropdown = document.querySelector('.dropdown');
+    const navLinks = document.querySelectorAll('.nav_link');
+
+    burgerIcon.addEventListener('click', () => {
+        navbar.classList.toggle('open');
+        dropdown.classList.toggle('open');
+    });
+
+    navLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+            navbar.classList.remove('open');
+            dropdown.classList.remove('open');
+        });
+    });
+</script>
+    
+</body>

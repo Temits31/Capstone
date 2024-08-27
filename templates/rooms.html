@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms and Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 100%;
+            height: 95vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: row;
+            margin: 20px;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: #eef1e6;
+        }
+
+        .sidebar {
+            background-color: #565950;
+            color: white;
+            width: 15%;
+            height: 100%;
+            border-radius: 30px;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sidebar nav ul li a i {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #eef1e6;
+            color:#182e17;
+            border-radius: 10px 0px 0px 10px;
+            transform: scale(1.05);
+            box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            width: 90%;
+            border-radius: 30px;
+            flex: 1;
+            padding: 20px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .navbar nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .navbar nav ul li a {
+            text-decoration: none;
+            color: #182e17;
+            font-weight: bold;
+        }
+
+        .sub-content {
+            padding: 0;
+            width: 100%;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+        }
+
+.burger-icon {
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+    display: none;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 2rem;
+    top: 60px;
+    height: 0;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dropdown.open {
+    display: block;
+    height: auto;
+    text-decoration: none;
+}
+
+.dropdown li {
+    padding: 0.8rem;
+    display: flex;
+    text-decoration: none;
+    list-style: none;
+    border-bottom: 1px solid #182E17;
+}
+
+.dropdown a {
+    text-decoration: none; /* Ensure no text decoration */
+    color: #182E17; /* Text color for dropdown links */
+    font-weight: bold;
+}
+
+.dropdown li a i {
+    margin-right: 20px;
+}
+
+#chat {
+    width: 98%; /* Use full width */
+    flex-grow: 1; /* Allow chat to grow within parent */
+    height: 500px;
+    border: 1px solid #ccc;
+    overflow-y: scroll; /* Scroll when overflowing */
+    padding: 10px;
+    background: #fff;
+}
+
+#message-form {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Full width for form */
+    gap: 10px;
+}
+
+.timestamp {
+    font-size: 0.8em;
+    color: #777;
+}
+
+#message-input {
+    flex-grow: 1; /* Grow input to fill remaining space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #182E17;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.sub-content h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #182E17;
+}
+
+
+@media (max-width: 768px) {
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        position: relative;
+    }
+
+    .container {
+        flex-direction: column;
+        width: 95%;
+        height: auto;
+    }
+
+    .content {
+        width: 100%;
+        padding: 20px;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .navbar nav {
+        display: none;
+    }
+
+    .burger-icon {
+        display: block;
+    }
+
+    .sidebar nav {
+        display: none;
+    }
+
+    .sidebar {
+        background: none;
+    }
+
+    .sub-content {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .sub-content h1 {
+        font-size: 1.5rem;
+    }
+
+    #chat {
+        width: 100%;
+    }
+
+}
+
+        
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <div class="sidebar">
+                <nav>
+                    <ul>
+                        {% if user_type in ['user_farmer', 'farm_owner'] %}
+                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                        {% endif %}
+                        
+                        <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="#"><i class="fas fa-history"></i> History</a></li>
+                        
+                        
+                        {% if user_type in ['user_farmer', 'farm_owner'] %}
+                        <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                        <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                        {% endif %}
+                        
+                        {% if user_type == 'farm_owner' %}
+                        <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+                        {% endif %}
+                        
+                        <li><a href="#"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+                    </ul>
+                </nav>
+            </div>            
+            <div class="content">
+                <div class="navbar">
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="burger-icon">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <div class="dropdown">
+                    <li><a href="#" ><i class="fas fa-home"></i>Home</a></li>
+                    <li><a href="#" ><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="#" ><i class="fas fa-question-circle"></i>Help</a></li>
+                    <li><a href="#" ><i class="fas fa-envelope"></i>Contact</a></li>
+                    {% if user_type in ['user_farmer', 'farm_owner'] %}
+                    <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                    {% endif %}
+                        
+                    <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="#"><i class="fas fa-history"></i> History</a></li>
+                        
+                        
+                    {% if user_type in ['user_farmer', 'farm_owner'] %}
+                    <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                    <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                    {% endif %}
+                        
+                    {% if user_type == 'farm_owner' %}
+                    <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+                    {% endif %}
+                        
+                    <li><a href="#"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+            </div>
+        </div>
+        
+    <div class="room-list">
+        <h2>Select a Room</h2>
+        <form method="POST">
+            {% for room in rooms %}
+                <div class="room-item">
+                    <button type="submit" name="room" value="{{ room[0] }}">{{ room[0] }}</button>
+                </div>
+            {% endfor %}
+        </form>
+    </div>
+
+    <div class="chat-box">
+        {% if selected_room %}
+            <h2>Chat Room: {{ selected_room }}</h2>
+            <div class="messages" id="chat">
+                {% for message in messages %}
+                    <div class="message">
+                        <strong>{{ message[0] }}</strong>: {{ message[1] }} <div class="timestamp">{{ message[2] }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <form id="message-form">
+                <input type="text" id="message-input" autocomplete="off" placeholder="Type a message...">
+                <button type="submit">Send</button>
+            </form>
+        {% else %}
+            <h2>Select a room to start chatting</h2>
+        {% endif %}
+    </div>
+</div>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        {% if selected_room %}
+        document.addEventListener('DOMContentLoaded', function() {
+            var socket = io();
+            var currentRoom = "{{ selected_room }}";
+            var username = "{{ username }}"; 
+            var ud_farm_id = "{{ ud_farm_id }}";
+
+            var chat = document.getElementById('chat');
+            var form = document.getElementById('message-form');
+            var input = document.getElementById('message-input');
+
+            socket.emit('join', { username: username, room: currentRoom });
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var message = input.value;
+                if (message.trim()) {
+                    socket.emit('message', { username: username, room: currentRoom, msg: message, ud_farm_id: ud_farm_id });
+                    input.value = '';
+                }
+            });
+
+            socket.on('message', function(data) {
+                var messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.innerHTML = '<strong>' + data.username + '</strong>: ' + data.msg + ' <div class="timestamp">' + data.timestamp + '</div>';
+                chat.appendChild(messageElement);
+                chat.scrollTop = chat.scrollHeight;
+            });
+        });
+        {% endif %}
+    </script>
+</body>
+</html>

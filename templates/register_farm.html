@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/register_farm.css">
+    <title>Register Farm</title>
+</head>
+
+<body>
+
+    <header>
+        <div class="navwh">
+        <div class="nav_brand">
+                <a href="/" class="navbar_brand">LimeLine</a>
+            </div>
+        
+        <nav id="navbar">
+            
+            <ul> 
+                <li><a href="/home" class="nav_link">Home</a></li>
+                <li><a href="#" class="nav_link">About</a></li>
+                <li><a href="#" class="nav_link">Services</a></li>
+                <li><a href="#" class="nav_link">Contact</a></li>
+            </ul>
+                    
+        </nav>
+            <div id="burger-icon" class="burger-icon">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="dropdown">
+        <li><a href="#" >Home</a></li>
+        <li><a href="#" >About</a></li>
+        <li><a href="#" >Services</a></li>
+        <li><a href="#" >Contact</a></li>
+    </div>
+</header>
+    <div class="con">
+        <div class="farm-container">
+            <h1>Register</h1>
+            <a href="/register_home">Back to Home</a>
+            <form id="registerForm" action="" method="post">
+                <input type="hidden" name="user_id" value="{{ user_id }}">
+                <input type="hidden" name="group_id" value="{{ group_id }}">
+                <div class="input-cont">
+                    <input type="text" name="farm_name" required>
+                    <label for="farm_name">Farm Name</label>
+                </div>
+                <div class="input-cont">
+                    <input type="text" name="province" required>
+                    <label for="province">Province</label>
+                </div>
+                <div class="input-cont">
+                    <input type="text" name="city" required>
+                    <label for="city">City</label>
+                </div>
+                <div class="input-cont">
+                    <input type="text" name="brgy" required>
+                    <label for="brgy">Barangay</label>
+                </div>
+                <div class="input-cont">
+                    <input type="text" name="strt_add" required>
+                    <label for="strt_add">Street Address</label>
+                </div>
+                <div class="input-cont">
+                    <input type="text" name="zip_code" required>
+                    <label for="zip_code">ZIP CODE</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="terms" value="true" required> Agree with terms and conditions
+                </div>
+                <div class="submit">
+                    <input type="submit" value="Next">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer"> 
+        <div class="footer-content">
+        <div class="footer-left">
+        <div class="footer-support">
+        <p>Contact us: support@example.com | +123 456 7890</p>
+        <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+        </div>
+        <div class="footer-right">
+        <div class="footer-social">
+        <a href="https://facebook.com" target="_blank"><img src="../static/facebook.png" alt="Facebook" ></a>
+        <a href="https://twitter.com" target="_blank"><img src="../static/twitter.png" alt="twitter"></a>
+        <a href="https://instagram.com" target="_blank"><img src="../static/instagram.png" alt="instagram"></a>
+        </div>
+        </div>
+    </div>
+    </div>
+    </footer>
+
+    <script>
+        const burgerIcon = document.getElementById('burger-icon');
+        const navbar = document.getElementById('navbar');
+        const dropdown = document.querySelector('.dropdown');
+        const navLinks = document.querySelectorAll('.nav_link');
+    
+        burgerIcon.addEventListener('click', () => {
+            navbar.classList.toggle('open');
+            dropdown.classList.toggle('open');
+        });
+    
+        navLinks.forEach((link) => {
+            link.addEventListener('click', () => {
+                navbar.classList.remove('open');
+                dropdown.classList.remove('open');
+            });
+        });
+    </script>
+</body>
+
+</html>

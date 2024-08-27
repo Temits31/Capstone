@@ -1,0 +1,617 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #E6ECDE;
+    padding: 0;
+}
+
+header {
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+    padding:10px;
+    background-color: #E6ECDE;
+    height: 80px;
+    width: 100%;
+    margin-top: 0;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+}
+
+.navwh {
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100px;
+    width: 100%;
+}
+
+.burger-icon {
+    display: none;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999;
+}
+
+#navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100px;
+    display: flex;
+    width: 50%;
+    flex-grow: 1;
+}
+
+#navbar ul{
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-end;
+    margin-right: 100px;
+}
+
+#navbar li {
+    margin-right: 80px;
+    align-items: center;
+}
+
+
+#navbar a {
+    color: #182E17;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    float: left;
+    display: block;
+    text-align: center;
+}
+
+.nav_brand {
+    margin-left: 50px;
+    display: flex;
+    padding-left: 20px;
+}
+
+.navbar_brand{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #182E17;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.navbar_brand:hover{
+    color: #182E17;
+    text-decoration: none;
+}
+
+
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 2rem;
+    top: 60px;
+    height: 0;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dropdown.open {
+    display: block;
+    height: 240px;
+    text-decoration: none;
+}
+
+.dropdown li {
+    padding: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    list-style: none;
+}
+
+.dropdown a {
+    text-decoration: none; /* Ensure no text decoration */
+    color: #182E17; /* Text color for dropdown links */
+}
+
+.register-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.container {
+    width: 80%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin: 20px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #bbc5ad;
+    margin-top: 60px;
+}
+
+.welcome, .reg {
+    padding: 20px;
+}
+
+.welcome {
+    flex: 1;
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    flex-direction: column;
+    margin: 30px;
+    gap: 20px;
+}
+
+.ttl {
+    margin: 0;
+    padding: 0;
+    color: #182E17;
+    font-size: 3.1em;
+}
+
+p { 
+    margin: 0;
+    padding: 0;
+    color: #182E17;
+    align-self: center;
+    font-size: 1.1em;
+    margin-top: 100px;
+}
+
+p.desc {
+    font-size: 1.9em;
+    margin: 0;
+}
+
+.logo {
+    margin: 0;
+    padding: 0;
+    display: block;
+    min-width: 100px;
+    min-height: 100px;
+}
+
+.reg {
+    width: 100%;
+    height: 650px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    color:#182E17;
+    flex: 1;
+}
+  
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+  
+a:hover {
+    text-decoration: underline;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+    margin: 10px 0;
+}
+
+label {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    font-size: 18px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    cursor: text;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px 10px 10px 5px;
+    border: none;
+    border-bottom: 2px solid #bbc5ad;
+    font-size: 16px;
+    box-sizing: border-box;
+    background: transparent;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    outline: none;
+}
+
+input[type="text"]:focus + label, input[type="password"]:focus + label, input[type="text"]:valid + label,
+input[type="password"]:valid + label {
+    top: -15px;
+    left: 0;
+    font-size: 14px;
+    color: #182E17;
+    pointer-events: none;
+}
+
+.btn {
+    background: #182E17;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 50px;
+    font: 1.2em 'Roboto', sans-serif;
+    width: 100%;
+    color: #fff;
+    }
+
+.btn[type="submit"]:hover {
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+
+a.login-button {
+    background: #182E17;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 50px;
+    font: 1.2em 'Roboto', sans-serif;
+    width: 300px;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 10px 0;
+    align-self: center;
+}
+
+a.login-button:hover {
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.footer {
+    background-color: #f8f8f8; /* Example background color */
+    font-family: Arial, sans-serif; /* Example font */
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-content {
+    display: flex; /* Flexbox for layout */
+    justify-content: space-between; /* Space between elements */
+    align-items: center; /* Center items vertically */
+    width: 100%;
+    margin: 0; /* Center content horizontally */
+    padding: 0 20px; /* Padding for responsiveness */
+    flex-direction: row;
+}
+
+.footer-left, .footer-right {
+    padding: 5px;
+}
+
+.footer-left {
+    display: flex; /* Flexbox for layout */
+    text-align: left;
+    left: 0;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.footer-right {
+    display: flex;
+    text-align: right;
+    right: 0;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.footer-support p {
+    margin: 0 0 4px; /* Margin for spacing */
+    font-size: 0.8em; /* Example font size */
+}
+
+.footer-social a {
+    margin: 0 10px; /* Margin between links */
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Link color */
+    font-size: 0.8em;
+}
+
+.footer-social a:hover {
+    color: #007bff; /* Link hover color */
+}
+
+.footer-social img {
+    width: 20px; /* Image width */
+    height: 20px; /* Image height */
+    margin: 0; /* Remove margin */
+}
+
+
+@media (max-width: 768px) {
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        height: auto;
+    }
+
+    header {
+        height: 60px;
+        top: 0;
+        left: 0;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+    
+    .navwh {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
+        position: fixed;
+        top: 20px;
+        left: 0;
+        width: 100%;
+        height: 30px;
+    }
+
+    #navbar .nav_link {
+        display: none;
+    }
+
+    .burger-icon {
+        display: block;
+        cursor: pointer;
+        position: fixed;
+        top: 20px;
+        right: 50px;
+        z-index: 9999;
+    }
+
+    .line {
+        width: 30px;
+        height: 3px;
+        background-color: #fff;
+        margin: 5px 0;
+    }
+    
+    .nav_brand {
+        margin-left: 30px;
+        padding-left: 0;
+    }
+
+    .dropdown {
+        display: block;
+    }
+
+    .register-content {
+        flex-direction: column; /* Stack children vertically */
+        padding: 20px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center children horizontally */
+        width: 80%;
+        height: auto;
+    }
+
+    .welcome, .reg {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    .reg {
+        margin-top: 20px; /* Add space between sections */
+        justify-content: center;
+        align-items: center;
+    }
+
+    .reg h1 {
+        padding-bottom: 1rem;
+    }
+
+    .reg img {
+        width: 100px;
+        height: 100px;
+        margin: 0;
+    }
+
+    .welcome {
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .ttl, p.desc {
+        box-sizing: border-box; /* Include padding and border in element's total width and height */
+    }
+
+    .ttl {
+        text-align: center;
+        font-size: 1.9em;
+        margin-top: 10px; /* Add some space at the top */
+    }
+
+    p.desc {
+        width: 90%;
+        font-size: 1em;
+        margin-top: 10px; /* Add space between ttl and desc */
+    }
+
+    .btn { 
+        margin: 0 10px 20px; /* Add space between button and input fields */
+    }
+
+    .input-container {
+        margin: 10px 10px 0; /* Add space between input fields */
+        width: 100%;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center; /* Center items vertically */
+        text-align: center; /* Center text */
+        padding: 10px;
+    }
+
+    .footer-left, .footer-right {
+        justify-content: center;
+        width: 100%; /* Full width for each section */
+    }
+
+    .footer-right {
+        margin-top: 10px;
+    }
+
+    .footer-social a {
+        margin: 0 5px; /* Reduce margin between links on smaller screens */
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .dropdown {
+        left: 2rem;
+        width: unset;
+    }
+
+    .container {
+        width: 100%;
+        align-items: center; /* Ensure children are centered */
+    }
+
+    .logo {
+        width: 100px;
+        height: 100px;
+        margin: 0;
+    }
+
+    .reg {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ttl {
+        font-size: 1.7em; /* Adjust font size for smaller screens */
+    }
+    
+    h1 {
+        font-size: 1.7em; /* Adjust font size for smaller screens */
+    }
+
+    p.desc {
+        font-size: 1.1em; /* Adjust font size for smaller screens */
+    }
+
+    p {
+        font-size: 0.9em; /* Adjust font size for smaller screens */
+    }
+
+    p.desc + p {
+        margin-top: 5px; /* Reduce space between .desc and the next p */
+    }
+
+    input[type="text"], input[type="password"] {
+        width: 250px; /* Adjust width of input fields */
+        font-size: 14px; /* Adjust font size for smaller screens */
+    }
+
+    .btn {
+        width: 250px; /* Adjust width of button */
+        font-size: 1em; /* Adjust font size for smaller screens */
+    }
+
+    a.login-button {
+        width: 150px; /* Adjust width of button */
+        font-size: 1em; /* Adjust font size for smaller screens */
+    }
+
+    .footer {
+        position: relative; /* Remove fixed positioning */
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-left, .footer-right {
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+        align-items: center;
+    }
+
+    .footer-right {
+        margin: 10px 0; /* Add margin between sections */
+    }
+
+    .footer-left {
+        flex-direction: column;
+    }
+
+    .footer-support p {
+        font-size: 0.7em; /* Adjust font size for smaller screens */
+    }
+
+    .footer-social a {
+        margin: 0 5px; /* Reduce margin between links on smaller screens */
+    }
+}
+
+

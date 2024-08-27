@@ -1,0 +1,442 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #E6ECDE;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 100vh;
+}
+
+header {
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+    padding:10px;
+    background-color: #E6ECDE;
+    height: 80px;
+    width: 100%;
+    z-index: 1000;
+    margin-top: 0;
+}
+
+.navwh {
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100px;
+    width: 100%;
+}
+
+.burger-icon {
+    display: none;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999;
+}
+
+#navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100px;
+    display: flex;
+    width: 50%;
+    flex-grow: 1;
+}
+
+#navbar ul{
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-end;
+    margin-right: 100px;
+}
+
+#navbar li {
+    margin-right: 80px;
+    align-items: center;
+}
+
+
+#navbar a {
+    color: #182E17;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    float: left;
+    display: block;
+    text-align: center;
+}
+
+.nav_brand {
+    margin-left: 50px;
+    display: flex;
+    padding-left: 20px;
+}
+
+.navbar_brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #182E17;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 2rem;
+    top: 60px;
+    height: 0;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dropdown.open {
+    display: block;
+    height: 240px;
+    text-decoration: none;
+}
+
+.dropdown li {
+    padding: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    list-style: none;
+}
+
+.dropdown a {
+    text-decoration: none; /* Ensure no text decoration */
+    color: #182E17; /* Text color for dropdown links */
+}
+
+.con {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #E6ECDE;
+    margin: auto;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+.farm-container {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.input-cont {
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+}
+
+h1 {
+    color: #333;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 18px;
+    color: #999;
+    transition: 0.2s ease all;
+    pointer-events: none;
+}
+
+input {
+    width: 300px;
+    padding: 10px 10px 10px 5px;
+    border: none;
+    border-bottom: 2px solid #bbc5ad;
+    font-size: 16px;
+    box-sizing: border-box;
+    background: transparent;
+}
+
+input:focus {
+    outline: none;
+}
+
+input:focus + label,
+input:valid + label {
+    top: -15px;
+    left: 0;
+    font-size: 14px;
+    color: #c2d6a6;
+}
+
+input[type="checkbox"] {
+    width: 10px;
+    height: 10px;
+    margin-bottom: 10px;
+}
+
+input[type="submit"] {
+    background-color: #182E17;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 100%;
+}
+
+.submit {
+    text-align: center;
+}
+
+.footer {
+    background-color: #f8f8f8; /* Example background color */
+    font-family: Arial, sans-serif; /* Example font */
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    }
+    
+.footer-content {
+    display: flex; /* Flexbox for layout */
+    justify-content: space-between; /* Space between elements */
+    align-items: center; /* Center items vertically */
+    width: 100%;
+    margin: 0; /* Center content horizontally */
+    padding: 0 20px; /* Padding for responsiveness */
+    flex-direction: row;
+    }
+    
+.footer-left, .footer-right {
+    padding: 5px;
+    }
+    
+.footer-left {
+    display: flex; /* Flexbox for layout */
+    text-align: left;
+    left: 0;
+    flex: 1;
+    justify-content: flex-start;
+    }
+    
+.footer-right {
+    display: flex;
+    text-align: right;
+    right: 0;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 10px;
+    }
+    
+.footer-support p {
+    margin: 0 0 4px; /* Margin for spacing */
+    font-size: 0.8em; /* Example font size */
+    }
+    
+.footer-social a {
+    margin: 0 10px; /* Margin between links */
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Link color */
+    font-size: 0.8em;
+    }
+    
+.footer-social a:hover {
+    color: #007bff; /* Link hover color */
+    }
+    
+    .footer-social img {
+    width: 20px; /* Image width */
+    height: 20px; /* Image height */
+    margin: 0; /* Remove margin */
+    }
+    
+
+@media (max-width: 768px) {
+
+    * {
+        box-sizing: border-box;
+    }
+
+    header {
+        height: 60px;
+        top: 0;
+        left: 0;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+    
+    .navwh {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
+        position: fixed;
+        top: 20px;
+        left: 0;
+        width: 100%;
+        height: 30px;
+    }
+
+    #navbar .nav_link {
+        display: none;
+    }
+
+    .burger-icon {
+        display: block;
+        cursor: pointer;
+        position: fixed;
+        top: 20px;
+        right: 50px;
+        z-index: 9999;
+    }
+
+    .line {
+        width: 30px;
+        height: 3px;
+        background-color: #fff;
+        margin: 5px 0;
+    }
+    
+    .nav_brand {
+        margin-left: 30px;
+        padding-left: 0;
+    }
+
+    .dropdown {
+        display: block;
+    }
+
+    .con {
+        width: 100%;
+        padding: 15px;
+        margin-top: 30px;
+    }
+
+    .farm-container {
+        width: 100%;
+    }
+
+    .input-cont label {
+        font-size: 16px;
+    }
+
+    input[type="submit"] {
+        font-size: 16px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center; /* Center items vertically */
+        text-align: center; /* Center text */
+        padding: 10px;
+    }
+
+    .footer-left, .footer-right {
+        justify-content: center;
+        width: 100%; /* Full width for each section */
+    }
+
+    .footer-right {
+        margin-top: 10px;
+    }
+
+    .footer-social a {
+        margin: 0 5px; /* Reduce margin between links on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+
+    .dropdown {
+        width: unset;
+        left: 2rem;
+    }
+    .cont {
+        padding: 20px 20px 0 20px;
+    }
+
+    .input-cont input {
+        font-size: 14px;
+        padding: 8px 5px 8px 5px;
+    }
+
+    .input-cont label {
+        font-size: 14px;
+    }
+
+    input[type="submit"] {
+        font-size: 14px;
+    }
+
+    .footer {
+        position: relative; /* Remove fixed positioning */
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-left, .footer-right {
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+        align-items: center;
+    }
+
+    .footer-right {
+        margin: 10px 0; /* Add margin between sections */
+    }
+
+    .footer-left {
+        flex-direction: column;
+    }
+
+    .footer-support p {
+        font-size: 0.7em; /* Adjust font size for smaller screens */
+    }
+
+    .footer-social a {
+        margin: 0 5px; /* Reduce margin between links on smaller screens */
+    }
+}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../static/dashboard.css">
+    <title>HUHU</title>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <div class="sidebar">
+                <nav>
+                    <ul>
+
+                        <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
+
+
+
+                        {% if user_type in ['user_farmer', 'farm_owner'] %}
+                            {% if status in ['member', 'Owner'] %}
+                            <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                            
+                            {%endif%}
+                        {% endif %}
+                        
+                        <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+                        <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                        
+                        
+                        {% if user_type in ['user_farmer', 'farm_owner'] %}
+                            {% if status in ['member', 'Owner'] %}
+                            <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                            <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                            {%endif%}
+
+                        {% endif %}
+                        
+                        {% if user_type == 'farm_owner' %}
+                            {% if status in ['member', 'Owner'] %}
+
+                            <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+                            {% endif %}
+                        
+                        {% endif %}
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+
+                    </ul>
+                </nav>
+            </div>            
+            <div class="content">
+                <div class="navbar">
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="burger-icon">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <div class="dropdown">
+                    <li><a href="#" ><i class="fas fa-home"></i>Home</a></li>
+                    <li><a href="#" ><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="#" ><i class="fas fa-question-circle"></i>Help</a></li>
+                    <li><a href="#" ><i class="fas fa-envelope"></i>Contact</a></li>
+                    <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
+
+                    {% if user_type in ['user_farmer', 'farm_owner'] %}
+                        {% if status in ['member', 'Owner'] %}
+
+                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                        {% endif %}
+                    {% endif %}
+
+                        
+                    <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+                    
+                    <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                        
+                        
+                    {% if user_type in ['user_farmer', 'farm_owner'] %}
+                        {% if status in ['member', 'Owner'] %}
+
+                        <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                        <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                        {% endif %}
+                    {% endif %}
+                        
+                    {% if user_type == 'farm_owner' %}
+                    <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+
+            </div>
+
+                <div class="sub-content">
+                    <div class="left">
+                        <div class="greet">
+                            <h1><strong>Hello, {{ username }}</strong></h1>
+                            <p>Let’s squash those diseases and keep your calamansi smiling!</p>
+                        </div>
+                
+                        <div class="date">
+                            <p id="currentDate"></p>
+                        </div>
+                    </div>
+                
+                        <div class="card">
+                            <p>{{ temp_cs }}°C</p>
+                            <p>{{ temp_fr }}°F</p>
+                            <p>{{ weather }}</p>
+                            <div class="weather">
+                            <img src="{{ icon_url }}" alt="Weather Icon">
+                        </div>
+                        </div>                
+                </div>
+
+                <div class="prediction">
+                    <form action="{{ url_for('dashboard_cp') }}" method="post" enctype="multipart/form-data">
+                        <label for="file">Upload File:</label>
+                        <p>Upload a clear image of your calamansi here for disease detection.</p>
+                        <input type="file" name="file" id="file" accept="image/*" capture="camera">
+                        <button type="submit">Upload</button>
+                    </form>
+                <div class="result">
+                    <p>{{ formatted_labels }}</p>
+                    <img src="{{image_url}}" alt="">
+                </div>
+                <div class="recom">
+                    <label>Disease Information</label>
+                    <p>Name</p>{{formatted_labels}}
+                    <p>Description</p>{{health_status[2]}}
+                    <p>Cause</p>{{health_status[0]}}
+                    <p>Solution</p>{{health_status[1]}}
+                    
+                </div>
+                </div>
+                <div class="statistics">
+                <div class="stats">
+                    <h3>TOTAL DISEASE DETECTED:</h3>{{count}}
+                </div>
+                <div class="stats">
+                    <h3>MOST DISEASE DETECTED:</h3>{{max}}
+                </div>
+                <div class="stats">
+                    <h3>members:</h3>{{tmembers}}
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const burgerIcon = document.querySelector('.burger-icon');
+    const burgerIconIcon = document.querySelector('.burger-icon i');
+    const dropdownMenu = document.querySelector('.dropdown');
+
+    burgerIcon.onclick = function() {
+        dropdownMenu.classList.toggle('open');
+        const isOpen = dropdownMenu.classList.contains('open');
+        
+        // Toggle between bars and times icon based on the dropdown state
+        burgerIconIcon.classList = isOpen ? 'fas fa-times' : 'fas fa-bars';
+    };
+
+    // Code to set the current date
+    var currentDate = new Date();
+    var formattedDate = currentDate.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    });
+
+    document.getElementById('currentDate').textContent = formattedDate;
+});
+    </script>
+</body>
+</html>
