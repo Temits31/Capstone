@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+body {
+    font-family: Arial, sans-serif;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #E6ECDE; /* Light green background */
+    position: relative;
+    flex-direction: column;
+}
+
+header {
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+    padding:10px;
+    background-color: #E6ECDE;
+    height: 80px;
+    width: 100%;
+    z-index: 1000;
+    top: 0;
+}
+
+.navwh {
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100px;
+    width: 100%;
+}
+
+.burger-icon {
+    display: none;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999;
+}
+
+#navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100px;
+    display: flex;
+    width: 50%;
+    flex-grow: 1;
+}
+
+#navbar ul{
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-end;
+    margin-right: 100px;
+}
+
+#navbar li {
+    margin-right: 80px;
+    align-items: center;
+}
+
+
+#navbar a {
+    color: #182E17;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    float: left;
+    display: block;
+    text-align: center;
+}
+
+.nav_brand {
+    margin-left: 50px;
+    display: flex;
+    padding-left: 20px;
+}
+
+.navbar_brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #182E17;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 2rem;
+    top: 60px;
+    height: 0;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dropdown.open {
+    display: block;
+    height: 240px;
+    text-decoration: none;
+}
+
+.dropdown li {
+    padding: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    list-style: none;
+}
+
+.dropdown a {
+    text-decoration: none; /* Ensure no text decoration */
+    color: #182E17; /* Text color for dropdown links */
+}
+
+
+.container {
+    background-color: #bbc5ad;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    text-align: center;
+    margin: 10px; /* Add some spacing between cards */
+    padding: 20px;
+    justify-content: center;
+}
+
+.card-body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background-color: #bbc5ad; /* Light green background */
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 300px;
+    text-align: center;
+    margin: 10px; /* Add some spacing between cards */
+    flex-grow: 1;
+    width: calc(20% - 20px); /* 20% width with space for margin */
+    box-sizing: border-box;
+    }
+
+.card-img {
+    width: 100%;    
+    height: auto;
+}
+
+.card-content {
+    padding: 16px;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 24px;
+    color: #2e7d32; /* Dark green title */
+}
+
+.card-description {
+    font-size: 16px;
+    color: #388e3c; /* Medium green description */
+    margin: 16px 0;
+}
+
+.card-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #182e17; /* Primary green button */
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.card-button:hover {
+    background-color: #2e7d32; /* Darker green on hover */
+}
+
+.footer {
+    background-color: #f8f8f8; /* Example background color */
+    font-family: Arial, sans-serif; /* Example font */
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-content {
+    display: flex; /* Flexbox for layout */
+    justify-content: space-between; /* Space between elements */
+    align-items: center; /* Center items vertically */
+    width: 100%;
+    margin: 0; /* Center content horizontally */
+    padding: 0 20px; /* Padding for responsiveness */
+    flex-direction: row;
+}
+
+.footer-left, .footer-right {
+    padding: 5px;
+}
+
+.footer-left {
+    display: flex; /* Flexbox for layout */
+    text-align: left;
+    left: 0;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.footer-right {
+    display: flex;
+    text-align: right;
+    right: 0;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.footer-support p {
+    margin: 0 0 4px; /* Margin for spacing */
+    font-size: 0.8em; /* Example font size */
+}
+
+.footer-social a {
+    margin: 0 10px; /* Margin between links */
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Link color */
+    font-size: 0.8em;
+}
+
+.footer-social a:hover {
+    color: #007bff; /* Link hover color */
+}
+
+.footer-social img {
+    width: 20px; /* Image width */
+    height: 20px; /* Image height */
+    margin: 0; /* Remove margin */
+}
+
+@media (max-width: 768px) {
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        height: auto;
+    }
+
+    header {
+        height: 60px;
+        top: 0;
+        left: 0;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+    
+    .navwh {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
+        position: fixed;
+        top: 20px;
+        left: 0;
+        width: 100%;
+        height: 30px;
+    }
+
+    #navbar .nav_link {
+        display: none;
+    }
+
+    .burger-icon {
+        display: block;
+        cursor: pointer;
+        position: fixed;
+        top: 20px;
+        right: 50px;
+        z-index: 9999;
+    }
+
+    .line {
+        width: 30px;
+        height: 3px;
+        background-color: #fff;
+        margin: 5px 0;
+    }
+    
+    .nav_brand {
+        margin-left: 30px;
+        padding-left: 0;
+    }
+
+    .dropdown {
+        display: block;
+    }
+
+    .container h1 {
+        font-size: 1.5em; /* Adjust font size for smaller screens */
+    }
+
+    .card {
+        width: calc(50% - 20px); /* 2 cards per row */
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center; /* Center items vertically */
+        text-align: center; /* Center text */
+        padding: 10px;
+    }
+
+    .footer-left, .footer-right {
+        justify-content: center;
+        width: 100%; /* Full width for each section */
+    }
+
+    .footer-right {
+        margin-top: 10px;
+    }
+
+    .footer-social a {
+        margin: 0 5px; /* Reduce margin between links on smaller screens */
+    }
+    .search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+}
+
+@media (max-width: 480px) {
+    .dropdown {
+        left: 2rem;
+        width: unset;
+    }
+
+    .card {
+                width: calc(100% - 20px); /* 1 card per row */
+    }
+
+    .footer {
+        position: relative; /* Remove fixed positioning */
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-left, .footer-right {
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+        align-items: center;
+    }
+
+    .footer-right {
+        margin: 10px 0; /* Add margin between sections */
+    }
+
+    .footer-left {
+        flex-direction: column;
+    }
+
+    .footer-support p {
+        font-size: 0.7em; /* Adjust font size for smaller screens */
+    }
+
+    .footer-social a {
+        margin: 0 5px; /* Reduce margin between links on smaller screens */
+    }
+    .search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navwh">
+        <div class="nav_brand">
+                <a href="/" class="navbar_brand">LimeLine</a>
+            </div>
+        
+        <nav id="navbar">
+            
+                <ul> 
+                  <li><a href="/home" class="nav_link">Home</a></li>
+                  <li><a href="#" class="nav_link">About</a></li>
+                  <li><a href="#" class="nav_link">Services</a></li>
+                  <li><a href="#" class="nav_link">Contact</a></li>
+                </ul>
+                    
+            </nav>
+            <div id="burger-icon" class="burger-icon">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <li><a href="#" >Home</a></li>
+            <li><a href="#" >About</a></li>
+            <li><a href="#" >Services</a></li>
+            <li><a href="#" >Contact</a></li>
+        </div>
+    </header>
+    <div class="container">
+    <h1>Are you a farmer of:</h1>
+    <input type="text" id="farmSearch" placeholder="Search for farms..." class="search-bar">
+    <div class="card-body" id="farmList">
+        {% for f in farm %}
+            <div class="card">
+
+                {% if f[11] %}
+                    <img src="{{ f[11] }}" alt="Card image" class="card-img"> 
+                {% else %}
+                    <img src="/static/default-image.jpg" alt="Default image" class="card-img">  <!-- Default image -->
+                {% endif %}
+                <div class="card-content">
+                    <h2 class="card-title">{{ f[1] }}</h2>
+                    <p class="card-description">{{ f[2] }}, {{ f[3] }}, {{ f[4] }}, {{ f[5] }}</p>
+                    <form action="{{ url_for('nofarm', user_id=user_id) }}" method="post">
+                        <input type="hidden" name="user_id" value="{{ user_id }}">
+                        <input type="hidden" name="farm_id" value="{{ f[0] }}">
+                        <input type="submit" class="card-button" value="Learn More">
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<footer class="footer"> 
+    <div class="footer-content">
+    <div class="footer-left">
+    <div class="footer-support">
+    <p>Contact us: support@example.com | +123 456 7890</p>
+    <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+    </div>
+    <div class="footer-right">
+    <div class="footer-social">
+    <a href="https://facebook.com" target="_blank"><img src="../static/facebook.png" alt="Facebook" ></a>
+    <a href="https://twitter.com" target="_blank"><img src="../static/twitter.png" alt="twitter"></a>
+    <a href="https://instagram.com" target="_blank"><img src="../static/instagram.png" alt="instagram"></a>
+    </div>
+    </div>
+</div>
+</div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var searchInput = document.getElementById('farmSearch');
+        var farmList = document.getElementById('farmList');
+        var cards = farmList.getElementsByClassName('card');
+
+        searchInput.addEventListener('keyup', function () {
+            var filter = searchInput.value.toLowerCase();
+            for (var i = 0; i < cards.length; i++) {
+                var title = cards[i].getElementsByClassName('card-title')[0];
+                if (title.innerHTML.toLowerCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

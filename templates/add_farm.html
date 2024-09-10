@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Add Farm</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 100%;
+            height: 95vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: row;
+            margin: 20px;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: #eef1e6;
+        }
+
+        .sidebar {
+            background-color: #565950;
+            color: white;
+            width: 15%;
+            height: 100%;
+            border-radius: 30px;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sidebar nav ul li a i {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #eef1e6;
+            color:#182e17;
+            border-radius: 10px 0px 0px 10px;
+            transform: scale(1.05);
+            box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            width: 90%;
+            border-radius: 30px;
+            flex: 1;
+            padding: 20px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .navbar nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .navbar nav ul li a {
+            text-decoration: none;
+            color: #182e17;
+            font-weight: bold;
+        }
+
+        .sub-content {
+            padding: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+        }
+
+.burger-icon {
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+    display: none;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 2rem;
+    top: 60px;
+    height: 0;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dropdown.open {
+    display: block;
+    height: auto;
+    text-decoration: none;
+}
+
+.dropdown li {
+    padding: 0.8rem;
+    display: flex;
+    text-decoration: none;
+    list-style: none;
+    border-bottom: 1px solid #182E17;
+}
+
+.dropdown a {
+    text-decoration: none; /* Ensure no text decoration */
+    color: #182E17; /* Text color for dropdown links */
+    font-weight: bold;
+}
+
+.dropdown li a i {
+    margin-right: 20px;
+}
+
+#registerForm {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    padding-bottom: 20px;
+}
+
+/* Styling for form groups */
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.form-table tr {
+    display: flex; /* Use flexbox for row layout */
+    gap: 20px; /* Adjust gap size as needed */
+    justify-content: space-between;
+}
+
+.form-table td {
+    flex: 1; /* Each cell takes equal width */
+}
+
+/* Label styles */
+label {
+    position: absolute;
+    top: 10px; /* Adjusted to work with the input padding */
+    left: 5px; /* Matches the input padding for better alignment */
+    font-size: 18px;
+    color: #999;
+    cursor: text;
+    transition: all 0.3s ease; /* Smooth transition for the label */
+}
+
+/* Input styles */
+input[type="text"], input[type="password"] {
+    width: 100%; /* Adjusted to take full width */
+    padding: 10px 10px 10px 5px;
+    border: none;
+    border-bottom: 2px solid #bbc5ad;
+    font-size: 16px;
+    box-sizing: border-box;
+    background: transparent;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    outline: none;
+}
+
+input[type="text"]:focus + label, 
+input[type="password"]:focus + label, 
+input[type="text"]:valid + label,
+input[type="password"]:valid + label {
+    top: -15px; /* Moves label above the input */
+    left: 0;
+    font-size: 14px; /* Smaller font size for floated label */
+    color: #182E17;
+    pointer-events: none;
+}
+
+/* Submit button styling */
+.submit {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.submit input[type="submit"] {
+    background-color: #182E17;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.submit input[type="submit"]:hover {
+    transform: scale(1.05);
+}
+
+p {
+    font-size: 1rem;
+}
+
+h1, p {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+strong {
+    margin-bottom: 20px;
+}
+
+
+@media (max-width: 768px) {
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        position: relative;
+    }
+
+    .container {
+        flex-direction: column;
+        width: 95%;
+        height: auto;
+    }
+
+    .content {
+        width: 100%;
+        padding: 20px;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .navbar nav {
+        display: none;
+    }
+
+    .burger-icon {
+        display: block;
+    }
+
+    .sidebar nav {
+        display: none;
+    }
+
+    .sidebar {
+        background: none;
+    }
+
+    .sub-content {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .sub-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .dropdown {
+        display: block;
+        z-index: 1;
+    }
+
+    .form-table tr {
+        flex-direction: column; /* Stack columns on smaller screens */
+        gap: 0;
+    }
+    .form-table td {
+        width: 100%; /* Full width for each column */
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <div class="sidebar">
+                <nav>
+                    <ul>
+                        <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-users"></i> Dashboard</a></li>
+
+                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                        
+                        <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="#"><i class="fas fa-history"></i> History</a></li>
+                        
+                        
+                        <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                        <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                        
+                        <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+                        
+                        <li><a href="#"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+                    </ul>
+                </nav>
+            </div>            
+            <div class="content">
+                <div class="navbar">
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="burger-icon">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <div class="dropdown">
+                    <li><a href="#" ><i class="fas fa-home"></i>Home</a></li>
+                    <li><a href="#" ><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="#" ><i class="fas fa-question-circle"></i>Help</a></li>
+                    <li><a href="#" ><i class="fas fa-envelope"></i>Contact</a></li>
+                    <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-users"></i> Dashboard</a></li>
+
+                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                        
+                
+                <li><a href="#"><i class="fas fa-history"></i> History</a></li>
+                <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                
+                
+                    <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                    <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                    <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
+
+
+                
+
+                    <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+                
+                        
+                    <li><a href="#"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+            </div>
+
+            <div class="sub-content">
+
+                <h1>Add Farm</h1>
+                <p>Please fill out the form below to add your farm details.</p>
+                    <strong>    {{text}}</strong>
+
+                    <form id="registerForm" action="" method="post" enctype="multipart/form-data" >
+                        <div class="form-group">
+                            <input type="text" name="farm_name" required>
+                            <label for="farm_name">Farm Name</label>
+                        </div>
+                    
+                        <table class="form-table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" name="province" required>
+                                            <label for="province">Province</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" name="city" required>
+                                            <label for="city">City</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" name="brgy" required>
+                                            <label for="brgy">Barangay</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" name="strt_add" required>
+                                            <label for="strt_add">Street Address</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="form-group">
+                                            <input type="text" name="zip_code" required>
+                                            <label for="zip_code">ZIP CODE</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="form-group">
+                                            <input type="file" name="f_img" id="f_img">
+
+                                            <label for="f_img">Farm Image</label>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                        <div class="submit">
+                            <input type="submit" value="Next">
+                        </div>
+                    </form>
+                </div>                
+            </div>
+        </div>
+    </div>
+
+    <script>
+            const burgerIcon = document.querySelector('.burger-icon');
+            const burgerIconIcon = document.querySelector('.burger-icon i');
+            const dropdownMenu = document.querySelector('.dropdown');
+
+            burgerIcon.onclick = function() {
+            dropdownMenu.classList.toggle('open');
+            const isOpen = dropdownMenu.classList.contains('open');
+        
+            burgerIconIcon.classList = isOpen ? 'fas fa-times' : 'fas fa-bars';
+        };
+    </script>
+</body>
+</html>

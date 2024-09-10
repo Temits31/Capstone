@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Farm View</title>
+</head>
+<body>
+    <nav class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="{{url_for('admin_dashboard')}}">dashboard</a></li>
+            <li><a href="{{url_for('admin_crud')}}">admin_crud</a></li>
+            <li><a href="{{url_for('update_farm_status')}}">admin_farm_status</a></li>
+            <li><a href="{{url_for('admin_test')}}">admin_test</a></li>
+            <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-tasks"></i> adminfarm</a></li>
+            <li><a href="{{url_for('map')}}">map</a></li>
+
+
+        </ul>
+    </nav>
+    
+    <h1>Farms Overview</h1>
+    
+    <div class="farm-list">
+        {% for farm in farms %}
+            <div class="farm-item">
+                <h2>{{ farm[1] }} (Farm ID: {{ farm[0] }})</h2>
+                
+                {% if farm[2] %}
+                    <img src="{{ farm[2] }}" alt="Image of {{ farm[1] }}" width="200px">
+                {% else %}
+                    <p>No Image Available</p>
+                {% endif %}
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <nav class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="{{url_for('admin_dashboard')}}">dashboard</a></li>
+            <li><a href="{{url_for('admin_crud')}}">admin_crud</a></li>
+            <li><a href="{{url_for('update_farm_status')}}">admin_farm_status</a></li>
+            <li><a href="{{url_for('admin_test')}}">admin_test</a></li>
+            <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-tasks"></i> adminfarm</a></li>
+            <li><a href="{{url_for('map')}}">map</a></li>
+
+
+        </ul>
+    </nav>
+
+    <div class="prediction">
+        <form action="{{ url_for('admin_test') }}" method="post" enctype="multipart/form-data">
+            <label for="file">Upload File:</label>
+            <input type="file" name="file" id="file" accept="image/*" capture="camera">
+            <button type="submit">Upload</button>
+        </form>
+        <p>{{ formatted_labels }}</p>
+        <img src="{{image_url}}" alt="">
+    </div>
+
+
+</body>
+</html>

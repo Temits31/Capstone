@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Update Farm Status</title>
+</head>
+<body>
+
+
+    <nav class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="{{url_for('admin_dashboard')}}">dashboard</a></li>
+            <li><a href="{{url_for('admin_crud')}}">admin_crud</a></li>
+            <li><a href="{{url_for('update_farm_status')}}">admin_farm_status</a></li>
+            <li><a href="{{url_for('admin_test')}}">admin_test</a></li>
+            <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-tasks"></i> adminfarm</a></li>
+            <li><a href="{{url_for('map')}}">map</a></li>
+
+
+        </ul>
+    </nav>
+
+
+
+
+    <h1>Update Farm Status</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Farm ID</th>
+                <th>Farm Name</th>
+                <th>Current Status</th>
+                <th>Update Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for farm in farms %}
+            <tr>
+                <td>{{ farm[0] }}</td>
+                <td>{{ farm[1] }}</td>
+                <td>{{ farm[2] }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('update_farm_status') }}">
+                        <input type="hidden" name="farm_id" value="{{ farm[0] }}">
+                        
+                        <select name="farm_status">
+                            <option value="Active" {% if farm['farm_status'] == 'Active' %} selected {% endif %}>Active</option>
+                            <option value="Pending for Deletion" {% if farm['farm_status'] == 'Pending for Deletion' %} selected {% endif %}>Pending for Deletion</option>
+                            <option value="Closed" {% if farm['farm_status'] == 'Closed' %} selected {% endif %}>Closed</option>
+                        </select>
+                        
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

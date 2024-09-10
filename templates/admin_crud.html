@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="{{url_for('admin_dashboard')}}">dashboard</a></li>
+            <li><a href="{{url_for('admin_crud')}}">admin_crud</a></li>
+            <li><a href="{{url_for('update_farm_status')}}">admin_farm_status</a></li>
+            <li><a href="{{url_for('admin_test')}}">admin_test</a></li>
+            <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-tasks"></i> adminfarm</a></li>
+            <li><a href="{{url_for('map')}}">map</a></li>
+
+
+        </ul>
+    </nav>
+    <strong><h1>{{text}}</h1></strong>
+    {% for res in results %}
+    <form action="/admin_update" method="post">
+        <div class="input-container">
+            <input type="text" id="username" name="username" value="{{ res[0] }}" required>
+            <label for="username">Username</label>
+        </div>
+        <br>
+        <div class="input-container">
+            <input type="password" id="password" name="password" value="{{ res[1] }}" required>
+            <label for="password">Password</label>
+        </div>
+        <input type="hidden" name="user_id" value="{{ res[10] }}">
+        <input type="hidden" name="user_details_id" value="{{ res[11] }}">
+    
+        <div class="input-cont">
+            <input type="text" id="fname" name="fname" value="{{ res[2] }}" required>
+            <label for="fname">First Name</label>
+        </div>
+        <div class="input-cont">
+            <input type="text" id="mname" name="mname" value="{{ res[3] }}">
+            <label for="mname">Middle Name</label>
+        </div>
+        <div class="input-cont">
+            <input type="text" id="lname" name="lname" value="{{ res[4] }}" required>
+            <label for="lname">Last Name</label>
+        </div>
+        <div class="input-cont">
+            <input type="text" id="province" name="province" value="{{ res[5] }}" required>
+            <label for="province">Province</label>
+        </div>
+        <div class="input-cont">
+            <input type="text" id="city" name="city" value="{{ res[6] }}" required>
+            <label for="city">City</label>
+        </div>
+        <div class="input-cont">
+            <input type="text" id="brgy" name="brgy" value="{{ res[7] }}" required>
+            <label for="brgy">Barangay</label>
+        </div>
+        <div class="input-cont">
+            <input type="text" id="strt_add" name="strt_add" value="{{ res[8] }}" required>
+            <label for="strt_add">Street Address</label>
+        </div>
+        <div class="input-cont">
+            <input type="text" id="cont_num" name="cont_num" value="{{ res[9] }}" required>
+            <label for="cont_num">Contact Number</label>
+        </div>
+    
+        <button type="submit" class="btn-update">Update</button>
+    </form>
+    
+    <form action="/admin_delete" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');">
+        <input type="hidden" name="user_id" value="{{ res[10] }}">
+        <input type="hidden" name="user_details_id" value="{{ res[11] }}">
+
+        <button type="submit" class="btn-delete">Delete</button>
+    </form>
+    <hr>
+    {% endfor %}
+    
+
+
+
+    
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <style>
+        body {
+            background-color: aquamarine;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        .navbar {
+            background-color: #333;
+            color: white;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .navbar li {
+            margin-left: 10px;
+        }
+        .navbar a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar {
+            background-color: #333;
+            color: white;
+            width: 250px;
+            position: fixed;
+            top: 50px; /* Adjust this if navbar height changes */
+            bottom: 0;
+            left: 0;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar a {
+            padding: 15px;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            padding-top: 60px; /* Adjust for navbar height */
+            width: calc(100% - 250px);
+            overflow-y: auto;
+            transition: margin-left 0.3s ease;
+            flex-grow: 1;
+        }
+        .profile-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-card img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .profile-card h2 {
+            text-align: center;
+            margin: 0 0 10px;
+        }
+        .profile-card p {
+            text-align: center;
+            color: #555;
+            margin: 5px 0;
+        }
+        @media screen and (max-width: 600px) {
+            .sidebar {
+                left: -250px;
+                top: 0;
+                height: 100%;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            .main-content.open {
+                margin-left: 250px;
+            }
+            .burger-icon {
+                display: block;
+                position: fixed;
+                top: 15px;
+                left: 15px;
+                z-index: 1001;
+            }
+            .burger-icon div {
+                width: 25px;
+                height: 3px;
+                background-color: white;
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="{{url_for('index')}}">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Burger button for sidebar -->
+    <div id="burger-icon" class="burger-icon" onclick="toggleSidebar()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <a href="{{url_for('members')}}">Members</a>
+        <a href="#">History</a>
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
+
+    </nav>
+
+    <div class="main-content" id="main-content">
+        <div class="profile-card">
+            <img src="" alt="Profile Picture">
+            <label for="username">Username</label>
+            <input type="text" name="username" value="{{info[0]}}">
+
+            <label for="fname">First Name</label>
+            <input type="text" name="fname" value="{{info[1]}}">
+
+            <label for="mname">Middle Name</label>
+            <input type="text" name="mname" value="{{info[2]}}">
+
+            <label for="lname">Last Name</label>
+            <input type="text" name="lname" value="{{info[3]}}">
+
+            <label for="province">Province</label>
+            <input type="text" name="province" value="{{info[4]}}">
+
+            <label for="city">City</label>
+            <input type="text" name="city" value="{{info[5]}}">
+
+            <label for="brgy">Barangay</label>
+            <input type="text" name="brgy" value="{{info[6]}}">
+
+            <label for="strt_add">Street Address</label>
+            <input type="text" name="strt_add" value="{{info[7]}}">
+
+
+        </div>
+         
+    </div>
+
+   
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('main-content').classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
