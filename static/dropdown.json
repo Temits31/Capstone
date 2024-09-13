@@ -1,0 +1,689 @@
+{
+    "provinces": [
+      {
+        "id": 1,
+        "name": "Nueva Ecija",
+        "cities": [
+          {
+            "id": 101,
+            "name": "Aliaga",
+            "zipCode": 3111,
+            "barangays": [
+              "Betes", "Bibiclat", "Bucot", "La Purisima", "Macabucod", "Magsaysay", "Pantoc",
+              "Poblacion Centro", "Poblacion East I", "Poblacion East II", "Poblacion West III",
+              "Poblacion West IV", "San Carlos", "San Emiliano", "San Eustacio", "San Felipe Bata",
+              "San Pablo Matanda", "Santa Monica", "Santiago", "Santo Rosario", "Santo Tomas", "Sunson",
+              "Umangan"
+            ]
+          },
+          {
+            "id": 102,
+            "name": "Bongabon City",
+            "zipCode": 3128,
+            "barangays": [
+                "Antipolo", "Ariendo", "Bantug", "Calaanan", "Commercial (Poblacion)", "Cruz",
+                "Digmala", "Curva (J. Tomacruz)", "Kaingin (Poblacion)", "Labi", "Larcon", "Lusok",
+                "Macabaclay", "Magtanggol (Poblacion)", "Mantile (Poblacion)", "Olivete", "Palo Maria (Poblacion)",
+                "Pesa", "Rizal (Poblacion)", "Sampalucan (Poblacion)", "San Roque (Poblacion)", "Santor", "Sinipit (Poblacion)",
+                "Sisilang na Ligaya (Poblacion)", "Social (Poblacion)", "Tugatug", "Tulay na Bato (Poblacion)", "Vega Grande"
+            ]
+          },
+          {
+            "id": 103,
+            "name": "Cabanatuan City",
+            "zipCode": 3100,
+            "barangays": [
+              "Aduas Centro (Aduas)", "Aduas Norte", "Aduas Sur", "Bagong Sikat", "Bagong Buhay", "Bakero", "Bakod Bayan",
+              "Balite", "Bangad", "Bantug Bulalo", "Bantug Norte", "Barlis", "Barrera District (Poblacion)", "Bernardo District (Poblacion)",
+              "Bitas", "Bonifacio District (Poblacion)", "Buliran", "Cabu", "Caudillo", "Calawagan (Kalawagan)", "Caalibangbangan", "Camp Tinio (Campo Tinio)",
+              "Caridad Village", "Cinco-Cinco", "City Supermarket/Bayan (Poblacion)", "Communal", "Cruz Roja", "Daan Sarile", "Dalampang", "Dicarma (Poblacion)",
+              "Dimasalang (Poblacion)", "Dionisio S. Garcia (D.S. Garcia)", "Fatima (Poblacion)", "General Luna (Poblacion)", "Hermogenes C. Concepcion Sr. (H. Concepcion)",
+              "Ibabao-Bana", "Imelda District", "Isla (Poblacion)", "Kalikid Norte", "Kalikid Sur", "Kapitan Pepe Subdivision (Poblacion)", "Lagare",
+              "Lourdes (Matungal-tungal)", "M.S. Garcia", "Mabini Extension", "Mabini Homesite", "Macatbong", "Magsaysay District", "Magsaysay South",
+              "Maria Theresa", "Matadero (Poblacion)", "Mayapyap Norte", "Mayapyap Sur", "Melojavilla (Poblacion)", "Nabao (Poblacion)", "Obrero",
+              "Padre Burgos (Poblacion)", "Padre Crisostomo", "Pagas", "Palagay", "Pamaldan", "Pangatian", "Patalac", "Polilio","Pula", "Quezon District (Poblacion)",
+              "Rizdelis (Poblacion)", "Samon", "San Isidro", "San Josef Norte", "San Josef Sur", "San Juan Accfa (San Juan Poblacion)", "San Roque Norte", "San Roque Sur",
+              "Sanbermicristi (Poblacion)", "Sangitan", "Sangitan East", "Santa Arcadia", "Santo Niño", "Sapang", "Sumacab Este", "Sumacab Norte", "Sumacab South",
+              "Talipapa", "Valdefuente", "Valle Cruz", "Vijandre District (Poblacion)", "Villa Ofelia Subdivision (Villa Ofelia-Caridad)", "Zuleta District (Poblacion)"
+            ]
+          },
+          {
+            "id": 104,
+            "name": "Cabiao",
+            "zipCode": 3107,
+            "barangays": [
+              "Bagong Buhay/ Lote", "Bagong Sikat", "Bagong Silang", "Concepcion/Asyenda", "Entablado", "Maligaya", "Natividad North(pob)",
+              "Natividad South(pob)", "Palasinan", "San Antonio/Pantalan", "San Fernando Norte", "San Fernando Sur", "San Gregorio",
+              "San Juan North(pob)", "San Juan South(pob)", "San Roque", "San Vicente", "Santa Rita", "Sinipit",
+              "Polilio/Libis", "San Carlos", "Santa Isabel","Santa Ines", "Sitio Dumanas"
+            ]
+          },
+          {
+            "id": 105,
+            "name": "Carranglan",
+            "zipCode": 3123,
+            "barangays": [
+              "Baluarte (R.A. Padilla)", "Bantug", "Bunga", "Burgos", "Poblacion", "Capintalan", "Digdig (Joson)",
+              "General Luna", "Minuli", "Piut", "Puncan", "Putlan", "Salazar", "San Agustin", "T. L. Padilla Pob. (Barangay I)", "F. C. Otic Pob. (Barangay II)",
+              "D. L. Maglanoc Pob. (Barangay III)", "G. S. Rosario Pob. (Barangay IV)"
+            ]
+          },
+          {
+            "id": 106,
+            "name": "Cuyapo",
+            "zipCode": 3117,
+            "barangays": [
+              "Baloy", "Bambanaba", "Bantug", "Bentigan", "Bibiclat", "Bonifacio", "Bued", "Bulala", "Burgos", "Cabileo",
+              "Cabatuan", "Cacapasan", "Calancuasan Norte", "Calancuasan Sur", "Colosboa", "Columbitin", "Curva",
+              "District I (Pob. I)", "District II (Pob. II)", "District IV (Pob. IV)", "District V (Pob. V)", "District VI (Pob. VI)",
+              "District VII (Pob. VII)", "District VIII (Pob. VIII)", "Landig", "Latap", "Loob", "Luna", "Malbeg-Patalan",
+              "Malineng", "Matindeg", "Maycaban", "Nagcuralan", "Nagmisahan", "Paitan Norte", "Paitan Sur", "Piglisan", "Pugo",
+              "Rizal", "Sabit", "Salagusog", "San Antonio (Butao)", "San Jose", "San Juan", "Santa Clara", "Santa Cruz", "Simimbaan",
+              "Tagtagumbao", "Tutuloy", "Ungab", "Villaflores"
+            ]
+          },
+          {
+            "id": 107,
+            "name": "Gabaldon",
+            "zipCode": 3131,
+            "barangays": [
+              "Bagong Sikat", "Bagting", "Bantug", "Bitulok (North Poblacion)", "Bugnan", "Calabasa", "Camachile",
+              "Cuyapa", "Ligaya", "Macasandal", "Malinao", "Pantoc", "Pinamalisan", "South Poblacion", "Sawmill",
+              "Tagumpay"
+            ]
+          },
+          {
+            "id": 108,
+            "name": "Gapan",
+            "zipCode": 3105,
+            "barangays": [
+              "Balante", "Bayanihan", "Bulak", "Bungo", "Kapalangan", "Mabuga", "Maburak", "Macabaklay (Macabaclay)",
+              "Mahipon", "Malimba", "Mangino", "Marelo", "Pambuan", "Parcutela", "Puting Tubig", "San Lorenzo (Poblacion)", "San Nicolas",
+              "San Roque", "San Vicente (Poblacion)", "Santa Cruz", "Santo Cristo Norte", "Santo Cristo Sur", "Santo Niño"
+            ]
+          },
+          {
+            "id": 109,
+            "name": "General Mamerto Natividad",
+            "zipCode": 3125,
+            "barangays": [
+              "Balangkare Norte", "Balangkare Sur", "Balaring", "Belen", "Bravo", "Burol", "Kabulihan",
+              "Mag-asawang Sampaloc", "Manarog", "Mataas na Kahoy", "Panacsac", "Picaleon", "Piñahan", "Platero",
+              "Poblacion", "Pula", "Pulong Singkamas", "Sapang Bato", "Talabutab Norte", "Talabutab Sur"
+            ]
+          },
+          {
+            "id": 110,
+            "name": "General Tinio",
+            "zipCode": 3104,
+            "barangays": [
+              "Padolina (Barangay 1)", "Concepcion (Barangay 2)", "Rio Chico (Barangay 3)", "Pias (Barangay 4)", "Nazareth (Barangay 5)",
+              "Bago (Barangay 6)", "Poblacion West (Barangay 7)", "Poblacion Central (Barangay 8)", "San Pedro (Barangay 9)", "Sampaguita (Barangay 10)",
+              "Poblacion East (Barangay 11)", "Pulong Matong (Barangay 12)", "Palale (Barangay 13)"
+            ]
+          },
+          {
+            "id": 111,
+            "name": "Guimba",
+            "zipCode": 3115,
+            "barangays": [
+              "Agcano", "Ayos Lomboy", "Bacayao", "Bagong Barrio", "Balbalino", "Balingog East", "Balingog West",
+              "Banitan", "Bantug", "Bulakid", "Bunol", "Caballero", "Cabaruan", "Caingin Tabing Ilog", "Calem",
+              "Camiing", "Cardinal", "Casongsong", "Catimon", "Cavite", "Cawayan Bugtong", "Consuelo", "Culong",
+              "Escaño", "Faigal", "Galvan", "Guiset", "Lamorito", "Lennec", "Macamias", "Macapabellag",
+              "Macatcatuit", "Manacsac", "Manggang Marikit", "Maturanoc", "Maybubon", "Naglabrahan", "Nagpandayan",
+              "Narvacan I", "Narvacan II", "Pacac", "Partida I", "Partida II", "Pasong Intsik", "Saint John District (Poblacion)",
+              "San Agustin", "San Andres", "San Bernardino", "San Marcelino", "San Miguel", "San Rafael", "San Roque",
+              "Santa Ana", "Santa Cruz", "Santa Lucia", "Santa Veronica District (Poblacion)", "Santo Cristo District (Poblacion)",
+              "Saranay District (Poblacion)", "Sinulatan", "Subol", "Tampac I", "Tampac II & III", "Triala", "Yuson"
+            ]
+          },
+          {
+            "id": 112,
+            "name": "Jaen",
+            "zipCode": 3109,
+            "barangays": [
+              "Calabasa", "Dampulan (Poblacion)", "Don Mariano Marcos (Poblacion)", "Hilera", "Imbunia",
+              "Imelda de Poblacion (Doña Aurora)", "Lambakin", "Langla", "Magsalisi", "Malabon-Kaingin",
+              "Marawa", "Niyugan", "Ocampo-Rivera (Poblacion)", "Pakol", "Pamacpacan", "Pinanggaan", "Putlod",
+              "San Jose", "San Josef (Nabao)", "San Pablo", "San Roque", "San Vicente", "Santa Rita","Santo Tomas North",
+              "Santo Tomas South", "Sapang", "Ulanin-Pitak"
+            ]
+          },
+          {
+            "id": 113,
+            "name": "Laur",
+            "zipCode": 3129,
+            "barangays": [
+              "Barangay I (Poblacion)", "Barangay II (Poblacion)", "Barangay III (Poblacion)", "Barangay IV (Poblacion)",
+              "Betania", "Canantong", "Nauzon", "Pangarulong", "Pinagbayanan", "Sagana", "San Fernando", "San Isidro",
+              "San Josef", "San Juan", "San Vicente", "Siclong", "San Felipe"
+            ]
+          },
+          {
+            "id": 114,
+            "name": "Licab",
+            "zipCode": 3112,
+            "barangays": [
+              "Aquino", "Linao", "Poblacion Norte", "Poblacion Sur", "San Casimiro", "San Cristobal", "San Jose",
+              "San Juan", "Santa Maria", "Tabing Ilog", "Villarosa"
+            ]
+          },
+          {
+            "id": 115,
+            "name": "Llanera",
+            "zipCode": 3126,
+            "barangays": [
+              "A. Bonifacio (A. Bonifacio Sur)", "Bagumbayan (Poblacion)", "Bosque", "Caridad Norte", "Caridad Sur",
+              "Casile", "Florida Blanca", "General Luna", "General Ricarte", "Gomez", "Inanama", "Ligaya", "Mabini",
+              "Murcon", "Plaridel", "San Francisco (A. Bonifacio Norte)", "San Felipe", "San Nicolas", "San Vicente",
+              "Santa Barbara", "Victoria", "Villa Viniegas"
+            ]
+          },
+          {
+            "id": 116,
+            "name": "Lupao",
+            "zipCode": 3122,
+            "barangays": [
+              "Agupalo Este", "Agupalo Weste", "Alalay Chica", "Alalay Grande", "Barangay J.U.Tienzo", "Bagong Flores",
+              "Balbalungao", "Burgos", "Cordero", "Mapangpang", "Namulandayan", "Parista", "Poblacion East", "Poblacion North",
+              "Poblacion South", "Poblacion West", "Salvacion I", "Salvacion II", "San Antonio Este", "San Antonio Weste",
+              "San Isidro", "San Pedro", "San Roque", "Santo Domingo"
+            ]
+          },
+          {
+            "id": 117,
+            "name": "Nampicuan",
+            "zipCode": 3116,
+            "barangays": [
+              "Alemania",
+              "Ambassador Alzate Village",
+              "Cabaducan East (Poblacion)",
+              "Cabaducan West (Poblacion)",
+              "Cabawangan",
+              "East Central Poblacion",
+              "Edy",
+              "Maeling",
+              "Mayantoc",
+              "Medico",
+              "Monic",
+              "North Poblacion",
+              "Northwest Poblacion",
+              "Estacion",
+              "West Poblacion",
+              "Recuerdo",
+              "South Central Poblacion",
+              "Southeast Poblacion",
+              "Southwest Poblacion",
+              "Tony",
+              "West Central Poblacion"
+            ]
+          },
+          {
+            "id": 118,
+            "name": "Palayan",
+            "zipCode": 3132,
+            "barangays": [
+              "Atate",
+              "Aulo",
+              "Bagong Buhay",
+              "Bo. Militar (Fort Magsaysay)",
+              "Caballero (Poblacion)",
+              "Caimito (Poblacion)",
+              "Doña Josefa",
+              "Ganaderia (Poblacion)",
+              "Imelda Valley I",
+              "Imelda Valley II",
+              "Langka",
+              "Malate (Poblacion)",
+              "Maligaya",
+              "Manacnac",
+              "Mapaet",
+              "Marcos Village",
+              "Popolon (Pagas)",
+              "Santolan (Poblacion)",
+              "Sapang Buho",
+              "Singalat"
+            ]
+          },
+          {
+            "id": 119,
+            "name": "Pantabangan",
+            "zipCode": 3124,
+            "barangays": [
+              "Cadaclan",
+              "Cambitala",
+              "Conversion",
+              "Ganduz",
+              "Liberty",
+              "Malbang",
+              "Marikit",
+              "Napon-Napon",
+              "Poblacion East",
+              "Poblacion West",
+              "Sampaloc",
+              "San Juan",
+              "Villarica",
+              "Fatima"
+            ]
+          },
+          {
+            "id": 120,
+            "name": "Peñaranda",
+            "zipCode": 3103,
+            "barangays": [
+              "Callos",
+              "Las Piñas",
+              "Poblacion I",
+              "Poblacion II",
+              "Poblacion III",
+              "Poblacion IV",
+              "Santo Tomas",
+              "Sinasajan",
+              "San Josef",
+              "San Mariano (Maugat)"
+            ]
+          },
+          {
+            "id": 121,
+            "name": "Quezon",
+            "zipCode": 3113,
+            "barangays": [
+              "Bertese",
+              "Doña Lucia",
+              "Dulong Bayan",
+              "Ilog Baliwag",
+              "Barangay I (Poblacion)",
+              "Barangay II (Poblacion)",
+              "Pulong Bahay",
+              "San Alejandro",
+              "San Andres I",
+              "San Andres II",
+              "San Manuel",
+              "Santa Clara",
+              "Santa Rita",
+              "Santo Cristo",
+              "Santo Tomas Feria",
+              "San Miguel"
+            ]
+          },
+          {
+            "id": 122,
+            "name": "Rizal",
+            "zipCode": 3127,
+            "barangays": [
+              "Agbannawag",
+              "Aglipay",
+              "Bicos",
+              "Cabucbucan",
+              "Calaocan District",
+              "Canaan East",
+              "Canaan West",
+              "Casilagan",
+              "Del Pilar",
+              "Estrella",
+              "General Luna",
+              "Macapsing",
+              "Maligaya",
+              "Paco Roman",
+              "Pag-asa",
+              "Poblacion Central",
+              "Poblacion East",
+              "Poblacion Norte",
+              "Poblacion Sur",
+              "Poblacion West",
+              "Portal",
+              "San Esteban",
+              "San Gregorio",
+              "Santa Monica",
+              "Villa Labrador",
+              "Villa Paraiso"
+            ]
+          },
+          {
+            "id": 123,
+            "name": "San Antonio",
+            "zipCode": 3108,
+            "barangays": [
+              "Buliran",
+              "Cama Juan",
+              "Julo",
+              "Lawang Kupang",
+              "Luyos",
+              "Maugat",
+              "Panabingan",
+              "Papaya",
+              "Poblacion",
+              "San Francisco (KC-1) Kaisiwan",
+              "San Jose (Cabungan)",
+              "San Mariano",
+              "Santa Barbara",
+              "Santa Cruz (Parang)",
+              "Santo Cristo",
+              "Tikiw"
+            ]
+          },
+          {
+            "id": 124,
+            "name": "San Isidro",
+            "zipCode": 3106,
+            "barangays": [
+              "Alua",
+              "Calaba",
+              "Malapit",
+              "Mangga",
+              "Poblacion",
+              "Pulo",
+              "San Roque",
+              "Santo Cristo",
+              "Tabon"
+            ]
+          },
+          {
+            "id": 125,
+            "name": "San Jose",
+            "zipCode": 3121,
+            "barangays": [
+              "A. Pascual",
+              "Abar 2nd",
+              "Abar 1st",
+              "Bagong Sikat",
+              "Caanawan",
+              "Calaocan",
+              "Camanacsacan",
+              "Canuto Ramos Poblacion (District III)",
+              "Crisanto Sanchez Poblacion (District V)",
+              "Culaylay",
+              "Dizol",
+              "Ferdinand E. Marcos Poblacion (District II)",
+              "Kaliwanagan",
+              "Kita-Kita",
+              "Malasin",
+              "Manicla",
+              "Palestina",
+              "Parang Mangga",
+              "Pinili",
+              "Porais",
+              "Rafael Rueda Sr. Poblacion (District I)",
+              "Raymundo Eugenio Poblacion (District IV)",
+              "San Agustin",
+              "San Juan",
+              "San Mauricio",
+              "Santo Niño 1st",
+              "Santo Niño 2nd",
+              "Santo Niño 3rd",
+              "Santo Tomas",
+              "Sibut",
+              "Sinipit Bubon",
+              "Tabulac",
+              "Tayabo",
+              "Tondod",
+              "Tulat",
+              "Villa Floresca",
+              "Villa Joson (Parilla)",
+              "Villa Marina"
+            ]
+          },
+          {
+            "id": 126,
+            "name": "San Leonardo",
+            "zipCode": 3102,
+            "barangays": [
+              "Bonifacio (Población)", 
+              "Burgos (Población)",
+              "Castellano",
+              "Diversion",
+              "Magpapalayoc",
+              "Mallorca",
+              "Mambangnan",
+              "Nieves",
+              "Rizal (Población)",
+              "San Anton",
+              "San Bartolomé (Población)",
+              "San Roque",
+              "Tabuating",
+              "Tagumpay",
+              "Tambo-Adorable"
+            ]
+          },
+          {
+            "id": 127,
+            "name": "Santa Rosa",
+            "zipCode": 3101,
+            "barangays": [
+              "Cojuangco (Poblacion)",
+              "La Fuente",
+              "Liwayway",
+              "Malacañang",
+              "Maliolio",
+              "Mapalad",
+              "Rizal (Poblacion)",
+              "Rajal Centro",
+              "Rajal Norte",
+              "Rajal Sur",
+              "San Gregorio",
+              "San Mariano",
+              "San Pedro",
+              "Santo Rosario",
+              "Soledad",
+              "Valenzuela (Poblacion)",
+              "Zamora (Poblacion)",
+              "Aguinaldo",
+              "Berang",
+              "Burgos",
+              "Del Pilar",
+              "Gomez",
+              "Inspector",
+              "Isla",
+              "Lourdes",
+              "Luna",
+              "Mabini",
+              "San Isidro",
+              "San Joseph",
+              "Santa Teresita",
+              "Sapsap",
+              "Tagpos",
+              "Tramo"
+            ]
+          },
+          {
+            "id": 128,
+            "name": "Santo Domingo",
+            "zipCode": 3133,
+            "barangays": [
+              "Baloc",
+              "Buasao",
+              "Burgos",
+              "Cabugao",
+              "Casulucan",
+              "Comitang",
+              "Concepcion",
+              "Dolores",
+              "General Luna",
+              "Hulo",
+              "Mabini",
+              "Malasin",
+              "Malayantoc",
+              "Mambarao",
+              "Poblacion",
+              "Malaya (Pook Malaya)",
+              "Pulong Buli",
+              "Sagaba",
+              "San Agustin",
+              "San Fabian",
+              "San Francisco",
+              "San Pascual",
+              "Santa Rita",
+              "Santo Rosario"
+            ]
+          },
+          {
+            "id": 129,
+            "name": "Science City of Muñoz",
+            "zipCode": 3119,
+            "barangays": [
+              "Bagong Sikat",
+              "Balante",
+              "Bantug",
+              "Bical",
+              "Cabisuculan",
+              "Calabalabaan",
+              "Calisitan",
+              "Catalanacan",
+              "Curva",
+              "Franza",
+              "Gabaldon",
+              "Labney",
+              "Licaong",
+              "Linglingay",
+              "Magtanggol",
+              "Maligaya",
+              "Mangandingay",
+              "Mapangpang",
+              "Maragol",
+              "Matingkis",
+              "Naglabrahan",
+              "Palusapis",
+              "Pandalla",
+              "Poblacion East",
+              "Poblacion North",
+              "Poblacion South",
+              "Poblacion West",
+              "Rang-ayan",
+              "Rizal",
+              "San Andres",
+              "San Antonio",
+              "San Felipe",
+              "Sapang Cawayan",
+              "Villa Cuizon",
+              "Villa Isla",
+              "Villa Nati",
+              "Villa Santos"
+            ]
+          },
+          {
+            "id": 130,
+            "name": "Talavera",
+            "zipCode": 3114,
+            "barangays": [
+              "Andal Aliño",
+              "Bagong Sikat",
+              "Bagong Silang",
+              "Bacal I",
+              "Bacal II",
+              "Bacal III",
+              "Baluga",
+              "Bantug",
+              "Bantug Hacienda",
+              "Basang Hamog",
+              "Bugtong na Buli",
+              "Bulac",
+              "Burnay",
+              "Calipahan",
+              "Campos",
+              "Casulucan Este",
+              "Collado",
+              "Dimasalang Norte",
+              "Dimasalang Sur",
+              "Dinarayat",
+              "Esguerra District",
+              "Gulod",
+              "Homestead I",
+              "Homestead II",
+              "Cabubulaunan",
+              "Caaniplahan",
+              "Caputican",
+              "Kinalanguyan",
+              "La Torre",
+              "Lomboy",
+              "Mabuhay",
+              "Maestrang Kikay (Poblacion)",
+              "Mamandil",
+              "Marcos District (Poblacion)",
+              "Matias District (Poblacion)",
+              "Matingkis",
+              "Minabuyoc",
+              "Pag-asa District (Poblacion)",
+              "Paludpod",
+              "Pantoc Bulac",
+              "Pinagpanaan",
+              "Poblacion Sur (Poblacion)",
+              "Pula",
+              "Pulong San Miguel",
+              "Sampaloc",
+              "San Miguel na Munti",
+              "San Pascual",
+              "San Ricardo",
+              "Sibul",
+              "Sicsican Matanda",
+              "Tabacao",
+              "Tagaytay",
+              "Valle"
+            ]
+          },
+          {
+            "id": 131,
+            "name": "Talugtug",
+            "zipCode": 3118,
+            "barangays": [
+              "Alula",
+              "Baybayabas",
+              "Buted",
+              "Cabiangan",
+              "Calisitan",
+              "Cinense",
+              "Culiat",
+              "Maasin",
+              "Magsaysay (Poblacion)",
+              "Mayamot I",
+              "Mayamot II",
+              "Nangabulan",
+              "Osmeña (Poblacion)",
+              "Villa Fronda",
+              "Patola",
+              "Quezon (Poblacion)",
+              "Quirino (Poblacion)",
+              "Roxas (Poblacion)",
+              "Saguing",
+              "Sampaloc",
+              "Santa Catalina",
+              "Santo Domingo",
+              "Saverona",
+              "Tandoc",
+              "Tibag",
+              "Villa Rosario",
+              "Villa Rosenda (formerly Saringaya)",
+              "Villa Boado"
+            ]
+          },
+          {
+            "id": 132,
+            "name": "Zaragoza",
+            "zipCode": 3110,
+            "barangays": [
+              "Batitang",
+              "Carmen",
+              "Concepcion",
+              "Del Pilar",
+              "General Luna",
+              "H. Romero",
+              "Macarse",
+              "Manaol",
+              "Mayamot",
+              "Pantoc",
+              "San Vicente (Poblacion)",
+              "San Isidro",
+              "San Rafael",
+              "Santa Cruz",
+              "Santa Lucia Old",
+              "Santa Lucia Young",
+              "Santo Rosario Old (Valdez matanda)",
+              "Santo Rosario Young (Valdez bata)",
+              "Valeriana"
+            ]
+          }                                                                                
+        ]
+      }
+    ]
+  }
+  

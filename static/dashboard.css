@@ -229,7 +229,13 @@ gap: 10px;
 color: #182e17;
 font-weight: bold;
 }
-
+#loadingText {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+}
 .recom {
 text-align: left;
 background-color: white;

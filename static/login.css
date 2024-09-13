@@ -1,7 +1,5 @@
 body {
     position: relative;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
     margin: 0;
     font-family: Arial, sans-serif;
@@ -9,90 +7,44 @@ body {
     padding: 0;
 }
 
-header {
-    position: fixed;
+.navbar {
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    padding:10px;
-    background-color: #E6ECDE;
-    height: 80px;
-    width: 100%;
-    z-index: 1000;
-    margin-top: 0;
+    padding: 20px 30px;
+    background-color: #E6ECDE; /* Background color for the navbar */
 }
 
-.navwh {
-    justify-content: space-between;
-    align-items: center;
+.navbar nav ul {
     display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100px;
-    width: 100%;
+    list-style: none;
+    gap: 40px;
+}
+
+.navbar nav ul li a {
+    text-decoration: none;
+    color: #182e17;
+    font-weight: bold;
+}
+
+.logo{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #182E17;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #182E17;
 }
 
 .burger-icon {
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
     display: none;
-    font-size: 1.5rem;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    top: 20px; /* Adjust as needed */
-    right: 20px; /* Adjust as needed */
-    z-index: 9999;
-}
-
-#navbar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    justify-content: flex-end;
-    align-items: center;
-    height: 100px;
-    display: flex;
-    width: 50%;
-    flex-grow: 1;
-}
-
-#navbar ul{
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    justify-content: flex-end;
-    margin-right: 100px;
-}
-
-#navbar li {
-    margin-right: 80px;
-    align-items: center;
-}
-
-
-#navbar a {
-    color: #182E17;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: bold;
-    float: left;
-    display: block;
-    text-align: center;
-}
-
-.nav_brand {
-    margin-left: 50px;
-    display: flex;
-    padding-left: 20px;
-}
-
-.navbar_brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #182E17;
-    text-decoration: none;
-    cursor: pointer;
 }
 
 
@@ -130,30 +82,26 @@ header {
     color: #182E17; /* Text color for dropdown links */
 }
 
-
 .content {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    margin: 0;
-    padding: 0;
-    width: 100%;
+    align-items: center;
+    padding: 20px;
 }
+
 
 .container {
     width: 80%;
-    max-width: 100%;
+    max-width: 1440px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    margin: 20px;
+    margin: 0 auto;
     border: 1px solid #ccc;
     border-radius: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background: #bbc5ad;
-    margin-top: 100px;
 }
 
 .register, .logincontainer {
@@ -166,7 +114,7 @@ header {
     align-items: left;
     justify-content: center;
     flex-direction: column;
-    margin: 30px;
+    padding: 40px;
     gap: 20px;
 }
 
@@ -174,10 +122,10 @@ header {
     margin: 0;
     padding: 0;
     color: #182E17;
-    font-size: 3.1em;
+    font-size: 3em;
 }
 
-p { 
+.register p { 
     margin: 0;
     padding: 0;
     color: #182E17;
@@ -187,11 +135,11 @@ p {
 }
 
 p.desc {
-    font-size: 1.9em;
+    font-size: 1.8em;
     margin: 0;
 }
 
-.logo {
+.logo-img {
     margin: 0;
     padding: 0;
     display: block;
@@ -264,11 +212,14 @@ input[type="password"]:valid + label {
     font: 1.2em 'Roboto', sans-serif;
     width: 300px;
     color: #fff;
-    }
+    cursor: pointer;
+    transition: transform 0.2s;
+}
 
 .logbtn[type="submit"]:hover {
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    transform: scale(1.05);
 }
+
 
 a.register-button {
     background: #182E17;
@@ -276,83 +227,75 @@ a.register-button {
     border-radius: 10px;
     padding: 10px 50px;
     font: 1.2em 'Roboto', sans-serif;
-    width: 200px;
     color: #fff;
+    width: 300px!important;
+    max-width: 300px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
-    margin: 10px 0;
     align-self: center;
+    cursor: pointer;
+    transition: transform 0.2s;
 }
 
 a.register-button:hover {
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    transform: scale(1.05);
 }
 
 .footer {
-    background-color: #f8f8f8; /* Example background color */
-    font-family: Arial, sans-serif; /* Example font */
     bottom: 0;
-    width: 100%;
     position: fixed;
-    left: 0;
-    margin: 0;
-    padding: 0;
+    background-color: #f8f8f8; /* Example background color */
+    width: 100%;
+    box-sizing: border-box; /* Include padding in width */
 }
 
 .footer-content {
+    width: 100%; /* Full width for responsiveness */
     display: flex; /* Flexbox for layout */
     justify-content: space-between; /* Space between elements */
-    align-items: center; /* Center items vertically */
-    width: 100%;
-    margin: 0; /* Center content horizontally */
-    padding: 0 20px; /* Padding for responsiveness */
-    flex-direction: row;
+    align-items: center;
+    margin: 0 auto; /* Center the content */
+    box-sizing: border-box; /* Include padding in width */
+    padding: 10px 20px; /* Padding for the content */
 }
 
 .footer-left, .footer-right {
-    padding: 5px;
+    display: flex;
+    flex: 1; /* Take equal space */
+    margin: 0;
 }
 
 .footer-left {
-    display: flex; /* Flexbox for layout */
-    text-align: left;
-    left: 0;
-    flex: 1;
-    justify-content: flex-start;
+    justify-content: flex-start; /* Align to the left */
+    flex-direction: column; /* Stack items vertically if needed */
 }
 
 .footer-right {
-    display: flex;
-    text-align: right;
-    right: 0;
-    flex: 1;
-    justify-content: flex-end;
-    align-items: center;
-    margin-right: 10px;
+    justify-content: flex-end; /* Align to the right */
 }
 
-.footer-support p {
-    margin: 0 0 4px; /* Margin for spacing */
+.footer-left p {
+    margin: 0; /* Remove default margin */
     font-size: 0.8em; /* Example font size */
 }
 
-.footer-social a {
+.footer-right a {
     margin: 0 10px; /* Margin between links */
     text-decoration: none; /* Remove underline from links */
     color: #333; /* Link color */
     font-size: 0.8em;
 }
 
-.footer-social a:hover {
+.footer-right a:hover {
     color: #007bff; /* Link hover color */
 }
 
-.footer-social img {
+.footer-right img {
     width: 20px; /* Image width */
     height: 20px; /* Image height */
     margin: 0; /* Remove margin */
 }
+
 
 
 
@@ -368,50 +311,12 @@ a.register-button:hover {
         height: auto;
     }
 
-    header {
-        height: 60px;
-        top: 0;
-        left: 0;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-    }
-    
-    .navwh {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        display: flex;
-        position: fixed;
-        top: 20px;
-        left: 0;
-        width: 100%;
-        height: 30px;
-    }
-
-    #navbar .nav_link {
+    .navbar nav {
         display: none;
     }
 
     .burger-icon {
         display: block;
-        cursor: pointer;
-        position: fixed;
-        top: 20px;
-        right: 50px;
-        z-index: 9999;
-    }
-
-    .line {
-        width: 30px;
-        height: 3px;
-        background-color: #fff;
-        margin: 5px 0;
-    }
-    
-    .nav_brand {
-        margin-left: 30px;
-        padding-left: 0;
     }
 
     .dropdown {
@@ -419,6 +324,7 @@ a.register-button:hover {
     }
 
     .content {
+        width: 100%;
         flex-direction: column; /* Stack children vertically */
         padding: 20px; /* Add padding to content */
     }
@@ -427,9 +333,10 @@ a.register-button:hover {
         display: flex;
         flex-direction: column;
         align-items: center; /* Center children horizontally */
-        width: 80%;
+        width: 100%;
         height: auto;
-        margin-top: 50px;
+        margin-top: 0;
+        padding: 10px;
     }
 
     .register, .logincontainer {
@@ -441,9 +348,10 @@ a.register-button:hover {
     .register {
         margin-top: 10px;
         margin-bottom: 20px;
+        align-items: center;
     }
 
-    .ttl, p.desc {
+    .ttl, p.desc{
         box-sizing: border-box; /* Include padding and border in element's total width and height */
     }
 
@@ -454,9 +362,18 @@ a.register-button:hover {
     }
 
     p.desc {
-        width: 90%;
         font-size: 1em;
-        margin-top: 10px; /* Add space between ttl and desc */
+    }
+
+    .register p {
+        font-size: 1em;
+        margin-top: 10px; /* Add space between desc and register */
+        align-self: center;
+    }
+
+    a.register-button {
+        width: 250px!important;
+        font-size: 1em;
     }
 
     .logbtn { 
@@ -464,29 +381,31 @@ a.register-button:hover {
     }
 
     .input-container {
-        margin: 5px 0; /* Add space between input fields */
-        width: 80%;
+        margin: 10px 0; /* Add space between input fields */
+        width: 100%;
     }
 
-    .footer-content {
-        flex-direction: column;
-        align-items: center; /* Center items vertically */
-        text-align: center; /* Center text */
-        padding: 10px;
+    .logincontainer h1 {
+        font-size: 1.5em; /* Adjust font size for smaller screens */
+    }
+
+    .logo-img {
+        width: 150px; /* Adjust width of logo image */
+    }
+
+    .footer {
+        padding: 5px 0; /* Adjust padding for smaller screens */
+        position: relative;
     }
 
     .footer-left, .footer-right {
-        justify-content: center;
-        width: 100%; /* Full width for each section */
+        width: 100%; /* Full width for responsiveness */
     }
 
-    .footer-right {
-        margin-top: 10px;
+    .footer-left p {
+        font-size: 0.7em;
     }
 
-    .footer-social a {
-        margin: 0 5px; /* Reduce margin between links on smaller screens */
-    }
 
 }
 
@@ -533,45 +452,4 @@ a.register-button:hover {
         font-size: 1em; /* Adjust font size for smaller screens */
     }
 
-    a.register-button {
-        width: 150px; /* Adjust width of button */
-        font-size: 1em; /* Adjust font size for smaller screens */
-    }
-
-
-    .footer {
-        position: relative; /* Remove fixed positioning */
-    }
-
-    .footer-content {
-        flex-direction: column;
-        align-items: center;
-        padding: 0;
-        margin: 0;
-    }
-
-    .footer-left, .footer-right {
-        justify-content: center;
-        width: 100%;
-        text-align: center;
-        align-items: center;
-    }
-
-    .footer-right {
-        margin: 10px 0; /* Add margin between sections */
-    }
-
-    .footer-left {
-        flex-direction: column;
-    }
-
-    .footer-support p {
-        font-size: 0.7em; /* Adjust font size for smaller screens */
-    }
-
-    .footer-social a {
-        margin: 0 5px; /* Reduce margin between links on smaller screens */
-    }
 }
-
-
