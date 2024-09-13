@@ -4,40 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../static/register_farmer.css">
     <title>Register Form</title>
 </head>
 
 <body>
-    <header>
-        <div class="navwh">
-        <div class="nav_brand">
-                <a href="/" class="navbar_brand">LimeLine</a>
-            </div>
-        
-        <nav id="navbar">
-            
-                <ul> 
-                  <li><a href="/home" class="nav_link">Home</a></li>
-                  <li><a href="#" class="nav_link">About</a></li>
-                  <li><a href="#" class="nav_link">Services</a></li>
-                  <li><a href="#" class="nav_link">Contact</a></li>
-                </ul>
-                    
-            </nav>
-            <div id="burger-icon" class="burger-icon">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-            </div>
+    <div class="navbar">
+        <div class="logo"><a href="/index">LimeLine</a></div> <!-- Logo Name on the left -->
+        <nav>
+            <ul>
+            <li><a href="{{url_for('index')}}" >Home</a></li>
+
+                <li><a href="/about">About</a></li>
+                <li><a href="#">Help</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="burger-icon">
+            <i class="fas fa-bars"></i>
         </div>
         <div class="dropdown">
-            <li><a href="#" >Home</a></li>
-            <li><a href="#" >About</a></li>
-            <li><a href="#" >Services</a></li>
-            <li><a href="#" >Contact</a></li>
+            <li><a href="{{url_for('index')}}" >Home</a></li>
+            <li><a href="/about" >About</a></li>
+            <li><a href="#" >Help</a></li>
+            <li><a href="/contact" >Contact</a></li>
         </div>
-    </header>
+    </div>
 
     <div class="cont">
         <div class="farmer-container">
@@ -45,9 +38,7 @@
         <a href="/register_farmer">Back to Home</a>
     
         <form id="registerForm" action="/register_farmer" method="post">
-
-            <input type="hidden" name="user_id" value="{{ user_id }}">
-
+            <input type="hidden" name="user_id" value="{{user_id}}">
             <div class="input-cont">
                 <input type="text" id="fname" name="fname" required placeholder=" ">
                 <label for="fname">First Name</label>
@@ -60,84 +51,156 @@
                 <input type="text" id="lname" name="lname" required placeholder=" ">
                 <label for="lname">Last Name</label>
             </div>
-            <div class="input-cont">
-                <input type="text" id="province" name="province" required placeholder=" ">
-                <label for="province">Province</label>
+            <div class="form-group">
+                <label for="province-dropdown">Province</label>
+                <select id="province-dropdown" name="province-dropdown">
+                    <option value="">Select Province</option>
+                </select>
             </div>
-            <div class="input-cont">
-                <input type="text" id="city" name="city" required placeholder=" ">
-                <label for="city">City</label>
+            <div class="form-group">
+                <label for="city-dropdown">City</label>
+                <select id="city-dropdown" name="city-dropdown" disabled>
+                    <option value="">Select City</option>
+                </select>
             </div>
-            <div class="input-cont">
-                <input type="text" id="brgy" name="brgy" required placeholder=" ">
-                <label for="brgy">Barangay</label>
+            <div class="form-group">
+                <label for="barangay-dropdown">Barangay</label>
+                <select id="barangay-dropdown" name="barangay-dropdown" disabled>
+                    <option value="">Select Barangay</option>
+                </select>
             </div>
             <div class="input-cont">
                 <input type="text" id="strt_add" name="strt_add" required placeholder=" ">
                 <label for="strt_add">Street Address</label>
             </div>
+            <span id="error-message" style="color: red;"></span>
             <div class="input-cont">
                 <input type="num" id="cont_num" name="cont_num" required placeholder=" ">
                 <label for="cont_num">Contact Number</label>
             </div>
-            <span id="error-message" style="color:red;"></span>
-
             <div class="submit">
                 <input type="submit" value="Next">
             </div>
         </form>
     </div>
     </div>
-        <footer class="footer"> 
-            <div class="footer-content">
-            <div class="footer-left">
-            <div class="footer-support">
-            <p>Contact us: support@example.com | +123 456 7890</p>
-            <p>&copy; 2024 Your Company Name. All rights reserved.</p>
-            </div>
-            <div class="footer-right">
-            <div class="footer-social">
-            <a href="https://facebook.com" target="_blank"><img src="../static/facebook.png" alt="Facebook" ></a>
-            <a href="https://twitter.com" target="_blank"><img src="../static/twitter.png" alt="twitter"></a>
-            <a href="https://instagram.com" target="_blank"><img src="../static/instagram.png" alt="instagram"></a>
-            </div>
-            </div>
+
+    <footer class="footer"> 
+        <div class="footer-content">
+        <div class="footer-left">
+        <p>Contact us: support@example.com | +123 456 7890</p>
+        <p>&copy; 2024 Your Company Name. All rights reserved.</p>
         </div>
+        <div class="footer-right">
+        <a href="https://facebook.com" target="_blank"><img src="../static/facebook.png" alt="Facebook" ></a>
+        <a href="https://twitter.com" target="_blank"><img src="../static/twitter.png" alt="twitter"></a>
+        <a href="https://instagram.com" target="_blank"><img src="../static/instagram.png" alt="instagram"></a>
         </div>
-        </footer>
+    </div>
+    </footer>
 
-        <script>
-            const burgerIcon = document.getElementById('burger-icon');
-            const navbar = document.getElementById('navbar');
-            const dropdown = document.querySelector('.dropdown');
-            const navLinks = document.querySelectorAll('.nav_link');
-            const contactInput = document.getElementById('cont_num');
-            const errorMessage = document.getElementById('error-message');
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+            const provinceDropdown = document.getElementById('province-dropdown');
+            const cityDropdown = document.getElementById('city-dropdown');
+            const barangayDropdown = document.getElementById('barangay-dropdown');
+            
+            fetch('../static/dropdown.json')
+                .then(response => response.json())
+                .then(data => {
+                    function populateProvinces() {
+                        data.provinces.forEach(province => {
+                            const option = document.createElement('option');
+                            option.value = province.id;
+                            option.textContent = province.name;
+                            provinceDropdown.appendChild(option);
+                        });
 
-            contactInput.addEventListener('input', function(e) {
-                this.value = this.value.replace(/\D/g, '');
+                        // Optionally, set a default province
+                        const defaultProvinceId = data.provinces[0].id;
+                        provinceDropdown.value = defaultProvinceId;
+                        populateCities(defaultProvinceId);
+                    }
 
-                if (this.value.length > 0 && !this.value.startsWith('09')) {
-                    errorMessage.textContent = "Contact number must start with 09.";
-                } else if (this.value.length > 11) {
-                    this.value = this.value.slice(0, 11);
-                    errorMessage.textContent = "Contact number cannot exceed 11 digits.";
-                } else {
-                    errorMessage.textContent = "";
-                }
-    });
-            burgerIcon.addEventListener('click', () => {
-                navbar.classList.toggle('open');
-                dropdown.classList.toggle('open');
-            });
-        
-            navLinks.forEach((link) => {
-                link.addEventListener('click', () => {
-                    navbar.classList.remove('open');
-                    dropdown.classList.remove('open');
+                    function populateCities(provinceId) {
+                        const province = data.provinces.find(p => p.id == provinceId);
+                        cityDropdown.innerHTML = '<option value="">Select City</option>';
+                        barangayDropdown.innerHTML = '<option value="">Select Barangay</option>';
+                        barangayDropdown.disabled = true;
+                        if (province) {
+                            province.cities.forEach(city => {
+                                const option = document.createElement('option');
+                                option.value = city.id;
+                                option.textContent = city.name;
+                                cityDropdown.appendChild(option);
+                            });
+                            cityDropdown.disabled = false;
+                            // Optionally, set a default city
+                            const defaultCityId = province.cities[0].id;
+                            cityDropdown.value = defaultCityId;
+                            populateBarangays(defaultCityId);
+                        } else {
+                            cityDropdown.disabled = true;
+                        }
+                    }
+
+                    function populateBarangays(cityId) {
+                        const province = data.provinces.find(p => p.cities.some(c => c.id == cityId));
+                        const city = province.cities.find(c => c.id == cityId);
+                        barangayDropdown.innerHTML = '<option value="">Select Barangay</option>';
+                        if (city) {
+                        city.barangays.forEach(barangay => {
+                            const option = document.createElement('option');
+                            option.textContent = barangay;
+                            barangayDropdown.appendChild(option);
+                        });
+                        barangayDropdown.disabled = false;
+                        } else {
+                        barangayDropdown.disabled = true;
+                        }
+                    }
+
+                    provinceDropdown.addEventListener('change', function() {
+                        populateCities(this.value);
+                    });
+
+                    cityDropdown.addEventListener('change', function() {
+                        populateBarangays(this.value);
+                    });
+
+                    populateProvinces();
+                })
+                .catch(error => console.error('Error loading JSON data:', error));
+        });
+
+        const burgerIcon = document.querySelector('.burger-icon');
+        const burgerIconIcon = document.querySelector('.burger-icon i');
+        const dropdownMenu = document.querySelector('.dropdown');
+        const contactInput = document.getElementById('cont_num');
+                const errorMessage = document.getElementById('error-message');
+
+
+                contactInput.addEventListener('input', function(e) {
+                    this.value = this.value.replace(/\D/g, '');
+
+                    if (this.value.length > 0 && !this.value.startsWith('09')) {
+                        errorMessage.textContent = "Contact number must start with 09.";
+                    } else if (this.value.length > 11) {
+                        this.value = this.value.slice(0, 11);
+                        errorMessage.textContent = "Contact number cannot exceed 11 digits.";
+                    } else {
+                        errorMessage.textContent = "";
+                    }
                 });
-            });
-        </script>
+
+        burgerIcon.onclick = function() {
+        dropdownMenu.classList.toggle('open');
+        const isOpen = dropdownMenu.classList.contains('open');
+    
+        // Toggle between bars and times icon based on the dropdown state
+        burgerIconIcon.classList = isOpen ? 'fas fa-times' : 'fas fa-bars';
+    };
+</script>
 </body>
 
 </html>

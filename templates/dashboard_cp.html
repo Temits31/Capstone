@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../static/dashboard.css">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.0/dist/chart.min.js"></script>
+    
     <title>HUHU</title>
 </head>
 <body>
@@ -125,9 +130,15 @@
                         </div>
                         </div>                
                 </div>
+                <div id="loadingText" style="display: none;">
+                    <h2>
+                    Detecting... Please wait.
+
+                    </h2>
+                </div>
 
                 <div class="prediction">
-                    <form action="{{ url_for('dashboard_cp') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ url_for('dashboard_cp') }}" method="post" enctype="multipart/form-data" id="uploadForm">
                         <label for="file">Upload File:</label>
                         <p>Upload a clear image of your calamansi here for disease detection.</p>
                         <input type="file" name="file" id="file" accept="image/*" capture="camera">
@@ -137,21 +148,41 @@
                     {% for result in results %}
                     <p>{{ result.label }}</p>
                     {%endfor%}
-                    <img src="{{image_url}}" alt="">
+                    <img src="{{ image_url }}" alt="">
+                    
                 </div>
                 <div class="recom">
                     <label>Disease Information</label>
+                        {% for result in results %}
+                        <div class="result-item">
+                            <p><strong>Name:</strong> {{ result.label }}</p>
+                            <p><strong>Description:</strong> {{ result.description }}</p>
+                            <p><strong>Cause:</strong> {{ result.cause }}</p>
+                            <p><strong>Solution:</strong> {{ result.solution }}</p>
+                        </div>
+                        {% endfor %}
+                    
 
-                    {% for result in results %}
-                    <div class="result-item">
-                        <p><strong>Name:</strong> {{ result.label }}</p>
-                        <p><strong>Description:</strong> {{ result.description }}</p>
-                        <p><strong>Cause:</strong> {{ result.cause }}</p>
-                        <p><strong>Solution:</strong> {{ result.solution }}</p>
-                    </div>
-                    {% endfor %}
                 </div>
                 </div>
+
+                <div>
+                    <select id="filterSelect" onchange="updateChart()">
+                        <option value="daily">Today</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+
+                <canvas id="diseaseChart" width="200" height="70"></canvas>
+
+                <div style="width: 300px; height: 300px;">
+                    <canvas id="diseasePieChart" width="400" height="200"></canvas>
+                </div>
+                
+
+
                 <div class="statistics">
                 <div class="stats">
                     <h3>TOTAL DISEASE DETECTED:</h3>{{count}}
@@ -163,6 +194,71 @@
             </div>
         </div>
     </div>
+    
+    <script src="../static/get_disease_stats.js"></script>
+    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('diseaseChart').getContext('2d');
+
+        const lineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],  // Will be updated dynamically
+                datasets: [{
+                    label: 'Disease Detections',
+                    data: [], 
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'category',  
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Detection Count'
+                        }
+                    }
+                }
+            }
+        });
+
+        function updateChart() {
+            const filterType = document.getElementById('filterSelect').value;
+
+            fetch(`/get_disease_data?filter=${filterType}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Error:', data.error);
+                        return;
+                    }
+
+                    lineChart.data.labels = data.labels;
+                    lineChart.data.datasets[0].data = data.data;
+                    lineChart.update();
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        document.getElementById('filterSelect').addEventListener('change', updateChart);
+
+        updateChart();
+    });
+
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -170,13 +266,20 @@
     const burgerIconIcon = document.querySelector('.burger-icon i');
     const dropdownMenu = document.querySelector('.dropdown');
 
+
+
     burgerIcon.onclick = function() {
         dropdownMenu.classList.toggle('open');
         const isOpen = dropdownMenu.classList.contains('open');
         
         burgerIconIcon.classList = isOpen ? 'fas fa-times' : 'fas fa-bars';
     };
-
+    document.getElementById("uploadForm").addEventListener("submit", function(event) {
+        document.getElementById("loadingText").style.display = "block";
+        });
+        setTimeout(function() {
+            document.getElementById("loadingText").style.display = "none";
+        }, 5000); // Simulating a 3-second processing delay
     var currentDate = new Date();
     var formattedDate = currentDate.toLocaleDateString("en-US", {
         weekday: "long",

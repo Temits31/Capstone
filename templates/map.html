@@ -6,7 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        .text-label {
+        .text-label {  
             background: none;
             border: none;
             text-align: center;
@@ -20,53 +20,107 @@
             height: 400px;
         }
 
-
+        /* Add additional styling for navigation and sidebar if needed */
     </style>
 </head>
 <body>
-    
-    <div id="map">
+    {% if session['role_id'] == 2 %}
 
+    <strong>{{session['role_id']}}</strong>
+    <nav class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="{{url_for('admin_dashboard')}}">Dashboard</a></li>
+            <li><a href="{{url_for('admin_crud')}}">Admin CRUD</a></li>
+            <li><a href="{{url_for('update_farm_status')}}">Farm Status</a></li>
+            <li><a href="{{url_for('admin_test')}}">Admin Test</a></li>
+            <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-tasks"></i> Admin Farm</a></li>
+            <li><a href="{{url_for('map')}}">Map</a></li>
+        </ul>
+    </nav>
+    {% elif session['role_id'] == 6 %}
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
+                {% if user_type in ['user_farmer', 'farm_owner'] %}
+                    {% if status in ['member', 'Owner'] %}
+                    <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                    {% endif %}
+                {% endif %}
+                <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+                <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                {% if user_type in ['user_farmer', 'farm_owner'] %}
+                    {% if status in ['member', 'Owner'] %}
+                    <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                    <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                    <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> Farm</a></li>
+                    {% endif %}
+                {% endif %}
+                {% if user_type == 'farm_owner' %}
+                    {% if status in ['member', 'Owner'] %}
+                    <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add Farm</a></li>
+                    {% endif %}
+                <li><a href="{{ url_for('nofarm') }}"><i class="fas fa-tasks"></i> Join a Farm</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
+            </ul>
+        </nav>
+    </div>            
+    <div class="content">
+        <div class="navbar">
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="burger-icon">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
     </div>
+    {% else %}
+    <!-- Content for other users or visitors -->
+    {% endif %}
 
+    <div id="map"></div>
 
-
-
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Initialize the map at the specified coordinates and zoom level
+            var map = L.map('map').setView([15.36054945411487, 120.92213630676271], 15);
 
-          var map = L.map('map').setView([15.36054945411487 , 120.92213630676271], 15);
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          }).addTo(map);
+            // Load and display tile layers from OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
 
-          var data = {{ coords | tojson | safe }};
+            var data = {{ coords | tojson | safe }};
 
-          data.forEach(function (coords, index) {
-                    var lat = coords.latitude;
-                    var long = coords.longitude;
-                    var diseaseCount = coords.disease_count;
-    
-                    var marker = L.marker([lat, long]).addTo(map);
+            data.forEach(function (coords) {
+                var lat = coords.latitude;
+                var lng = coords.longitude;
+                var diseaseCount = coords.disease_count;
+                var radius = 400; // Default radius
 
-                    marker.bindPopup('Disease Count: ' + diseaseCount).openPopup();
-                    
-                    marker.on('click', function () {
-                        map.setView([lat, long], map.getZoom() + 3);
-                    });
+                // Create a circle with specified radius
+                L.circle([lat, lng], { radius: radius }).addTo(map);
 
+                // Create a marker
+                var marker = L.marker([lat, lng]).addTo(map);
+
+                // Bind a popup with disease count information
+                marker.bindPopup('Disease Count: ' + diseaseCount);
+
+                // Adjust the map view when marker is clicked
+                marker.on('click', function () {
+                    map.setView([lat, lng], map.getZoom() + 2); // Adjust zoom level increment as needed
                 });
-      });
-
-      </script>
-
-          <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-
-
-
-
-
-
+            });
+        });
+    </script>
 </body>
 </html>

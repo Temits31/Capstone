@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>farm</title>
+    <title>Farm</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../static/dashboard.css">
 </head>
@@ -13,145 +13,117 @@
             <div class="sidebar">
                 <nav>
                     <ul>
-
                         <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
-
-
-
-
-                            <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
-                            
-
-                        
+                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
                         <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
                         <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
-                        
-                        
-
-                            <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
-                            <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
-                        <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
-
-   
-
-                            <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
-
-                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
-
-                    </ul>
-                </nav>
-            </div>            
-            <div class="content">
-                <div class="navbar">
-                <nav>
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </nav>
-                <div class="burger-icon">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </div>
-            <div class="dropdown">
-                    <li><a href="#" ><i class="fas fa-home"></i>Home</a></li>
-                    <li><a href="#" ><i class="fas fa-info-circle"></i> About</a></li>
-                    <li><a href="#" ><i class="fas fa-question-circle"></i>Help</a></li>
-                    <li><a href="#" ><i class="fas fa-envelope"></i>Contact</a></li>
-                    <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
-
-                    {% if user_type in ['user_farmer', 'farm_owner'] %}
-                        {% if status in ['member', 'Owner'] %}
-
-                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
-                        {% endif %}
-                    {% endif %}
-
-                        
-                    <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
-                    
-                    <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
-                        
-                        
-                    {% if user_type in ['user_farmer', 'farm_owner'] %}
-                        {% if status in ['member', 'Owner'] %}
-
                         <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
                         <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
-                        <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
-
-                        {% endif %}
-                    {% endif %}
-                        
-                    {%  if user_type in ['user_farmer', 'farm_owner'] %}
-                    <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
-                    {% endif %}
-                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
-
+                        <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> Farm</a></li>
+                        <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add Farm</a></li>
+                        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
+                    </ul>
+                </nav>
             </div>
-
-
-
-
-            <strong><h1>Which Farm are you now?</h1></strong>
+            <div class="content">
+                <strong><h1>Which Farm are you now?</h1></strong>
                 {% for farm in farms %}
                     <form action="/farm" method="post">
                         <div class="buttons">
-                            <!-- Select a farm button -->
-       
-        <button class="option-button-left" name="farm_id" value="{{ farm[0] }}">Farm name: {{ farm[1] }} </button>
+                            <button class="option-button-left" name="farm_id" value="{{ farm[0] }}">Farm name: {{ farm[1] }} </button>
                         </div>
                         <div>Disease in farms: {{farm[2]}}</div>
+                        <div>
+                            <canvas id="chart_{{ farm[0] }}" width="400" height="200"></canvas>
+                        </div>
                     </form>
-                    
-                    <!-- Leave Farm button -->
+
                     <form id="leaveFarmForm_{{ farm[0] }}" action="{{ url_for('leave_farm') }}" method="POST">
                         <input type="hidden" name="farm_id" value="{{ farm[0] }}">
                         <button type="button" class="btn btn-danger" onclick="confirmLeave('{{ farm[0] }}', '{{ role_id }}')">Leave Farm</button>
-                        
-                        <!-- Reason field for farm owners, hidden initially -->
                         <div id="reasonSection_{{ farm[0] }}" style="display: none;">
                             <label for="reason">Reason for deleting the farm:</label>
                             <textarea name="reason" id="reason_{{ farm[0] }}"></textarea>
                         </div>
                     </form>
                 {% endfor %}
-            
+            </div>
         </div>
-            
-            
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
-        // Confirm leave function with different prompts based on role
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for farm in farms %}
+                fetch(`/get_disease_data_farm?farm_id={{ farm[0] }}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error) {
+                            console.log(`Error fetching data for farm {{ farm[0] }}:`, data.error);
+                            return;
+                        }
+
+                        const ctx = document.getElementById(`chart_{{ farm[0] }}`).getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',  // Change to the type you need
+                            data: {
+                                labels: data.labels,  // X-axis (dates)
+                                datasets: [{
+                                    label: 'Disease Detections',
+                                    data: data.data,  // Y-axis (detection count)
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    fill: true,
+                                    borderWidth: 2
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: 'Date'
+                                        }
+                                    },
+                                    y: {
+                                        title: {
+                                            display: true,
+                                            text: 'Detections'
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => console.error(`Error fetching data: ${error}`));
+            {% endfor %}
+        });
+
+    </script>
+
+    <script>
         function confirmLeave(farmId, roleId) {
-            console.log("Role ID: ", roleId); // Debugging step
             if (roleId == '5') {
-                // Simple confirmation for farmers
                 if (confirm("Are you sure you want to leave the farm?")) {
                     document.getElementById('leaveFarmForm_' + farmId).submit();
                 }
             } else if (roleId == '6') {
-                // Confirmation for farm owners, asking for a reason
                 let reasonField = document.getElementById('reason_' + farmId);
                 let reasonSection = document.getElementById('reasonSection_' + farmId);
-                
-                // Show the reason field
-                reasonSection.style.display = 'block';
-                
-                // Check if the reason is provided before submitting
-                if (reasonField.value.trim() === '') {
-                    alert("Please provide a reason to delete the farm.");
-                    return;
-                } else {
-                    if (confirm("Farmers will be removed from the deleted farm. Are you sure you want to proceed?")) {
-                        document.getElementById('leaveFarmForm_' + farmId).submit();
-                    }
+                if (confirm("Are you sure you want to delete the farm?")) {
+                    reasonSection.style.display = 'block';
+                }
+                if (reasonField.value !== '') {
+                    document.getElementById('leaveFarmForm_' + farmId).submit();
                 }
             }
         }
-        </script>
+    </script>
 </body>
 </html>

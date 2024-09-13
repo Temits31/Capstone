@@ -8,125 +8,154 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <style>
+        .report-section {
+            margin-bottom: 30px;
+        }
+        .report-header {
+            margin-bottom: 20px;
+        }
+        @media print {
+            report-section {
+                width: 100%;
+                page-break-inside: avoid; /* Prevent breaks inside sections */
+            }
+
+            .no-print {
+                display: none; /* Hide elements not needed for print */
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h2>Admin Dashboard</h2>
+        <!-- Your existing HTML content -->
 
-        <nav class="sidebar" id="sidebar">
-            <ul>
-                <li><a href="{{url_for('admin_dashboard')}}">dashboard</a></li>
-                <li><a href="{{url_for('admin_crud')}}">admin_crud</a></li>
-                <li><a href="{{url_for('update_farm_status')}}">admin_farm_status</a></li>
-                <li><a href="{{url_for('admin_test')}}">admin_test</a></li>
-                <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-tasks"></i> adminfarm</a></li>
-                <li><a href="{{url_for('map')}}">map</a></li>
-
-    
-            </ul>
-        </nav>
-
-        <div class="card-body">
-
-            <h3>
-                Total Users
-            </h3>
-            {{total_users}}
+        <!-- Print Button -->
+        <div class="text-end mb-4">
+            <input type="button" onclick="window.print()" value="Print Report" />
         </div>
 
-        <div>
-            <ul>
-            <li><a href="{{url_for('admin_test')}}">test_admin</a></li>
-            </ul>
-        </div>
-            
-        <div class="card mt-3">
-            <div class="card-header">
-                User Data Chart
-            </div>
-            <div class="card-body">
-                <canvas id="myChart" width="400" height="200"></canvas>
-            </div>
-        </div>
-
-
-
-        <div class="card mt-3">
-            <div class="card-header">
-                Users List
-            </div>
-
-
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Username ID</th>
-                            <th>Name</th>
-                            <th>Role</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users %}
-                        <tr>
-                            <td>{{ user[0] }}</td>
-                            <td>{{ user[1] }} {{ user[2] }} {{ user[3] }}</td>
-                            <td>{{ user[4] }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-
-
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Farm Name</th>
-                            <th>Status</th>
-                            <th>Address</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for farm in farms %}
-                        <tr>
-                            <td>{{ farm[0] }}</td>
-                            <td>{{ farm[1] }}</td>
-                            <td>{{ farm[2] }}</td>
-                            <td>{{ farm[3] }} {{ farm[4] }} {{ farm[5] }} {{ farm[7] }}</td>
-
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <!-- Report Filters -->
+        <div class="report-header">
+            <h3>Select Report Period</h3>
+            <form id="report-filter-form" method="GET" action="/admin">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="report-type" class="form-label">Report Type</label>
+                        <select id="report-type" name="period" class="form-select">
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly" selected>Monthly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="start-date" class="form-label">Start Date</label>
+                        <input type="date" id="start-date" name="start_date" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="end-date" class="form-label">End Date</label>
+                        <input type="date" id="end-date" name="end_date" class="form-control">
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <button type="submit" class="btn btn-primary">Generate Report</button>
+                    </div>
+                </div>
+            </form>
         </div>
 
+        <div id="printableArea">
+            <!-- Report Sections -->
+            <div class="report-section">
+                <h2>Disease Trends</h2>
+                <canvas id="disease-trend-chart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="report-section">
+                <h2>Top Detected Diseases</h2>
+                <canvas id="top-diseases-chart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="report-section">
+                <h2>Farm Performance Metrics</h2>
+                <p>Total Farms: <span id="total-farms"></span></p>
+                <p>Total Detections: <span id="total-detections"></span></p>
+                <canvas id="performance-chart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="report-section">
+                <h2>Recommended Actions</h2>
+                <ul>
+                    <li>Increase surveillance for top detected diseases in farms X, Y, Z.</li>
+                    <li>Consider updating disease control measures for diseases A, B, and C.</li>
+                    <li>Monitor farms with consistently low performance for signs of recurring issues.</li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const data = {{ chart_data|tojson }};
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: data,
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to prepare the page for printing
+            function prepareForPrint() {
+                var charts = document.querySelectorAll('canvas');
+                charts.forEach(function (canvas) {
+                    var ctx = canvas.getContext('2d');
+                    var chartInstance = Chart.getChart(canvas);
+                    if (chartInstance) {
+                        chartInstance.update();
+                    }
+                });
+            }
+
+            // Handle beforeprint event
+            window.addEventListener('beforeprint', function () {
+                prepareForPrint();
+            });
+
+            // Example chart rendering code
+            var ctxTrend = document.getElementById('disease-trend-chart').getContext('2d');
+            var trendChart = new Chart(ctxTrend, {
+                type: 'line',
+                data: {{ farm_chart_data|tojson }},
+                options: {
+                    scales: {
+                        x: { title: { display: true, text: 'Farms' } },
+                        y: { title: { display: true, text: 'Disease Detections' } }
+                    },
+                    fill: true
+                }
+            });
+
+            var ctxDiseases = document.getElementById('top-diseases-chart').getContext('2d');
+            var diseaseChart = new Chart(ctxDiseases, {
+                type: 'bar',
+                data: {{ health_data|tojson }},
+                options: {
+                    scales: {
+                        x: { title: { display: true, text: 'Diseases' } },
+                        y: { title: { display: true, text: 'Detection Count' } }
                     }
                 }
-            }
+            });
+
+            var ctxPerformance = document.getElementById('performance-chart').getContext('2d');
+            var performanceChart = new Chart(ctxPerformance, {
+                type: 'pie',
+                data: {{ chart_data|tojson }},
+                options: {
+                    scales: {
+                        x: { title: { display: true, text: 'Farm Types' } },
+                        y: { title: { display: true, text: 'Number of Users' } }
+                    }
+                }
+            });
+
+            document.getElementById('total-farms').innerText = '{{ farms|length }}'; // Example value
+            document.getElementById('total-detections').innerText = '350'; // Replace with dynamic data
         });
     </script>
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

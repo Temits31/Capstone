@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rooms and Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        body {
+       body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -82,7 +83,7 @@
         }
 
         .content {
-            width: 90%;
+            width: 100%;
             border-radius: 30px;
             flex: 1;
             padding: 20px;
@@ -118,15 +119,8 @@
             width: 100%;
             display: flex;
             flex: 1;
-            flex-direction: column;
             justify-content: flex-start;
-            overflow-y: auto;
         }
-    .blurred-message {
-        filter: blur(4px);
-        color: red;
-    }
-
 
 .burger-icon {
     font-size: 1.5rem;
@@ -174,7 +168,7 @@
 }
 
 #chat {
-    width: 98%; /* Use full width */
+    width: 100%; /* Use full width */
     flex-grow: 1; /* Allow chat to grow within parent */
     height: 500px;
     border: 1px solid #ccc;
@@ -220,6 +214,12 @@ form button {
     color: #182E17;
 }
 
+.room-list, .chat-box {
+    width: 100%;
+    padding: 20px;
+    flex: 1;
+}
+
 
 @media (max-width: 768px) {
     * {
@@ -249,6 +249,10 @@ form button {
         display: none;
     }
 
+    .dropdown {
+        display: block;
+    }
+
     .burger-icon {
         display: block;
     }
@@ -274,6 +278,35 @@ form button {
         width: 100%;
     }
 
+    #message-form {
+        width: 100%;
+    }
+
+    .timestamp {
+        font-size: 0.7em;
+    }
+
+    #message-input {
+        width: 100%;
+    }
+
+    .room-list, .chat-box {
+        width: 100%;
+        margin: 0;
+    }
+
+    .room-list h2 {
+        font-size: 1.3rem;
+    }
+
+    .room-item {
+        margin-bottom: 10px;
+    }
+
+    .chat-box h2 {
+        font-size: 1.3rem;
+    }
+
 }
 
         
@@ -285,7 +318,7 @@ form button {
             <div class="sidebar">
                 <nav>
                     <ul>
-                        <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
+                        <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
 
                         {% if user_type in ['user_farmer', 'farm_owner'] %}
                         <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
@@ -348,8 +381,8 @@ form button {
                         
                     <li><a href="#"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
             </div>
-        </div>
         
+    <div class="sub-content">    
     <div class="room-list">
         <h2>Select a Room</h2>
         <form method="POST">
@@ -378,6 +411,9 @@ form button {
         {% else %}
             <h2>Select a room to start chatting</h2>
         {% endif %}
+        </div>
+        </div>
+    </div>
     </div>
 </div>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
