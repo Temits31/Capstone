@@ -3,31 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farm</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../static/dashboard.css">
+    <title>Add Farm</title>
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Includes padding/border in width/height */
+        }
+
+        body {
+            position: relative;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+            background-color: #e6ecde;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .limeline {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content inside the limeline div */
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar {
+            background-color: #19381F;
+            color: white;
+            width: 15%;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sidebar nav ul li a i {
+            margin-right: 15px;
+            font-size: 20px;
+            z-index: 1;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #e6ecde;
+            color:#182e17;
+            border-radius: 10px 0px 0px 10px;
+            margin-right: -20px;
+            transform: scale(1.05);
+            box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+        .content {
+            margin-left: 280px;
+            width: 100%;
+            position: relative;
+            background-color: #e6ecde;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #182E17;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .navbar nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .navbar nav ul li a {
+            text-decoration: none;
+            color: #182e17;
+            font-weight: bold;
+        }
+
+        .burger-icon {
+            font-size: 1.5rem;
+            color: #19381F;
+            cursor: pointer;
+            display: none;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            right: 2rem;
+            top: 60px;
+            height: 0;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+
+        .dropdown.open {
+            display: block;
+            height: auto;
+            text-decoration: none;
+        }
+
+        .dropdown li {
+            padding: 0.8rem;
+            display: flex;
+            text-decoration: none;
+            list-style: none;
+            border-bottom: 1px solid #182E17; 
+        }
+
+        .dropdown a {
+            text-decoration: none; /* Ensure no text decoration */
+            color: #182E17; /* Text color for dropdown links */
+            font-weight: bold; /* Bold font weight */
+        }
+
+        .dropdown li a i {
+            margin-right: 20px;
+        }
+
+        .sub-content {
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .form-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 50%;
+        }
+
+        .option-button-left {
+            background-color: #91cb3e;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .option-button-left:hover {
+            background-color: #45a049;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+            display: block;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Style the reason section for leaving the farm */
+        #reasonSection {
+            display: none;
+            margin-top: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+
+@media (max-width: 768px) {
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        position: relative;
+    }
+
+    .container {
+        flex-direction: column;
+        width: 95%;
+        height: auto;
+    }
+
+    .content {
+        width: 100%;
+        padding: 20px;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .navbar nav {
+        display: none;
+    }
+
+    .burger-icon {
+        display: block;
+    }
+
+    .sidebar nav {
+        display: none;
+    }
+
+    .sidebar {
+        background: none;
+    }
+
+    .sub-content {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .sub-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .dropdown {
+        display: block;
+        z-index: 1;
+    }
+
+}
+
+    </style>
 </head>
 <body>
-    <div class="main-container">
         <div class="container">
             <div class="sidebar">
+                <div class="limeline">
+                    <img src="../static/limelinelogo.png" style="width: 120px; height: 120px;">
+                    <h3>LimeLine</h3>
+                </div>
                 <nav>
                     <ul>
-                        <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
-                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                        <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        
+                            {% if session['role_id'] == 6 %}
+        
+                            <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                            {% endif %}
+        
+                            
                         <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+                        
                         <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
-                        <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
-                        <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
-                        <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> Farm</a></li>
+                            
+                            
+                            {% if session['role_id'] == 6 %}
+        
+                            <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                            <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                            <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> Farm</a></li>
+        
+                            {% endif %}
+                            
                         <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add Farm</a></li>
-                        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
+                        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+        
                     </ul>
                 </nav>
-            </div>
+            </div>            
             <div class="content">
+                <div class="navbar">
+                    <div class="title">Farm</div>
+                <nav>
+                    <ul>
+                        <li><a href="/dashboard">Home</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/help">Help</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="burger-icon">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <div class="dropdown">
+                    <li><a href="#" ><i class="fas fa-home"></i>Home</a></li>
+                    <li><a href="#" ><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="#" ><i class="fas fa-question-circle"></i>Help</a></li>
+                    <li><a href="#" ><i class="fas fa-envelope"></i>Contact</a></li>
+                    <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        
+                    {% if user_type in ['user_farmer', 'farm_owner'] %}
+                        {% if session['role_id'] == 6 %}
+        
+                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                        {% endif %}
+                    {% endif %}
+        
+                        
+                    <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+                    
+                    <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                        
+                        
+                    {% if user_type in ['user_farmer', 'farm_owner'] %}
+                        {% if session['role_id'] == 6 %}
+        
+                        <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                        <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                        <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
+        
+                        {% endif %}
+                    {% endif %}
+                        
+                    {%  if user_type in ['user_farmer', 'farm_owner'] %}
+                    <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+            </div>
+
+            <div class="sub-content">
+                
                 <strong><h1>Which Farm are you now?</h1></strong>
                 {% for farm in farms %}
+                <div class="form-container">
                     <form action="/farm" method="post">
                         <div class="buttons">
                             <button class="option-button-left" name="farm_id" value="{{ farm[0] }}">Farm name: {{ farm[1] }} </button>
@@ -47,11 +411,12 @@
                         </div>
                     </form>
                 {% endfor %}
+                </div>
+                </div>                
             </div>
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -124,6 +489,19 @@
                 }
             }
         }
+    </script>
+    <script>
+            const burgerIcon = document.querySelector('.burger-icon');
+            const burgerIconIcon = document.querySelector('.burger-icon i');
+            const dropdownMenu = document.querySelector('.dropdown');
+
+            burgerIcon.onclick = function() {
+            dropdownMenu.classList.toggle('open');
+            const isOpen = dropdownMenu.classList.contains('open');
+        
+            // Toggle between bars and times icon based on the dropdown state
+            burgerIconIcon.classList = isOpen ? 'fas fa-times' : 'fas fa-bars';
+        };
     </script>
 </body>
 </html>

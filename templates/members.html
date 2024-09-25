@@ -1,280 +1,493 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>members</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Add Farm</title>
     <style>
-
-        .navbar {
-            background-color: #333;
-            color: white;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-        }
-        .navbar ul {
+        * {
             margin: 0;
             padding: 0;
-            list-style-type: none;
+            box-sizing: border-box; /* Includes padding/border in width/height */
+        }
+
+        body {
+            position: relative;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+            background-color: #e6ecde;
+        }
+
+        .container {
             display: flex;
-            justify-content: flex-end;
+            width: 100%;
+            height: 100vh;
+            overflow-x: hidden;
         }
-        .navbar li {
-            margin-left: 10px;
-        }
-        .navbar a {
-            display: block;
-            padding: 10px;
-            color: white;
-            text-decoration: none;
-        }
-        .sidebar {
-            background-color: #333;
-            color: white;
-            width: 250px;
-            height: 100%;
-            position: fixed;
-            top: 100px; /* Adjust this if navbar height changes */
-            left: 0;
-            transition: left 0.3s ease;
-            overflow: auto;
+
+        .limeline {
             display: flex;
             flex-direction: column;
+            align-items: center; /* Center content inside the limeline div */
+            justify-content: center;
+            margin-bottom: 20px;
         }
-        .sidebar li{
-            margin-top: 40px;
+
+        .sidebar {
+            background-color: #19381F;
+            color: white;
+            width: 15%;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
         }
-        .sidebar a {
-            padding: 10px;
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
             text-decoration: none;
             color: white;
         }
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-            padding-top: 60px; /* Adjust for navbar height */
-            width: calc(100% - 250px);
-            overflow-y: auto;
-            transition: margin-left 0.3s ease;
-        }
-        .burger-icon {
-            display: none;
-            cursor: pointer;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 9999;
-        }
-        .line {
-            width: 30px;
-            height: 3px;
-            background-color: #fff;
-            margin: 5px 0;
-        }
-        @media screen and (max-width: 600px) {
-            .sidebar {
-                left: -250px;
-                top: 0;
-                height: 100%;
-            }
-            .sidebar.open {
-                left: 0;
-            }
-            .main-content {
-                margin-left: 0;
-                width: 100%;
-            }
-            .main-content.open {
-                margin-left: 250px;
-            }
-            .burger-icon {
-                display: block;
-            }
-        }
-        body {
-            background-color: aquamarine;
-            font-family: Arial, sans-serif;
-            margin: 0;
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
             display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center;     /* Center vertically */
-            height: 100vh;           /* Full viewport height */
+            align-items: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+        .sidebar nav ul li a i {
+            margin-right: 15px;
+            font-size: 20px;
+            z-index: 1;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #e6ecde;
+            color:#182e17;
+            border-radius: 10px 0px 0px 10px;
+            margin-right: -20px;
+            transform: scale(1.05);
+            box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+        .content {
+            margin-left: 280px;
+            width: 100%;
+            position: relative;
+            background-color: #e6ecde;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #182E17;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .navbar nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .navbar nav ul li a {
+            text-decoration: none;
+            color: #182e17;
+            font-weight: bold;
+        }
+
+        .burger-icon {
+            font-size: 1.5rem;
+            color: #19381F;
+            cursor: pointer;
+            display: none;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            right: 2rem;
+            top: 60px;
+            height: 0;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+
+        .dropdown.open {
+            display: block;
+            height: auto;
+            text-decoration: none;
+        }
+
+        .dropdown li {
+            padding: 0.8rem;
+            display: flex;
+            text-decoration: none;
+            list-style: none;
+            border-bottom: 1px solid #182E17; 
+        }
+
+        .dropdown a {
+            text-decoration: none; /* Ensure no text decoration */
+            color: #182E17; /* Text color for dropdown links */
+            font-weight: bold; /* Bold font weight */
+        }
+
+        .dropdown li a i {
+            margin-right: 20px;
+        }
+
+        .sub-content {
+            width: 100%;
+            padding: 20px;
+            position: relative;
+        }
+
 
         .table-container {
             display: flex;
+            flex-direction: column;
             justify-content: center; /* Center horizontally */
             align-items: center;     /* Center vertically */
             height: 100%;            /* Full height of the parent container */
-            width: 60%;             /* Full width of the parent container */
-            overflow-x: auto;
+            width: 100%;             /* Full width of the parent container */
+            overflow-x: scroll;
         }
+
         .table {
             width: 100%;
             border-collapse: collapse;
+            border-radius: 10px;
         }
+
         .table th, .table td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
             white-space: nowrap;
         }
+                
         .table th {
-            background-color: #333;
+            background-color: #91cb3e;
             color: white;
         }
+
+        .table tbody {
+            background-color: white;
+        }
+                
         .highlight {
             background-color: yellow;
         }
+                
         .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* High z-index to appear above other elements */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scrolling if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Auto margin to center horizontally */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Set a width for the modal */
+    max-width: 500px; /* Optional max width for responsiveness */
+    position: relative;
+    top: 50%; /* Move it down by 50% from the top */
+    transform: translateY(-50%); /* Pull it back up by half its height to center vertically */
+    z-index: 1001; /* Make sure the content itself is above the background */
+}
+
+                
         .close {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
+                
         .close:hover,
         .close:focus {
             color: black;
             text-decoration: none;
             cursor: pointer;
         }
+
+
+@media (max-width: 768px) {
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        position: relative;
+    }
+
+    .container {
+        flex-direction: column;
+        width: 95%;
+        height: auto;
+    }
+
+    .content {
+        width: 100%;
+        padding: 20px;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .navbar nav {
+        display: none;
+    }
+
+    .burger-icon {
+        display: block;
+    }
+
+    .sidebar nav {
+        display: none;
+    }
+
+    .sidebar {
+        background: none;
+    }
+
+    .sub-content {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .sub-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .dropdown {
+        display: block;
+        z-index: 1;
+    }
+
+
+}
+
     </style>
 </head>
 <body>
-
-    <!-- Top Navigation -->
-    <nav class="navbar">
-        <ul>
-            <li><a href="{{url_for('index')}}">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-    </nav>
-
-    <!-- Burger button for sidebar -->
-    <div id="burger-icon" class="burger-icon">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
-
-    <!-- Sidebar Navigation -->
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="{{url_for('dashboard_cp')}}">dashboard</a></li>
-
-            <li><a href="{{url_for('members')}}">Members</a></li>
-            <li><a href="#">History</a></li>
-            <li><a href="{{url_for('profile')}}">Profile</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
-
-        </ul>
-    </nav>
-
-
-
-
-<div class="table-container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>First Name</th>
-                <th>Middle Name</th>
-                <th>Last Name</th>
-                <th>Farm</th>
-                <th>Status</th>
-                <th>Group</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for m in members %}
-            <tr>
-                {% for s in m %}
-                <td>{{ s }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{%if status == 'Owner'%}
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <p id="modal-content"></p>
-        <form action="/members" method="post">
-            <input type="hidden" name="user_details_id" id="user_details_id">
-
-            <button type="submit" class="option-button" value="accept" name="permission">Accept</button>
-            <button type="submit" class="option-button" value="reject" name="permission">Reject</button>
-        </form>
-    </div>
-</div>
-{%endif%}
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var modal = document.getElementById('myModal');
-        var span = document.getElementsByClassName('close')[0];
-        var tableRows = document.querySelectorAll('.table tbody tr');
-        var burgerIcon = document.getElementById('burger-icon');
-            var sidebar = document.getElementById('sidebar');
-            var mainContent = document.getElementById('main-content');
-
-            burgerIcon.addEventListener('click', function() {
-                sidebar.classList.toggle('open');
-                mainContent.classList.toggle('open');
-            });
+        <div class="container">
+            <div class="sidebar">
+                <div class="limeline">
+                    <img src="../static/limelinelogo.png" style="width: 120px; height: 120px;">
+                    <h3>LimeLine</h3>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
         
-        tableRows.forEach(function(row) {
-            row.addEventListener('click', function() {
-                var rowData = Array.from(row.children).map(td => td.textContent);
-                document.getElementById('modal-content').textContent = rowData.join(' | ');
-                document.getElementById('user_details_id').value = rowData[7];
-                modal.style.display = 'block';
-                tableRows.forEach(function(r) {
-                    r.classList.remove('highlight');
+                        {% if user_type in ['user_farmer', 'farm_owner'] %}
+                            {% if session['role_id'] == 6 %}
+        
+                            <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                            {% endif %}
+                        {% endif %}
+        
+                            
+                        <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+                        
+                        <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                            
+                            
+                        {% if user_type in ['user_farmer', 'farm_owner'] %}
+                            {% if session['role_id'] == 6 %}
+        
+                            <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                            <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                            <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> Farm</a></li>
+        
+                            {% endif %}
+                        {% endif %}
+                            
+                        {%  if user_type in ['user_farmer', 'farm_owner'] %}
+                        <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add Farm</a></li>
+                        {% endif %}
+                        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+        
+                    </ul>
+                </nav>
+            </div>            
+            <div class="content">
+                <div class="navbar">
+                    <div class="title">Farm Members</div>
+                <nav>
+                    <ul>
+                        <li><a href="/dashboard">Home</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/help">Help</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="burger-icon" id="burger-icon">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <div class="dropdown">
+                    <li><a href="#" ><i class="fas fa-home"></i>Home</a></li>
+                    <li><a href="#" ><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="#" ><i class="fas fa-question-circle"></i>Help</a></li>
+                    <li><a href="#" ><i class="fas fa-envelope"></i>Contact</a></li>
+                    <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        
+                    {% if user_type in ['user_farmer', 'farm_owner'] %}
+                        {% if session['role_id'] == 6 %}
+        
+                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                        {% endif %}
+                    {% endif %}
+        
+                        
+                    <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+                    
+                    <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                        
+                        
+                    {% if user_type in ['user_farmer', 'farm_owner'] %}
+                        {% if session['role_id'] == 6 %}
+        
+                        <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                        <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                        <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> Farm</a></li>
+        
+                        {% endif %}
+                    {% endif %}
+                        
+                    {%  if user_type in ['user_farmer', 'farm_owner'] %}
+                    <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+            </div>
+
+            <div class="sub-content">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Last Name</th>
+                                <th>Farm</th>
+                                <th>Status</th>
+                                <th>Group</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for m in members %}
+                            <tr>
+                                {% for s in m %}
+                                <td>{{ s }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {%if status == 'Owner'%}
+                <!-- The Modal -->
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <p id="modal-content"></p>
+                        <form action="/members" method="post">
+                            <input type="hidden" name="user_details_id" id="user_details_id">
+                
+                            <button type="submit" class="option-button" value="accept" name="permission">Accept</button>
+                            <button type="submit" class="option-button" value="reject" name="permission">Reject</button>
+                        </form>
+                    </div>
+                </div>
+                {%endif%}
+                <!-- where sub-content ends -->
+                </div>                
+            </div>
+        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById('myModal');
+            var span = document.getElementsByClassName('close')[0];
+            var tableRows = document.querySelectorAll('.table tbody tr');
+            var burgerIcon = document.getElementById('burger-icon');
+            var sidebar = document.getElementById('sidebar');
+            var mainContent = document.getElementById('sub-content');
+    
+                burgerIcon.addEventListener('click', function() {
+                    sidebar.classList.toggle('open');
+                    mainContent.classList.toggle('open');
                 });
-                row.classList.add('highlight');
+            
+            tableRows.forEach(function(row) {
+                row.addEventListener('click', function() {
+                    var rowData = Array.from(row.children).map(td => td.textContent);
+                    document.getElementById('modal-content').textContent = rowData.join(' | ');
+                    document.getElementById('user_details_id').value = rowData[7];
+                    modal.style.display = 'block';
+                    tableRows.forEach(function(r) {
+                        r.classList.remove('highlight');
+                    });
+                    row.classList.add('highlight');
+                });
             });
-        });
-
-        span.onclick = function() {
-            modal.style.display = 'none';
-        };
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
+    
+            span.onclick = function() {
                 modal.style.display = 'none';
-            }
-        };
-    });
-</script>
+            };
+    
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
 
+                }
+            };
+        });
+    </script>
 </body>
 </html>

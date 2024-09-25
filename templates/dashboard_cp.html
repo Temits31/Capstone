@@ -1,215 +1,893 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../static/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Includes padding/border in width/height */
+        }
+
+        body {
+            position: relative;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+            background-color: #e6ecde;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .limeline {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content inside the limeline div */
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar {
+            background-color: #19381F;
+            color: white;
+            width: 15%;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sidebar nav ul li a i {
+            margin-right: 15px;
+            font-size: 20px;
+            z-index: 1;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #e6ecde;
+            color:#182e17;
+            border-radius: 10px 0px 0px 10px;
+            margin-right: -20px;
+            transform: scale(1.05);
+            box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+        .content {
+            margin-left: 280px;
+            width: 100%;
+            position: relative;
+            background-color: #e6ecde;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #182E17;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .navbar nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .navbar nav ul li a {
+            text-decoration: none;
+            color: #182e17;
+            font-weight: bold;
+        }
+
+        .burger-icon {
+            font-size: 1.5rem;
+            color: #19381F;
+            cursor: pointer;
+            display: none;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            right: 2rem;
+            top: 60px;
+            height: 0;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+
+        .dropdown.open {
+            display: block;
+            height: auto;
+            text-decoration: none;
+        }
+
+        .dropdown li {
+            padding: 0.8rem;
+            display: flex;
+            text-decoration: none;
+            list-style: none;
+            border-bottom: 1px solid #182E17; 
+        }
+
+        .dropdown a {
+            text-decoration: none; /* Ensure no text decoration */
+            color: #182E17; /* Text color for dropdown links */
+            font-weight: bold; /* Bold font weight */
+        }
+
+        .dropdown li a i {
+            margin-right: 20px;
+        }
+
+        .sub-content {
+            width: 100%;
+            padding: 20px;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            padding: 10px;
+            height: 150px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            justify-content: space-between;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+            gap: 10px;
+            padding-left: 10px;
+        }
+
+        .greet h1 {
+            color: #19381F;
+            font-weight: bold;
+        }
+        
+        .weather-forecast {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Vertically center content */
+            background: linear-gradient(135deg, #fcfcaf, #fffbe3); 
+            padding: 20px;
+            border-radius: 10px;
+            gap: 10px;
+            max-width: 400px;
+            height: 130px;
+            color: #19381F;
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: flex-end;
+        }
+
+        .weather-image { 
+            flex: 1;
+            text-align: right;
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Vertically center the image */
+        }
+
+        .weather-image img {
+            width: 100px; /* Adjust the size of the weather image */
+            height: auto;
+        }
+
+        .temp {
+            flex: 1;
+            text-align: left;
+            align-self: flex-end;
+        }
+
+        .temperature {
+            margin: 0;
+            font-size: 1.7rem;
+        }
+
+        p {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .all-cont {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* Align items to the top */
+            width: 100%;
+            padding: 0; /* Ensure no extra padding */
+            margin: 0; /* Ensure no margin affecting the width */
+        }
+
+        .prediction {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Increased gap between sections */
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .upload-container{
+            width: 100%;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .upload-ins {
+            margin-top: 20px;
+        }
+
+        .upload-box {
+            border: 2px dashed #91cb3e;
+            padding: 20px;
+            border-radius: 10px;
+            color: #91cb3e;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .upload-box:hover {
+            background-color: #53a548;
+        }
+
+        .upload-box i {
+            font-size: 3em;
+        }
+
+        .upload-box p {
+            margin-top: 10px;
+        }
+
+        .upload-box span {
+            color: #eee82c;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .upload-button {
+            background-color: #91cb3e;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            font-size: 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: transform(0.3s);
+        }
+
+        .upload-button:hover {
+            transform: scale(1.05);
+        }
 
 
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.0/dist/chart.min.js"></script>
-    
-    <title>HUHU</title>
+        .result {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px; /* Increased space in the result section */
+            padding: 20px;
+        }
+
+        .result img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .placeholder i {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .placeholder p {
+            font-size: 16px;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        .recom {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .recom label {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #53a548;
+        }
+
+        .recom p {
+            margin: 8px 0; /* Adjusted margins for cleaner spacing */
+            color: #555;
+        }
+
+        /* Styling for the Graphs Container */
+        .graphs {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            width: 100%;
+        }
+
+        /* Line Graph Section (Top) */
+        .line {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .line-up {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .line-up h3 {
+            font-weight: bold;
+        }
+
+        select {
+            border: 1px solid #91cb3e;
+            padding: 6px;
+            border-radius: 5px;
+        }
+
+        .lineGraph {
+            width: 100%; /* Adjust the width of the chart */
+            height: 300px;
+            margin: 0 auto; /* Center the chart */
+            background-color: #ffffff;
+            padding: 10px;
+        }
+
+        /* Bottom Section: Pie Chart and Side Info */
+        .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        /* Pie Chart (Bottom-Left) */
+        .pie {
+            flex: 1;
+            width: 100%; /* Take up half the width */
+            text-align: center;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 280px;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .pie h3 {
+            align-self: flex-start; /* Aligns h3 to the left */
+            width: 100%; /* Ensures it takes up the full width */
+            padding-top: 20px;
+        }
+
+        .pie canvas {
+            margin-top: -20px;
+        }
+
+
+        /* Side Info Section (Bottom-Right) */
+        .side-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 20%; /* Adjust width for the side info */
+            align-items: stretch;
+        }
+
+        .nod, .md {
+            background-color: #f7f7f7;
+            margin-bottom: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            gap: 20px;
+            color: #fff;
+            height: 135px;
+            border-radius: 10px;
+        }
+        .nod{
+            background-color:  #91cb3e;
+        }
+        .md{
+            background-color: #53a548;
+        }
+        .nod h3, .md h3 {
+            margin-bottom: 10px;
+        }
+
+        .nod p, .md p {
+            font-size: 40px;
+            font-weight: bold;
+            bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .navbar nav {
+                display: none;
+            }
+
+            .dropdown {
+                display: block;
+            }
+
+            .burger-icon {
+                display: block;
+            }
+
+            .content {
+                margin: 0;
+                width: 100%;
+                padding: 0;
+            }
+
+            .sub-content {
+                width: 100%;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: center;
+                height: auto;
+                padding: 20px;
+            }
+
+            .left {
+                padding-left: 0;
+                align-items: center;
+                margin-bottom: 5px;
+            }
+
+            .weather-forecast {
+                height: auto;
+                max-width: 100%;
+                padding: 15px;
+            }
+
+            .weather-image img {
+                width: 80px;
+            }
+
+
+            .temperature {
+                margin: 0;
+                font-size: 1.2rem;
+            }
+
+            p {
+                margin: 0;
+                font-size: 1rem;
+            }
+
+            .all-cont {
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .prediction {
+                max-width: 100%;
+            }
+
+            .graphs {
+                padding: 5px;
+            }
+
+            .line {
+                padding: 5px;
+            }
+
+            .line-up {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .bottom-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .pie, .side-info {
+                width: 100%;
+                height: auto;
+            }
+
+            .result img {
+                width: 100%;
+                height: auto;
+            }
+
+            .upload-box {
+                padding: 15px;
+            }
+
+            .upload-button {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .nod, .md {
+                height: auto;
+                padding: 15px;
+            }
+
+            .nod p, .md p {
+                font-size: 30px;
+            }
+
+            /* Adjust font sizes */
+            .greet h1 {
+                font-size: 1.5rem;
+            }
+
+            .temperature {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            .recom label {
+                font-size: 1rem;
+            }
+
+            .recom p {
+                font-size: 0.9rem;
+            }
+
+        }
+
+
+    </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="container">
-            <div class="sidebar">
-                <nav>
-                    <ul>
+    <div class="container">
+    <div class="sidebar">
+        <div class="limeline">
+            <img src="../static/limelinelogo.png" style="width: 120px; height: 120px;">
+            <h3>LimeLine</h3>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
 
-                        <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
+                {% if user_type in ['user_farmer', 'farm_owner'] %}
+                    {% if session['role_id'] == 6 %}
 
+                    <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                    {% endif %}
+                {% endif %}
 
+                    
+                <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+                
+                <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                    
+                    
+                {% if user_type in ['user_farmer', 'farm_owner'] %}
+                    {% if session['role_id'] == 6 %}
 
-                        {% if user_type in ['user_farmer', 'farm_owner'] %}
-                            {% if status in ['member', 'Owner'] %}
-                            <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
-                            
-                            {%endif%}
-                        {% endif %}
-                        
-                        <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
-                        <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
-                        
-                        
-                        {% if user_type in ['user_farmer', 'farm_owner'] %}
-                            {% if status in ['member', 'Owner'] %}
-                            <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
-                            <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
-                        <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
+                    <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                    <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                    <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> Farm</a></li>
 
-                            {%endif%}
+                    {% endif %}
+                {% endif %}
+                    
+                {%  if user_type in ['user_farmer', 'farm_owner'] %}
+                <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add Farm</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
 
-                        {% endif %}
-                        
-                        {% if user_type == 'farm_owner' %}
-                            {% if status in ['member', 'Owner'] %}
+            </ul>
+        </nav>
+    </div>            
+    <div class="content">
+        <div class="navbar">
+            <div class="title">Dashboard</div>
+        <nav>
+            <ul>
+                <li><a href="/dashboard">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/help">Help</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="burger-icon">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+    <div class="dropdown">
+            <li><a href="#" ><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="#" ><i class="fas fa-info-circle"></i> About</a></li>
+            <li><a href="#" ><i class="fas fa-question-circle"></i>Help</a></li>
+            <li><a href="#" ><i class="fas fa-envelope"></i>Contact</a></li>
+            <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
 
-                            <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
-                            {% endif %}
-                        <li><a href="{{ url_for('nofarm') }}"><i class="fas fa-tasks"></i> Join a Farm</a></li>
+            {% if user_type in ['user_farmer', 'farm_owner'] %}
+                {% if session['role_id'] == 6 %}
 
-                        
-                        {% endif %}
-                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+                <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                {% endif %}
+            {% endif %}
 
-                    </ul>
-                </nav>
-            </div>            
-            <div class="content">
-                <div class="navbar">
-                <nav>
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </nav>
-                <div class="burger-icon">
-                    <i class="fas fa-bars"></i>
+                
+            <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+            
+            <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                
+                
+            {% if user_type in ['user_farmer', 'farm_owner'] %}
+                {% if session['role_id'] == 6 %}
+
+                <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
+
+                {% endif %}
+            {% endif %}
+                
+            {%  if user_type in ['user_farmer', 'farm_owner'] %}
+            <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+    </div>
+    <div class="sub-content">
+        <div class="header">
+            <div class="left">
+                <div class="greet">
+                    <h1><strong>Hello, {{ username }}!</strong></h1>
+                    <p>Lets squash those diseases and keep your calamansi smiling!</p>
+                </div>
+        
+                <div class="date">
+                    <p id="currentDate"></p>
                 </div>
             </div>
-            <div class="dropdown">
-                    <li><a href="#" ><i class="fas fa-home"></i>Home</a></li>
-                    <li><a href="#" ><i class="fas fa-info-circle"></i> About</a></li>
-                    <li><a href="#" ><i class="fas fa-question-circle"></i>Help</a></li>
-                    <li><a href="#" ><i class="fas fa-envelope"></i>Contact</a></li>
-                    <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
-
-                    {% if user_type in ['user_farmer', 'farm_owner'] %}
-                        {% if session['role_id'] == 6 %}
-
-                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
-                        {% endif %}
-                    {% endif %}
-
-                        
-                    <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
-                    
-                    <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
-                        
-                        
-                    {% if user_type in ['user_farmer', 'farm_owner'] %}
-                        {% if session['role_id'] == 6 %}
-
-                        <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
-                        <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
-                        <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
-
-                        {% endif %}
-                    {% endif %}
-                        
-                    {%  if user_type in ['user_farmer', 'farm_owner'] %}
-                    <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
-                    {% endif %}
-                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
-
-            </div>
-
-                <div class="sub-content">
-                    <div class="left">
-                        <div class="greet">
-                            <h1><strong>Hello, {{ username }}</strong></h1>
-                            <p>Let’s squash those diseases and keep your calamansi smiling!</p>
-                        </div>
-                
-                        <div class="date">
-                            <p id="currentDate"></p>
-                        </div>
+            <div class="weather-forecast">
+                <div class="weather-info">
+                    <div class="weather-image">
+                    <img src="{{ icon_url }}" alt="Weather Image">
                     </div>
-                
-                        <div class="card">
-                            <p>{{ temp_cs }}°C</p>
-                            <p>{{ temp_fr }}°F</p>
-                            <p>{{ weather }}</p>
-                            <div class="weather">
-                            <img src="{{ icon_url }}" alt="Weather Icon">
-                        </div>
-                        </div>                
                 </div>
-                <div id="loadingText" style="display: none;">
-                    <h2>
-                    Detecting... Please wait.
-
-                    </h2>
-                </div>
-
-                <div class="prediction">
-                    <form action="{{ url_for('dashboard_cp') }}" method="post" enctype="multipart/form-data" id="uploadForm">
-                        <label for="file">Upload File:</label>
-                        <p>Upload a clear image of your calamansi here for disease detection.</p>
-                        <input type="file" name="file" id="file" accept="image/*" capture="camera">
-                        <button type="submit">Upload</button>
-                    </form>
-                <div class="result">
-                    {% for result in results %}
-                    <p>{{ result.label }}</p>
-                    {%endfor%}
-                    <img src="{{ image_url }}" alt="">
+                <div class="temp">
+                    <h3 class="temperature">{{ temp_cs }}°C/{{ temp_fr }}°F</h3>
                     
+                    <p>{{ weather }}</p>
                 </div>
-                <div class="recom">
-                    <label>Disease Information</label>
-                        {% for result in results %}
-                        <div class="result-item">
-                            <p><strong>Name:</strong> {{ result.label }}</p>
-                            <p><strong>Description:</strong> {{ result.description }}</p>
-                            <p><strong>Cause:</strong> {{ result.cause }}</p>
-                            <p><strong>Solution:</strong> {{ result.solution }}</p>
-                        </div>
-                        {% endfor %}
-                    
+            </div>      
+        </div>
 
+        <div class="all-cont">
+        <div class="prediction">
+            <div class="upload-container">
+            <form action="/dashboard_cp" method="post" enctype="multipart/form-data">
+                <p>Upload a clear image of your calamansi here for disease detection.</p>
+                <div class="upload-ins">
+                    <div class="upload-box" id="upload-box">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p id="upload-text">Click here <br> or <span id="browse">browse</span></p>
+                        <input type="file" name="file" id="file-upload" accept="image/*" capture="camera" hidden>
+                    </div>
                 </div>
-                </div>
-
-                <div>
-                    <select id="filterSelect" onchange="updateChart()">
-                        <option value="daily">Today</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="yearly">Yearly</option>
-                    </select>
-                </div>
-
-                <canvas id="diseaseChart" width="200" height="70"></canvas>
-
-                <div style="width: 300px; height: 300px;">
-                    <canvas id="diseasePieChart" width="400" height="200"></canvas>
-                </div>
-                
-
-
-                <div class="statistics">
-                <div class="stats">
-                    <h3>TOTAL DISEASE DETECTED:</h3>{{count}}
-                </div>
-                <div class="stats">
-                    <h3>MOST DISEASE DETECTED:</h3>{{max}}
-                </div>
+                 
+                <button class="upload-button" type="submit">Submit</button>
+            </form>
             </div>
+            <div class="result">
+                {% if image_url %}
+                    <img src="{{ image_url }}" alt=" ">
+                {% else %}
+                    <div class="placeholder">
+                        <i class="fas fa-image fa-3x"></i> <!-- Font Awesome camera icon -->
+                        <p>No image uploaded yet. Please upload a calamansi image for disease detection.</p>
+                    </div>
+                {% endif %}
+            </div>
+        <div class="recom">
+            <label>Disease Information</label>
+            {% for result in results %}
+            <p>Name  {{ result.label }}</p>
+            <p>Description  {{ result.description }}</p>
+            <p>Cause  {{ result.cause }}</p>
+            <p>Solution  {{ result.solution }}</p>
+            <p>Source  {{ result.source }}</p>
+
+            {%endfor%}
+        </div>
+        </div>
+        <div class="graphs">
+    <!-- Line Chart Section -->
+    <div class="line">
+        <div class="line-up">
+            <h3>Detection Activities</h3>
+        <select id="filterSelect" onchange="updateChart()">
+            <option value="daily">Today</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+        </select>
+        </div>
+        <div class="lineGraph">
+            <canvas id="diseaseChart" width="250" height="100"></canvas>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <div class="pie">
+            <h3>Detected Diseases</h3>
+            <canvas id="diseasePieChart" width="400" height="100"></canvas>
+        </div>
+
+        <div class="side-info">
+            <div class="nod">
+                
+                <h3>Number of Detection</h3>
+                <p>{{count}}</p>
+            </div>
+
+
+
+
+            <div class="md">
+                <h3>Most Disease</h3>
+
+                <p>{{max}}</p>
+
+
+
             </div>
         </div>
     </div>
-    
-    <script src="../static/get_disease_stats.js"></script>
-    
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        const ctx = document.getElementById('diseaseChart').getContext('2d');
+        </div>
 
-        const lineChart = new Chart(ctx, {
-            type: 'line',
+    </div> <!-- sub-content-->
+</div> <!--content-->
+
+
+
+
+
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('diseaseChart').getContext('2d');
+    let currentChart = null; // Store the current chart (line or bar)
+
+    function createChart(chartType, labels, data) {
+        if (currentChart) {
+            currentChart.destroy(); // Destroy the previous chart before creating a new one
+        }
+
+        currentChart = new Chart(ctx, {
+            type: chartType,
             data: {
-                labels: [],  // Will be updated dynamically
+                labels: labels,
                 datasets: [{
                     label: 'Disease Detections',
-                    data: [], 
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    data: data,
+                    borderColor: chartType === 'line' ? '#588157' : '#344E41',
+                    backgroundColor: [
+                    '#19381f', // Color for first disease
+                    '#EE82C', // Color for second disease
+                    '#91CB3E', // Color for third disease
+                    '#53A548', // Color for fourth disease
+                    '#4C934C'  // Color for fifth disease
+                ],
+                    borderWidth: 2,
                     fill: true,
                     tension: 0.1
                 }]
@@ -218,7 +896,7 @@
                 responsive: true,
                 scales: {
                     x: {
-                        type: 'category',  
+                        type: 'category',
                         title: {
                             display: true,
                             text: 'Date'
@@ -234,70 +912,88 @@
                 }
             }
         });
+    }
 
-        function updateChart() {
-            const filterType = document.getElementById('filterSelect').value;
+    function updateChart() {
+        const filterType = document.getElementById('filterSelect').value || 'daily'; ;
 
-            fetch(`/get_disease_data?filter=${filterType}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        console.error('Error:', data.error);
-                        return;
-                    }
+        fetch(`/get_disease_data?filter=${filterType}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error:', data.error);
+                    return;
+                }
 
-                    lineChart.data.labels = data.labels;
-                    lineChart.data.datasets[0].data = data.data;
-                    lineChart.update();
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }
+                const chartType = filterType === 'daily' ? 'bar' : 'line';
 
-        document.getElementById('filterSelect').addEventListener('change', updateChart);
+                createChart(chartType, data.labels, data.data);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
 
-        updateChart();
+    document.getElementById('filterSelect').value = 'daily';
+    updateChart(); 
+
+    document.getElementById('filterSelect').addEventListener('change', updateChart);
     });
 
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    const burgerIcon = document.querySelector('.burger-icon');
-    const burgerIconIcon = document.querySelector('.burger-icon i');
-    const dropdownMenu = document.querySelector('.dropdown');
+ </script>
 
 
 
-    burgerIcon.onclick = function() {
-        dropdownMenu.classList.toggle('open');
-        const isOpen = dropdownMenu.classList.contains('open');
-        
-        burgerIconIcon.classList = isOpen ? 'fas fa-times' : 'fas fa-bars';
-    };
-    document.getElementById("uploadForm").addEventListener("submit", function(event) {
-        document.getElementById("loadingText").style.display = "block";
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const burgerIcon = document.querySelector('.burger-icon');
+        const burgerIconIcon = document.querySelector('.burger-icon i');
+        const dropdownMenu = document.querySelector('.dropdown');
+
+        burgerIcon.onclick = function() {
+            dropdownMenu.classList.toggle('open');
+            const isOpen = dropdownMenu.classList.contains('open');
+            
+            // Toggle between bars and times icon based on the dropdown state
+            burgerIconIcon.classList = isOpen ? 'fas fa-times' : 'fas fa-bars';
+        };
+
+        // Code to set the current date
+        var currentDate = new Date();
+        var formattedDate = currentDate.toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
         });
-        setTimeout(function() {
-            document.getElementById("loadingText").style.display = "none";
-        }, 5000); // Simulating a 3-second processing delay
-    var currentDate = new Date();
-    var formattedDate = currentDate.toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric"
+
+        document.getElementById('currentDate').textContent = formattedDate;
+
+        const fileInput = document.getElementById('file-upload');
+        const uploadBox = document.getElementById('upload-box');
+        const uploadText = document.getElementById('upload-text');
+        const browseText = document.getElementById('browse');
+
+        // Trigger file input when clicking on the upload box or the "browse" text
+        uploadBox.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        browseText.addEventListener('click', (event) => {
+            event.stopPropagation();  // Prevent triggering the upload box click event
+            fileInput.click();
+        });
+
+        // Update the text inside the upload box after selecting a file
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                uploadText.innerHTML = `Selected file: ${fileInput.files[0].name}`;
+            }
+        });
+    
     });
-
-    document.getElementById('currentDate').textContent = formattedDate;
-
-
-
-});
-   
 </script>
 
-<script src="../static/notification.js"></script>
-<script src="../static/notifynewmember.js"></script>
-
+<script src="../static/get_disease_stats.js"></script>
 </body>
 </html>

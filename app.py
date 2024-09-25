@@ -50,7 +50,7 @@ connection = mysql.connector.connect(
     database='new_caps',
     user='root',
     password='',
-    connection_timeout=800
+    connection_timeout=2000
 )
 
 cursor = connection.cursor(buffered=True)
@@ -85,7 +85,7 @@ def username():
         check= cursor.fetchall()
 
         if check:
-            text = 'You already have an account.'
+            text = 'This account is already registered.'
         else:
             # 7 is default - nagreregister palang 
             role_id = 7
@@ -194,39 +194,76 @@ def register_backyard():
 
 
 
-def get_coords_and_disease_sql():
-    cursor.execute('''SELECT f.latitude, f.longitude, COUNT(DISTINCT d.detection_id) AS disease_count
-                    FROM farm f
-                    LEFT JOIN detection d ON d.farm_id = f.farm_id
-                    WHERE d.health_status_id IS NOT NULL
-                    AND d.health_status_id != 8 
-                    AND d.health_status_id != 9
-                    GROUP BY f.latitude, f.longitude
-                   ''')
-    results = cursor.fetchall()
-    
-    if results:
-        data = [
-            {"latitude": float(row[0]), "longitude": float(row[1]), "disease_count": int(row[2])}
-            for row in results
-        ]
-    else:
-        data = []
-    
-    return data
-
-@app.route('/map', methods=['GET', 'POST'])
+@app.route('/map', methods=['GET'])
 def map():
-    if 'id' in session:
-        sid = session['id']
-
-        coords_with_disease_count = get_coords_and_disease_sql()
-
-        print(coords_with_disease_count)
-
-        return render_template('map.html', coords=coords_with_disease_count)
     
-    return redirect(url_for('login'))
+    query1 = '''
+        SELECT f.farm_name, f.latitude, f.longitude
+        FROM farm f
+        GROUP BY f.farm_name, f.latitude, f.longitude
+    '''
+    cursor.execute(query1)
+    results = cursor.fetchall()
+
+    map_data = []
+    for row in results:
+        map_data.append({
+            'farm_name': row[0],
+            'latitude': row[1],
+            'longitude': row[2],
+        })
+
+
+    return render_template('map.html', coords=map_data)
+
+
+
+
+@app.route('/search_farms', methods=['POST'])
+def search_farms():
+    data = request.get_json()
+    latitude = data.get('latitude')
+    longitude = data.get('longitude')
+
+    search_radius = 1000
+
+    query2 = '''
+        SELECT f.farm_name, f.latitude, f.longitude, hs.status_name, COUNT(d.detection_id) AS disease_count
+        FROM farm f
+        LEFT JOIN detection d ON d.farm_id = f.farm_id
+        LEFT JOIN health_status hs ON d.health_status_id = hs.health_status_id
+        WHERE ST_Distance_Sphere(POINT(f.longitude, f.latitude), POINT(%s, %s)) <= %s
+        AND d.health_status_id IS NOT NULL
+        AND d.health_status_id != 8 
+        AND d.health_status_id != 9
+        GROUP BY f.farm_name, f.latitude, f.longitude, hs.status_name
+        ORDER BY disease_count DESC
+        LIMIT 1
+    '''
+
+    cursor.execute(query2, (longitude, latitude, search_radius))
+    results = cursor.fetchall()
+
+
+    if results:
+
+        farm_data = []
+        if results:
+            row = results[0]
+            farm_data.append({
+                'farm_name': row[0],
+                'latitude': row[1],
+                'longitude': row[2],
+                'health_status_name': row[3],
+                'disease_count': row[4]
+            })
+    else:
+        farm_data = []
+
+    return jsonify(farm_data)
+
+
+
 
 
 
@@ -314,6 +351,11 @@ def learnmore():
 
     print(f'Initial farm_id from GET: {farm_id}')
     print(f'Initial user_id from GET: {user_id}')
+    cursor.execute('''SELECT farm_id, farm_name, province, city, brgy, strt_add, zip_code
+                      FROM farm
+                      WHERE farm_id = %s LIMIT 1''', (farm_id,))
+    farm = cursor.fetchone()
+    print('Farm data in learnmore:', farm)
 
     if request.method == 'POST':
   
@@ -341,6 +383,17 @@ def learnmore():
         result = cursor.fetchone()
         user_details_id = result[0] if result else None
 
+
+        cursor.execute('''SELECT * FROM ud_farm WHERE user_details_id = %s''', (user_details_id,))
+        check_ud = cursor.fetchall()
+
+        if check_ud:
+            text = 'You are already in the farm!'
+            return render_template('learnmore.html', farm=farm, user_id=user_id, farm_id=farm_id, text = text)
+
+
+
+
         if user_details_id and farm_id:
             cursor.execute('SELECT uf.group_id FROM ud_farm uf WHERE uf.farm_id = %s', (farm_id,))
             result = cursor.fetchone()
@@ -352,11 +405,7 @@ def learnmore():
 
         return redirect(url_for('login'))
 
-    cursor.execute('''SELECT farm_id, farm_name, province, city, brgy, strt_add, zip_code
-                      FROM farm
-                      WHERE farm_id = %s LIMIT 1''', (farm_id,))
-    farm = cursor.fetchone()
-    print('Farm data in learnmore:', farm)
+
 
     return render_template('learnmore.html', farm=farm, user_id=user_id, farm_id=farm_id)
 
@@ -457,10 +506,11 @@ def profile():
                            WHERE ud.user_id = %s''',(sid,))
             farm_info = cursor.fetchall()
 
+        cursor.execute('''SELECT tr.role_name FROM tbl_role tr INNER JOIN tbl_user u on u.role_id = tr.role_id WHERE u.user_id = %s''',(sid,))
+        role_name = cursor.fetchone()[0]
 
 
-
-        return render_template('profile.html', info = info, farm_info = farm_info)
+        return render_template('profile.html', info = info, farm_info = farm_info, user_type = role_name)
     
 
 
@@ -479,7 +529,6 @@ def members():
     if 'id' in session:
         sid = session['id']
 
-        # Fetch user details
         cursor.execute('''
             SELECT u.user_id, u.username, 
             ud.user_details_id, ud.fname, ud.lname, ud.mname
@@ -489,8 +538,9 @@ def members():
         ''', (sid,))
         user_details = cursor.fetchone()
         print('User details: ', user_details)
+        cursor.execute('''SELECT tr.role_name FROM tbl_role tr INNER JOIN tbl_user u on u.role_id = tr.role_id WHERE u.user_id = %s''',(sid,))
+        role_name = cursor.fetchone()[0]
 
-        # Fetch the status for the user's farms
         cursor.execute('''
             SELECT status
             FROM ud_farm 
@@ -509,7 +559,7 @@ def members():
         farms = cursor.fetchall()
         print('Farms associated with user: ', farms)
 
-        all_members = []  # To store members from all farms
+        all_members = []  
 
         for farm in farms:
             farm_id = farm[0]
@@ -527,9 +577,10 @@ def members():
             members = cursor.fetchall()
 
             if members:
-                all_members.extend(members)  # Collect all members across farms
+                all_members.extend(members) 
             
         group_id = None
+        print(all_members)
 
         if request.method == 'POST':
             user_details_id = request.form['user_details_id']
@@ -538,7 +589,7 @@ def members():
             for member in all_members:
                 print('member[7] (user_details_id): ', member[7])
 
-                if str(member[7]) == user_details_id:  # Ensure comparison is consistent
+                if str(member[7]) == user_details_id:
                     group_id = member[6]
                     break
 
@@ -553,34 +604,11 @@ def members():
                 ''', (group_id, user_details_id,))
                 connection.commit()
 
-
-                cursor.execute('''
-                    SELECT u.user_id, u.role_id FROM user_details ud 
-                    INNER JOIN tbl_user u ON ud.user_id = u.user_id 
-                    WHERE user_details_id = %s
-                ''', (user_details_id,))
-                join_2 = cursor.fetchone()
-
-                if join_2:
-                    cursor.execute('UPDATE tbl_role SET role_name = "user_farmer" WHERE role_id = %s', (join_2[1],))
-                    connection.commit()
-
             elif permission == 'reject':
                 cursor.execute('UPDATE ud_farm SET status = "rejected" WHERE user_details_id = %s', (user_details_id,))
                 connection.commit()
 
-                cursor.execute('''
-                    SELECT u.user_id, u.role_id FROM user_details ud 
-                    INNER JOIN tbl_user u ON ud.user_id = u.user_id 
-                    WHERE user_details_id = %s
-                ''', (user_details_id,))
-                join_2 = cursor.fetchone()
-
-                if join_2:
-                    cursor.execute('UPDATE tbl_role SET role_name = "rejected_farmer" WHERE role_id = %s', (join_2[1],))
-                    connection.commit()
-
-        return render_template('members.html', members=all_members, status=status, group_id=group_id)
+        return render_template('members.html', members=all_members, status=status, group_id=group_id, user_type = role_name)
 
 
 @app.route('/admin/update_farm_status', methods=['GET', 'POST'])
@@ -608,6 +636,21 @@ def update_farm_status():
     else:
         flash('You must be an admin to access this page.', 'danger')
         return redirect(url_for('login'))
+
+
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+
+    return render_template('contact.html')
+
+
+@app.route('/about', methods=['GET', 'POST'])
+def about():
+
+    return render_template('about.html')
+
+
 
 @app.route('/admin_test', methods=['GET', 'POST'])
 def admin_test():
@@ -662,7 +705,6 @@ def admin_test():
         return redirect(url_for('login'))
 
 
-
 @app.route('/get_disease_data', methods=['GET'])
 def get_disease_data():
     if 'id' in session:
@@ -675,9 +717,33 @@ def get_disease_data():
 
             today = datetime.datetime.today()
 
+            # Special handling for "daily" filter
             if filter_type == 'daily':
                 start_date = today - datetime.timedelta(days=1)
-            elif filter_type == 'weekly':
+
+                query = """
+                    SELECT hs.status_name, COUNT(*) AS disease_count
+                    FROM detection d
+                    INNER JOIN history h ON h.detection_id = d.detection_id
+                    INNER JOIN health_status hs on d.health_status_id = hs.health_status_id
+                    WHERE h.date_recorded >= %s AND d.user_id = %s AND NOT hs.status_name IN ('None Detected')
+                    GROUP BY hs.status_name
+                    ORDER BY disease_count DESC
+                """
+                cursor.execute(query, (start_date, user_id))
+                results = cursor.fetchall()
+                if not results:
+                    return jsonify({"labels": [], "data": []})
+
+                data = {
+                    "labels": [result[0] for result in results],  # Disease names
+                    "data": [result[1] for result in results]     # Disease counts
+                }
+
+                return jsonify(data)
+
+            # For other filters (weekly, monthly, yearly), return detections by date
+            if filter_type == 'weekly':
                 start_date = today - datetime.timedelta(weeks=1)
             elif filter_type == 'monthly':
                 start_date = today - datetime.timedelta(days=30)
@@ -686,10 +752,11 @@ def get_disease_data():
             else:
                 return jsonify({"error": "Invalid filter type"}), 400
 
+            # Query for weekly, monthly, yearly: Count of detections per day
             query = """
                 SELECT h.date_recorded, COUNT(*) AS detection_count
                 FROM history h
-                INNER JOIN detection d on d.detection_id = h.detection_id
+                INNER JOIN detection d ON d.detection_id = h.detection_id
                 WHERE h.date_recorded >= %s AND d.user_id = %s
                 GROUP BY h.date_recorded
                 ORDER BY h.date_recorded ASC
@@ -697,12 +764,13 @@ def get_disease_data():
             cursor.execute(query, (start_date, user_id))
             results = cursor.fetchall()
 
+
             if not results:
-                return jsonify({"error": "No data found for the selected filter"}), 404
+                return jsonify({"labels": [], "data": []})
 
             data = {
-                "labels": [result[0].strftime('%Y-%m-%d') for result in results],  # Format dates as strings
-                "data": [result[1] for result in results]  # Detection counts
+                "labels": [result[0].strftime('%Y-%m-%d') for result in results],  # Dates
+                "data": [result[1] for result in results]                         # Detection counts
             }
 
             return jsonify(data)
@@ -710,6 +778,7 @@ def get_disease_data():
         except Exception as e:
             print(f"Error in /get_disease_data: {e}")
             return jsonify({"error": "An error occurred on the server"}), 500
+
 
 
 @app.route('/get_disease_data_farm', methods=['GET'])
@@ -723,7 +792,7 @@ def get_disease_data_farm():
             print(f"Farm ID: {farm_id}")
 
             today = datetime.datetime.today()
-            start_date = today - datetime.timedelta(weeks=1) 
+            start_date = today - datetime.timedelta(weeks=4) 
 
             print(f"Start Date: {start_date}")
 
@@ -777,7 +846,7 @@ def get_disease_stats():
                 SELECT hs.status_name, COUNT(*) AS detection_count
                 FROM detection d
                 INNER JOIN health_status hs ON d.health_status_id = hs.health_status_id
-                WHERE NOT hs.status_name IN ('None Detected', 'healthy') AND d.user_id = %s
+                WHERE NOT hs.status_name IN ('None Detected') AND d.user_id = %s
                 GROUP BY hs.status_name
                 ORDER BY detection_count DESC
             """
@@ -812,7 +881,6 @@ def dashboard_cp():
         sid = session['id']
         farm_id = session.get('farm_id', None)
 
-        # Fetch user and weather information
         cursor.execute("SELECT username FROM tbl_user WHERE user_id = %s", (sid,))
         result = cursor.fetchone()
         if result:
@@ -826,16 +894,15 @@ def dashboard_cp():
         icon = response['weather'][0]['icon']
         icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"
 
-        # Initialize variables
         health_status = ''
         image_url = None
         formatted_labels = []
         results = []
 
-        # Determine user role and fetch related data
         cursor.execute('SELECT u.user_id, u.role_id, tr.role_name FROM tbl_user u INNER JOIN tbl_role tr ON u.role_id = tr.role_id WHERE u.user_id = %s', (sid,))
         result = cursor.fetchone()
         role_name = result[2] if result else None
+
 
         if role_name in ['user_farmer', 'farm_owner']:
             cursor.execute('''SELECT uf.status FROM tbl_user u
@@ -845,17 +912,32 @@ def dashboard_cp():
             result = cursor.fetchone()
             status = result[0] if result else None
 
-            cursor.execute("""SELECT count(detection_id) FROM detection d
-                              INNER JOIN farm f ON d.farm_id = f.farm_id
-                              WHERE NOT d.health_status_id IN (8, 9) AND f.farm_id = %s AND d.user_id = %s""", (farm_id, sid))
-            ct = cursor.fetchone()
+            if status == 'rejected':
+                farm_id = None
+                print(status)
+                cursor.execute("""SELECT count(detection_id) FROM detection d
+                              WHERE NOT d.health_status_id IN (8, 9) AND d.user_id = %s""", (sid,))
+                ct = cursor.fetchone()
 
-            cursor.execute("""SELECT count(detection_id), d.health_status_id, hs.status_name FROM detection d
-                              INNER JOIN health_status hs ON d.health_status_id = hs.health_status_id
-                              WHERE NOT hs.status_name IN ('None Detected', 'healthy') AND d.farm_id = %s AND d.user_id = %s
-                              GROUP BY d.health_status_id
-                              ORDER BY d.health_status_id DESC""", (farm_id, sid))
-            max = cursor.fetchone()
+                cursor.execute("""SELECT count(detection_id), d.health_status_id, hs.status_name FROM detection d
+                                INNER JOIN health_status hs ON d.health_status_id = hs.health_status_id
+                                WHERE NOT hs.status_name IN ('None Detected', 'healthy') AND d.user_id = %s
+                                GROUP BY d.health_status_id
+                                ORDER BY d.health_status_id DESC""", (sid,))
+                max = cursor.fetchone()
+
+            else:
+                cursor.execute("""SELECT count(detection_id) FROM detection d
+                                INNER JOIN farm f ON d.farm_id = f.farm_id
+                                WHERE NOT d.health_status_id IN (8, 9) AND f.farm_id = %s AND d.user_id = %s""", (farm_id, sid))
+                ct = cursor.fetchone()
+
+                cursor.execute("""SELECT count(detection_id), d.health_status_id, hs.status_name FROM detection d
+                                INNER JOIN health_status hs ON d.health_status_id = hs.health_status_id
+                                WHERE NOT hs.status_name IN ('None Detected', 'healthy') AND d.farm_id = %s AND d.user_id = %s
+                                GROUP BY d.health_status_id
+                                ORDER BY d.health_status_id DESC""", (farm_id, sid))
+                max = cursor.fetchone()
         else:
             status = None
             cursor.execute("""SELECT count(detection_id) FROM detection d
@@ -881,14 +963,9 @@ def dashboard_cp():
                 file.save(file_path)
 
                 image = Image.open(file_path)
-                new_size = (500, 500)
-                resized_image = image.resize(new_size)
                 
 
-                buffered = io.BytesIO()
-                resized_image.save(buffered, format="PNG")
-                image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-
+                
                 model = get_model(model_id="calamansi-0bxbw/3")
                 results = model.infer(image)
                 detections = sv.Detections.from_inference(results[0].dict(by_alias=True, exclude_none=True))
@@ -936,15 +1013,15 @@ def dashboard_cp():
                         cursor.execute('SELECT cause, solution, description, health_status_id FROM health_status WHERE status_name = %s', (health_status_name,))
                         health_status = cursor.fetchone()
                         cursor.execute("INSERT INTO detection (user_id, img, prediction, health_status_id, farm_id) VALUES (%s, %s, %s, %s, %s)", 
-                                (sid, image_base64, label, health_status[3], farm_id))
+                                (sid, image_url, label, health_status[3], farm_id))
                         connection.commit()
                         cursor.execute('SELECT detection_id FROM detection ORDER BY detection_id DESC LIMIT 1')
                         detection_id = cursor.fetchone()[0]
 
                         
 
-                        time_recorded = datetime.now().strftime('%H:%M:%S')
-                        date_recorded = datetime.now().strftime('%Y-%m-%d')
+                        time_recorded = datetime.datetime.now().strftime('%H:%M:%S')
+                        date_recorded = datetime.datetime.now().strftime('%Y-%m-%d')
                         temperature = f"{temp_cs}°C / {temp_fr}°F"
 
                         cursor.execute('INSERT INTO history (date_recorded, time_recorded, detection_id, weather_temp, weather_status) VALUES (%s, %s, %s, %s, %s)',
@@ -975,7 +1052,7 @@ def dashboard_cp():
                             if label == 'heathy':
                                 label = 'healthy'
 
-                            cursor.execute('SELECT cause, solution, description, health_status_id FROM health_status WHERE status_name = %s', (health_status_name,))
+                            cursor.execute('SELECT cause, solution, description, health_status_id, source FROM health_status WHERE status_name = %s', (health_status_name,))
                             health_status = cursor.fetchone()
 
                             print('health status', health_status)
@@ -984,15 +1061,15 @@ def dashboard_cp():
 
                                 # Insert into `detection` table
                                 cursor.execute("INSERT INTO detection (user_id, img, prediction, health_status_id, farm_id) VALUES (%s, %s, %s, %s, %s)", 
-                                (sid, image_base64, label, health_status[3], farm_id))
+                                (sid, image_url, label, health_status[3], farm_id))
 
                                 connection.commit()
 
                                 cursor.execute('SELECT detection_id FROM detection ORDER BY detection_id DESC LIMIT 1')
                                 detection_id = cursor.fetchone()[0]
 
-                                time_recorded = datetime.now().strftime('%H:%M:%S')
-                                date_recorded = datetime.now().strftime('%Y-%m-%d')
+                                time_recorded = datetime.datetime.now().strftime('%H:%M:%S')
+                                date_recorded = datetime.datetime.now().strftime('%Y-%m-%d')
                                 temperature = f"{temp_cs}°C / {temp_fr}°F"
 
                                 cursor.execute('INSERT INTO history (date_recorded, time_recorded, detection_id, weather_temp, weather_status) VALUES (%s, %s, %s, %s, %s)',
@@ -1004,7 +1081,8 @@ def dashboard_cp():
                                         'label': label,
                                         'description': health_status[2],
                                         'cause': health_status[0],
-                                        'solution': health_status[1]
+                                        'solution': health_status[1],
+                                        'sources':health_status[4]
                                     }
 
                                     results.append(result)
@@ -1059,25 +1137,30 @@ def check_status():
 def check_new_members():
     if 'farm_id' in session:
         farm_id = session['farm_id']
+        if session['role_id'] == 2:
 
-        cursor.execute('''
-            SELECT u.username, ud.fname, ud.lname, uf.status, u.created_at
-            FROM tbl_user u
-            INNER JOIN user_details ud ON u.user_id = ud.user_id
-            INNER JOIN ud_farm uf ON uf.user_details_id = ud.user_details_id
-            WHERE uf.farm_id = %s
-            ORDER BY u.created_at DESC LIMIT 1
-        ''', (farm_id,))
-        new_member = cursor.fetchone()
-        print('this is new member', new_member)
+            cursor.execute('''
+                SELECT u.username, ud.fname, ud.lname, uf.status, u.created_at
+                FROM tbl_user u
+                INNER JOIN user_details ud ON u.user_id = ud.user_id
+                INNER JOIN ud_farm uf ON uf.user_details_id = ud.user_details_id
+                WHERE uf.farm_id = %s
+                ORDER BY u.created_at DESC LIMIT 1
+            ''', (farm_id,))
+            new_member = cursor.fetchone()
+            print('this is new member', new_member)
 
-        if new_member:
-            member_name = f"{new_member[1]} {new_member[2]}"
-            return jsonify({'new_member': member_name, 'status': new_member[3]})
+            if new_member:
+                member_name = f"{new_member[1]} {new_member[2]}"
+                return jsonify({'new_member': member_name, 'status': new_member[3]})
+            else:
+                return jsonify({'new_member': None})
         else:
-            return jsonify({'new_member': None})
+            return jsonify({'error': 'Not authorized'}), 401
+            
 
     return jsonify({'error': 'Not authorized'}), 401
+
 
 
 
@@ -1088,10 +1171,9 @@ def history():
         cursor.execute("SELECT username FROM tbl_user WHERE user_id = %s", (sid,))
         username_result = cursor.fetchone()
 
-
         cursor.execute('SELECT u.user_id, u.role_id, tr.role_id, tr.role_name FROM tbl_user u INNER JOIN tbl_role tr ON u.role_id = tr.role_id WHERE u.user_id = %s', (sid,))
         result = cursor.fetchone()
-        
+
         status = None
         
         if result:
@@ -1112,42 +1194,60 @@ def history():
             farm_id = result[6]
             status = result[7]
 
-            print('Status: ', status, 'role name: ', role_name)
-
         if username_result:
             username = username_result[0]
         else:
             username = "Unknown User"
 
-        cursor.execute("""SELECT d.img, d.prediction, h.weather_status, h.weather_temp,
-                        h.date_recorded, h.time_recorded , hs.solution
+        # Default query
+        query = """SELECT d.img, d.prediction, h.weather_status, h.weather_temp,
+                        h.date_recorded, h.time_recorded, hs.solution
                         FROM history h 
                         INNER JOIN detection d ON d.detection_id = h.detection_id 
                         INNER JOIN health_status hs ON hs.health_status_id = d.health_status_id
                         INNER JOIN tbl_user u ON u.user_id = d.user_id 
-                        WHERE u.user_id = %s ORDER BY TIME(h.time_recorded), DATE(h.date_recorded) ASC LIMIT 10""", (sid,))
+                        WHERE u.user_id = %s 
+                        ORDER BY DATE(h.date_recorded), TIME(h.time_recorded) ASC LIMIT 10"""
+        params = (sid,)
+
+        if request.method == 'POST':
+            date_filter = request.form.get('date_filter')
+
+            print(date_filter)
+            today = datetime.datetime.today()
+
+            if date_filter == 'today':
+                start_date = today.strftime('%Y-%m-%d')
+                end_date = today.strftime('%Y-%m-%d')
+            elif date_filter == 'last_week':
+                start_date = (today - datetime.timedelta(days=today.weekday() + 7)).strftime('%Y-%m-%d')
+                end_date = today.strftime('%Y-%m-%d')
+            elif date_filter == 'last_month':
+                start_date = (today - datetime.timedelta(days=30)).strftime('%Y-%m-%d')
+                end_date = today.strftime('%Y-%m-%d')
+            elif date_filter == 'last_year':
+                start_date = (today - datetime.timedelta(days=365)).strftime('%Y-%m-%d')
+                end_date = today.strftime('%Y-%m-%d')
+
+            print(start_date)
+
+            query = """SELECT d.img, d.prediction, h.weather_status, h.weather_temp,
+                            h.date_recorded, h.time_recorded, hs.solution
+                            FROM history h 
+                            INNER JOIN detection d ON d.detection_id = h.detection_id 
+                            INNER JOIN health_status hs ON hs.health_status_id = d.health_status_id
+                            INNER JOIN tbl_user u ON u.user_id = d.user_id 
+                            WHERE u.user_id = %s AND h.date_recorded BETWEEN %s AND %s
+                            ORDER BY DATE(h.date_recorded), TIME(h.time_recorded) ASC"""
+            params = (sid, start_date, end_date)
+
+        cursor.execute(query, params)
         h_records = cursor.fetchall()
-        file_path = None
-
-
-
-
-
 
         history = []
-        h_index = 0
         for record in h_records:
-            h_index+=1
-            image_binary = record[0]
-            binary_data = base64.b64decode(image_binary)
-            image = Image.open(io.BytesIO(binary_data))
-            filename = f"file{h_index}.png"
-            
-            file_path = os.path.join( r'C:\xampp\htdocs\backup capstone\xammp_projects\static\upload_folder', filename)
-            image.save(file_path)
-            new_fpath = "..\\static\\upload_folder\\" + filename
             history.append({
-                'image': new_fpath,
+                'image': record[0],  # Using d.img directly from the database
                 'prediction': record[1],
                 'weather_status': record[2],
                 'weather_temp': record[3],
@@ -1156,11 +1256,12 @@ def history():
                 'solution': record[6]
             })
 
-        return render_template('history.html', user_id=sid, username=username, history=history, file_path = file_path, user_type = role_name, status = status)
+
+        print(history)
+
+        return render_template('history.html', user_id=sid, username=username, history=history, user_type=role_name, status=status)
     else:
         return redirect(url_for('login'))
-
-
 
 
 
@@ -1371,14 +1472,14 @@ def on_join(data):
     username = data['username']
     room = data['room']
     join_room(room)
-    send({"username": username, "msg": "has entered the room", "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}, to=room)
+    send({"username": username, "msg": "has entered the room", "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}, to=room)
 
 @socketio.on('leave')
 def on_leave(data):
     username = data['username']
     room = data['room']
     leave_room(room)
-    send({"username": username, "msg": "has left the room", "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}, to=room)
+    send({"username": username, "msg": "has left the room", "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}, to=room)
 
 
 inappropriate_words = ['tite', 'burat', 'puke','pokpok','pepe', 'bilat', 'putangina']
@@ -1394,7 +1495,7 @@ def handle_message(data):
     message = data['msg']
     room = data['room']
     ud_farm_id = data['ud_farm_id']
-    data['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     if contains_inappropriate_content(message):
         data['msg'] = "This message has been flagged for inappropriate content."
@@ -1418,19 +1519,16 @@ def farm():
         cursor.execute('''
             SELECT f.farm_id, f.farm_name, 
                    COUNT(d.detection_id) AS detection_count
-            FROM ud_farm uf
-            INNER JOIN user_details ud ON ud.user_details_id = uf.user_details_id
-            INNER JOIN tbl_user u ON u.user_id = ud.user_id
-            INNER JOIN farm f ON uf.farm_id = f.farm_id
+            FROM farm f
             LEFT JOIN detection d ON f.farm_id = d.farm_id
-            WHERE u.user_id = %s
+            WHERE d.user_id = %s
             GROUP BY f.farm_id
         ''', (sid,))
         
         farms = cursor.fetchall()
 
         if not farms:
-            return "No farms found for this user.", 404
+            return redirect(url_for('dashboard_cp'))
 
      
         if request.method == 'POST':

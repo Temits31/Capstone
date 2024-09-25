@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Chart.js -->
@@ -11,40 +12,243 @@
     <!-- html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
     <style>
-        .report-section {
-            margin-bottom: 30px;
+        body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
         }
-        .report-header {
+
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100%;
+            background-color: #19381f;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h3 {
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .sidebar nav ul li a i {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #fff;
+            color:#182e17;
+            border-radius: 10px 0px 0px 10px;
+            margin-right: -20px;
+            transform: scale(1.05);
+            box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .limeline img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .card {
+            border: none;
+            background-color: #eef4ea;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .card-header {
+            background-color: #53a548;
+            color: #fff;
+            font-weight: bold;
+            padding: 10px;
+        }
+
+        .table th {
+            background-color: #eef4ea;
+        }
+
+        .table td {
+            background-color: #eef4ea;
+        }
+
+        .card-body {
+            padding: 20px;
+            color: #2b2d42;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f4f9f4; /* Very light green for alternating rows */
+        }
+
+        .table-striped th, .table-striped td {
+            border-top: 1px solid #bfdcae;
+        }
+
+        .btn-primary {
+            background-color: #eee82c; /* Darker green for buttons */
+            color: black;
+            font-weight: bold;
+            border: none;
+            padding: 10px;
+            width: 180px;
             margin-bottom: 20px;
         }
-        @media print {
-            report-section {
-                width: 100%;
-                page-break-inside: avoid; /* Prevent breaks inside sections */
-            }
 
+        .btn-primary:hover {
+            background-color: #556b2f; /* Dark olive green */
+        }
+
+        /* Report filters */
+        .form-label {
+            color: #388e3c;
+        }
+
+        select, input[type="date"] {
+            border: 1px solid #193f18;
+            background-color: #fff;
+        }
+
+        select {
+            padding: 6px;
+            border-radius: 5px;
+        }
+
+        .report-section {
+            background-color: #fff; /* Light background for sections */
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media print {
+            .report-section {
+                width: 100%;
+                page-break-inside: avoid;
+            }
             .no-print {
-                display: none; /* Hide elements not needed for print */
+                display: none;
             }
         }
     </style>
 </head>
-<body>
-    <div class="container mt-5">
-        <!-- Your existing HTML content -->
+<body> 
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="limeline">
+            <img src="../static/limelinelogo.png" style="width: 120px; height: 120px;">
+            <h3>LimeLine</h3>
+        </div>
+        <nav id="sidebar">
+            <ul>
+                <li><a href="{{url_for('admin_dashboard')}}"><i class="fas fa-chart-line"></i>Dashboard</a></li>
+                <li><a href="{{url_for('admin_crud')}}"><i class="fas fa-database"></i>Admin CRUD</a></li>
+                <li><a href="{{url_for('update_farm_status')}}"><i class="fas fa-clipboard-list"></i>Admin Farm Status</a></li>
+                <li><a href="{{url_for('admin_test')}}"><i class="fas fa-tools"></i>Admin Test</a></li>
+                <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-seedling"></i>Admin Farm</a></li>
+                <li><a href="{{url_for('map')}}"><i class="fas fa-map"></i>Map</a></li>
+                <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
 
-        <!-- Print Button -->
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="card mt-3">
+            <div class="card-header">
+                Users List
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Username ID</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user[0] }}</td>
+                            <td>{{ user[1] }} {{ user[2] }} {{ user[3] }}</td>
+                            <td>{{ user[4] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Farm Name</th>
+                        <th>Status</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for farm in farms %}
+                    <tr>
+                        <td>{{ farm[0] }}</td>
+                        <td>{{ farm[1] }}</td>
+                        <td>{{ farm[2] }}</td>
+                        <td>{{ farm[3] }} {{ farm[4] }} {{ farm[5] }} {{ farm[7] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Report Filters -->
+        <div class="report-header mt-5">
+
+             <!-- Print Button -->
         <div class="text-end mb-4">
             <input type="button" onclick="window.print()" value="Print Report" />
         </div>
 
-        <!-- Report Filters -->
-        <div class="report-header">
+
             <h3>Select Report Period</h3>
             <form id="report-filter-form" method="GET" action="/admin">
                 <div class="row">
                     <div class="col-md-4">
-                        <label for="report-type" class="form-label">Report Type</label>
+                        <label for="report-type" class="form-label">Report Type</label><br>
                         <select id="report-type" name="period" class="form-select">
                             <option value="weekly">Weekly</option>
                             <option value="monthly" selected>Monthly</option>
@@ -66,8 +270,8 @@
             </form>
         </div>
 
+        <!-- Report Section -->
         <div id="printableArea">
-            <!-- Report Sections -->
             <div class="report-section">
                 <h2>Disease Trends</h2>
                 <canvas id="disease-trend-chart" width="400" height="200"></canvas>
@@ -89,8 +293,8 @@
                 <h2>Recommended Actions</h2>
                 <ul>
                     <li>Increase surveillance for top detected diseases in farms X, Y, Z.</li>
-                    <li>Consider updating disease control measures for diseases A, B, and C.</li>
-                    <li>Monitor farms with consistently low performance for signs of recurring issues.</li>
+                    <li>Update disease control measures for diseases A, B, and C.</li>
+                    <li>Monitor farms with low performance for recurring issues.</li>
                 </ul>
             </div>
         </div>

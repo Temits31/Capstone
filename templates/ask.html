@@ -31,32 +31,32 @@ body {
     width: 30%;
     height: auto;
     justify-content: center;
-    background: #bbc5ad;
+    background: #fff;
     align-items: center;
     border-radius: 30px;
     position: absolute;
     display: flex;
     flex-wrap: wrap;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .popup-container .popup {
     text-align: center;
     position: relative;
+    align-items: center;
+    justify-content: center;
 }
 
 
 .popup-container .popup h1 {
-    color: #182E17;
+    color: #53A548;
     font-size: 1.5rem;
     padding: 1rem;
     font-weight: bold;
 }
 
-.popup-container .popup .button { 
-    background:#182E17;
-    color: white;
+.popup-container .popup .buttons button { 
     padding: 10px;
-    width: 70px;
     border-radius: 10px;
     cursor: pointer;
     border: none;
@@ -65,22 +65,22 @@ body {
 .popup-container .popup .buttons {
     display: flex;
     gap: 1.5rem;
-    flex-wrap: wrap;
     margin-top: 1rem;
 }
 
 .popup-container .popup .buttons button {
     flex: 1 1;
-    padding: 1rem;
+    padding: 10px;
     font-size: 1rem;
-    background-color: #e6ecde;
-    border: 2px solid #182E17;
-    color: #182E17;
+    background-color: #e0f1c8;
+    border: 2px solid #91CB3E;
+    color: #19381f;
     border-radius: 20px;
+    font-weight: bold;
 }
 
 .popup-container .popup .buttons button.option-button-left {
-    background-color: #182E17;
+    background-color: #91CB3E;
     color: #fff;
 }
 
@@ -100,13 +100,13 @@ body {
 <body>
     <div class="popup-container">
         <div class="popup">
-        <h1>Are you a Farm Owner</h1>
+        <h1>Do you own a Calamansi Farm?</h1>
         <form action="/ask" method="POST">
-        <input type="hidden" name="user_id" value="{{ user_id }}">
+             <input type="hidden" name="user_id" value="{{ user_id }}">
 
             <div class="buttons">
-                <button class="option-button-left" name="ask" value="1">Yes</button>
-                <button class="option-button-right" name="ask" value="2">No</button>
+                <button class="option-button-left" name="yes" value="yes">Yes</button>
+                <button class="option-button-right" name="no" value="no">No</button>
             </div>
         </form>
 </div>

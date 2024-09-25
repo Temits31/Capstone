@@ -3,48 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Rooms and Chat</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
     <style>
-       body {
+        * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            box-sizing: border-box; /* Includes padding/border in width/height */
         }
 
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        body {
+            position: relative;
+            height: 100vh;
             margin: 0;
             padding: 0;
-            width: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+            background-color: #e6ecde;
         }
 
         .container {
-            width: 95%;
-            max-width: 100%;
-            height: 95vh;
             display: flex;
+            width: 100%;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .limeline {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content inside the limeline div */
             justify-content: center;
-            align-items: flex-start;
-            flex-direction: row;
-            margin: 20px;
-            border: 1px solid #ccc;
-            border-radius: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background: #eef1e6;
+            margin-bottom: 20px;
         }
 
         .sidebar {
-            background-color: #565950;
+            background-color: #19381F;
             color: white;
             width: 15%;
-            height: 100%;
-            border-radius: 30px;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
         }
 
         .sidebar nav ul {
@@ -72,34 +75,41 @@
         .sidebar nav ul li a i {
             margin-right: 15px;
             font-size: 20px;
+            z-index: 1;
         }
 
         .sidebar nav ul li a:hover {
-            background-color: #eef1e6;
+            background-color: #e6ecde;
             color:#182e17;
             border-radius: 10px 0px 0px 10px;
+            margin-right: -20px;
             transform: scale(1.05);
             box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
         }
 
         .content {
+            margin-left: 280px;
             width: 100%;
-            border-radius: 30px;
-            flex: 1;
-            padding: 20px;
-            align-items: flex-start;
-            justify-content: flex-start;
-            gap: 10px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            position: relative;
+            background-color: #e6ecde;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #182E17;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         .navbar {
             width: 100%;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #fff;
         }
 
         .navbar nav ul {
@@ -114,58 +124,61 @@
             font-weight: bold;
         }
 
+        .burger-icon {
+            font-size: 1.5rem;
+            color: #19381F;
+            cursor: pointer;
+            display: none;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            right: 2rem;
+            top: 60px;
+            height: 0;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+
+        .dropdown.open {
+            display: block;
+            height: auto;
+            text-decoration: none;
+        }
+
+        .dropdown li {
+            padding: 0.8rem;
+            display: flex;
+            text-decoration: none;
+            list-style: none;
+            border-bottom: 1px solid #182E17; 
+        }
+
+        .dropdown a {
+            text-decoration: none; /* Ensure no text decoration */
+            color: #182E17; /* Text color for dropdown links */
+            font-weight: bold; /* Bold font weight */
+        }
+
+        .dropdown li a i {
+            margin-right: 20px;
+        }
+
         .sub-content {
-            padding: 0;
             width: 100%;
+            padding: 20px;
+            position: relative;
             display: flex;
             flex: 1;
             justify-content: flex-start;
         }
 
-.burger-icon {
-    font-size: 1.5rem;
-    color: #fff;
-    cursor: pointer;
-    display: none;
-}
-
-.dropdown {
-    display: none;
-    position: absolute;
-    right: 2rem;
-    top: 60px;
-    height: 0;
-    width: 300px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-    border-radius: 10px;
-    overflow: hidden;
-    transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.dropdown.open {
-    display: block;
-    height: auto;
-    text-decoration: none;
-}
-
-.dropdown li {
-    padding: 0.8rem;
-    display: flex;
-    text-decoration: none;
-    list-style: none;
-    border-bottom: 1px solid #182E17;
-}
-
-.dropdown a {
-    text-decoration: none; /* Ensure no text decoration */
-    color: #182E17; /* Text color for dropdown links */
-    font-weight: bold;
-}
-
-.dropdown li a i {
-    margin-right: 20px;
-}
 
 #chat {
     width: 100%; /* Use full width */
@@ -201,17 +214,16 @@ form button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background: #182E17;
+    background: #91cb3e;
     color: #fff;
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: bold;
 }
 
-.sub-content h1 {
+.sub-content h2 {
     margin-bottom: 20px;
-    font-size: 2rem;
-    color: #182E17;
+    color: #19381F;
 }
 
 .room-list, .chat-box {
@@ -313,42 +325,56 @@ form button {
     </style>
 </head>
 <body>
-    <div class="main-container">
         <div class="container">
             <div class="sidebar">
+                <div class="limeline">
+                    <img src="../static/limelinelogo.png" style="width: 120px; height: 120px;">
+                    <h3>LimeLine</h3>
+                </div>
                 <nav>
                     <ul>
                         <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-
+        
                         {% if user_type in ['user_farmer', 'farm_owner'] %}
-                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                            {% if session['role_id'] == 6 %}
+        
+                            <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                            {% endif %}
                         {% endif %}
+        
+                            
+                        <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
                         
                         <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
-                        <li><a href="#"><i class="fas fa-history"></i> History</a></li>
-                        
-                        
+                            
+                            
                         {% if user_type in ['user_farmer', 'farm_owner'] %}
-                        <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
-                        <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                            {% if session['role_id'] == 6 %}
+        
+                            <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                            <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                            <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> Farm</a></li>
+        
+                            {% endif %}
                         {% endif %}
-                        
-                        {% if user_type == 'farm_owner' %}
-                        <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+                            
+                        {%  if user_type in ['user_farmer', 'farm_owner'] %}
+                        <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add Farm</a></li>
                         {% endif %}
-                        
-                        <li><a href="#"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+                        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+        
                     </ul>
                 </nav>
             </div>            
             <div class="content">
                 <div class="navbar">
+                    <div class="title">Chat</div>
                 <nav>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="/dashboard">Home</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/help">Help</a></li>
+                        <li><a href="/contact">Contact</a></li>
                     </ul>
                 </nav>
                 <div class="burger-icon">
@@ -360,29 +386,38 @@ form button {
                     <li><a href="#" ><i class="fas fa-info-circle"></i> About</a></li>
                     <li><a href="#" ><i class="fas fa-question-circle"></i>Help</a></li>
                     <li><a href="#" ><i class="fas fa-envelope"></i>Contact</a></li>
-                    <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
-
+                    <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+        
                     {% if user_type in ['user_farmer', 'farm_owner'] %}
-                    <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                        {% if session['role_id'] == 6 %}
+        
+                        <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                        {% endif %}
                     {% endif %}
+        
                         
+                    <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+                    
                     <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="#"><i class="fas fa-history"></i> History</a></li>
                         
                         
                     {% if user_type in ['user_farmer', 'farm_owner'] %}
-                    <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
-                    <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                        {% if session['role_id'] == 6 %}
+        
+                        <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                        <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                        <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
+        
+                        {% endif %}
                     {% endif %}
                         
-                    {% if user_type == 'farm_owner' %}
+                    {%  if user_type in ['user_farmer', 'farm_owner'] %}
                     <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
                     {% endif %}
-                        
-                    <li><a href="#"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
             </div>
-        
-    <div class="sub-content">    
+    
+    <div class="sub-content">
     <div class="room-list">
         <h2>Select a Room</h2>
         <form method="POST">
@@ -411,11 +446,10 @@ form button {
         {% else %}
             <h2>Select a room to start chatting</h2>
         {% endif %}
-        </div>
-        </div>
     </div>
     </div>
 </div>
+</div> 
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
         {% if selected_room %}
@@ -424,7 +458,6 @@ form button {
             var currentRoom = "{{ selected_room }}";
             var username = "{{ username }}"; 
             var ud_farm_id = "{{ ud_farm_id }}";
-            var inappropriateWords = ['tite', 'burat']
 
             var chat = document.getElementById('chat');
             var form = document.getElementById('message-form');
@@ -444,22 +477,25 @@ form button {
             socket.on('message', function(data) {
                 var messageElement = document.createElement('div');
                 messageElement.classList.add('message');
-
-                var containsInappropriateWords = inappropriateWords.some(function(word) {
-                    return data.msg.toLowerCase().includes(word.toLowerCase());
-                });
-
-                if (containsInappropriateWords){
-                    messageElement.innerHTML = '<strong>' + data.username + '</strong>: ' + 'This message has been flagged for inappropriate content. <div class="timestamp">' + data.timestamp + '</div>';
-                } else {
                 messageElement.innerHTML = '<strong>' + data.username + '</strong>: ' + data.msg + ' <div class="timestamp">' + data.timestamp + '</div>';
-                    
-                }
                 chat.appendChild(messageElement);
                 chat.scrollTop = chat.scrollHeight;
             });
         });
         {% endif %}
+    </script>
+    <script>
+            const burgerIcon = document.querySelector('.burger-icon');
+            const burgerIconIcon = document.querySelector('.burger-icon i');
+            const dropdownMenu = document.querySelector('.dropdown');
+
+            burgerIcon.onclick = function() {
+                dropdownMenu.classList.toggle('open');
+                const isOpen = dropdownMenu.classList.contains('open');
+        
+            // Toggle between bars and times icon based on the dropdown state
+            burgerIconIcon.classList = isOpen ? 'fas fa-times' : 'fas fa-bars';
+        };
     </script>
 </body>
 </html>

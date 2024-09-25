@@ -1,126 +1,466 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+
     <style>
-        .text-label {  
-            background: none;
-            border: none;
-            text-align: center;
-            font-size: 14px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Includes padding/border in width/height */
+        }
+
+        body {
+            position: relative;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+            background-color: #e6ecde;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .limeline {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content inside the limeline div */
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar {
+            background-color: #19381F;
+            color: white;
+            width: 15%;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: white;
             font-weight: bold;
-            color: red; /* Adjust the color as needed */
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sidebar nav ul li a i {
+            margin-right: 15px;
+            font-size: 20px;
+            z-index: 1;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #e6ecde;
+            color:#182e17;
+            border-radius: 10px 0px 0px 10px;
+            margin-right: -20px;
+            transform: scale(1.05);
+            box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+        .content {
+            margin-left: 280px;
+            width: 100%;
+            position: relative;
+            background-color: #e6ecde;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #182E17;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .navbar nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .navbar nav ul li a {
+            text-decoration: none;
+            color: #182e17;
+            font-weight: bold;
+        }
+
+        .burger-icon {
+            font-size: 1.5rem;
+            color: #19381F;
+            cursor: pointer;
+            display: none;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            right: 2rem;
+            top: 60px;
+            height: 0;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+
+        .dropdown.open {
+            display: block;
+            height: auto;
+            text-decoration: none;
+        }
+
+        .dropdown li {
+            padding: 0.8rem;
+            display: flex;
+            text-decoration: none;
+            list-style: none;
+            border-bottom: 1px solid #182E17; 
+        }
+
+        .dropdown a {
+            text-decoration: none; /* Ensure no text decoration */
+            color: #182E17; /* Text color for dropdown links */
+            font-weight: bold; /* Bold font weight */
+        }
+
+        .dropdown li a i {
+            margin-right: 20px;
+        }
+
+        .sub-content {
+            width: 100%;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            overflow: hidden;
+        }
+
+        #farm-list {
+            flex: 1;
+            width: 100%; /* Adjust this as needed */
+            height: 100px;
+            background-color: #f5f5f5; /* Light background to make it stand out */
+            padding: 20px; /* Increased padding */
+            margin-right: 20px; /* Adds space between map and farm list */
+            border-radius: 10px; /* Makes it look nicer with rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a soft shadow */
+}
+
+        .farm-info {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #farm-list h3 {
+            margin-bottom: 10px;
+        }
+
+        .farm-info h4 {
+            margin: 0;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #344E41; /* Darker green from your palette */
+        }
+
+        .farm-info p {
+            margin: 5px 0;
+            font-size: 14px;
         }
 
         #map {
-            width: 100%;
-            height: 400px;
+            padding: 20px;
+            width: 80%;
+            height: 90vh;
         }
 
-        /* Add additional styling for navigation and sidebar if needed */
+        @media (max-width: 768px) {
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .navbar nav {
+                display: none;
+            }
+
+            .dropdown {
+                display: block;
+            }
+
+            .burger-icon {
+                display: block;
+            }
+
+            .content {
+                margin: 0;
+                width: 100%;
+                padding: 0;
+            }
+
+            .sub-content {
+                width: 100%;
+            }
+
+        }
+
+
     </style>
 </head>
 <body>
-    {% if session['role_id'] == 2 %}
-
-    <strong>{{session['role_id']}}</strong>
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="{{url_for('admin_dashboard')}}">Dashboard</a></li>
-            <li><a href="{{url_for('admin_crud')}}">Admin CRUD</a></li>
-            <li><a href="{{url_for('update_farm_status')}}">Farm Status</a></li>
-            <li><a href="{{url_for('admin_test')}}">Admin Test</a></li>
-            <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-tasks"></i> Admin Farm</a></li>
-            <li><a href="{{url_for('map')}}">Map</a></li>
-        </ul>
-    </nav>
-    {% elif session['role_id'] == 6 %}
+    <div class="container">
     <div class="sidebar">
+        <div class="limeline">
+            <img src="../static/limelinelogo.png" style="width: 120px; height: 120px;">
+            <h3>LimeLine</h3>
+        </div>
+        {% if session['role_id'] == 2 %}
+        <!-- Admin Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <ul>
+                <li><a href="{{url_for('admin_dashboard')}}">Dashboard</a></li>
+                <li><a href="{{url_for('admin_crud')}}">Admin CRUD</a></li>
+                <li><a href="{{url_for('update_farm_status')}}">Farm Status</a></li>
+                <li><a href="{{url_for('admin_test')}}">Admin Test</a></li>
+                <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-tasks"></i> Admin Farm</a></li>
+                <li><a href="{{url_for('map')}}">Map</a></li>
+            </ul>
+        </nav>
+        {% elif session['role_id'] == 6 %}
+
+
+
+
         <nav>
             <ul>
-                <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-tasks"></i> Dashboard</a></li>
-                {% if user_type in ['user_farmer', 'farm_owner'] %}
-                    {% if status in ['member', 'Owner'] %}
+                <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+
+                {% if session['role_id'] in [6, 5] %}
+                    {% if session['role_id'] == 6 %}
+    
                     <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
                     {% endif %}
                 {% endif %}
+    
+                    
                 <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+                
                 <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
-                {% if user_type in ['user_farmer', 'farm_owner'] %}
-                    {% if status in ['member', 'Owner'] %}
+                    
+                {% if session['role_id'] in [6, 5] %}
+                    
+                    {% if session['role_id'] == 6 %}
+    
                     <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
                     <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
                     <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> Farm</a></li>
+    
                     {% endif %}
                 {% endif %}
-                {% if user_type == 'farm_owner' %}
-                    {% if status in ['member', 'Owner'] %}
-                    <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add Farm</a></li>
-                    {% endif %}
-                <li><a href="{{ url_for('nofarm') }}"><i class="fas fa-tasks"></i> Join a Farm</a></li>
+                {% if session['role_id'] in [6, 5] %}
+    
+                    
+                <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
                 {% endif %}
-                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+
             </ul>
         </nav>
     </div>            
     <div class="content">
         <div class="navbar">
-            <nav>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </nav>
-            <div class="burger-icon">
-                <i class="fas fa-bars"></i>
-            </div>
+            <div class="title">Map</div>
+        <nav>
+            <ul>
+                <li><a href="/dashboard">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/help">Help</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="burger-icon">
+            <i class="fas fa-bars"></i>
         </div>
     </div>
+    <div class="dropdown">
+            <li><a href="#" ><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="#" ><i class="fas fa-info-circle"></i> About</a></li>
+            <li><a href="#" ><i class="fas fa-question-circle"></i>Help</a></li>
+            <li><a href="#" ><i class="fas fa-envelope"></i>Contact</a></li>
+            <li><a href="{{ url_for('dashboard_cp') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+
+            {% if session['role_id'] in [6, 5] %}
+                {% if session['role_id'] == 6 %}
+
+                <li><a href="{{ url_for('members') }}"><i class="fas fa-users"></i> Members</a></li>
+                {% endif %}
+            {% endif %}
+
+                
+            <li><a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a></li>
+            
+            <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+                
+            {% if session['role_id'] in [6, 5] %}
+                
+                {% if session['role_id'] == 6 %}
+
+                <li><a href="{{ url_for('rooms') }}"><i class="fas fa-comments"></i> Chat</a></li>
+                <li><a href="{{ url_for('map') }}"><i class="fas fa-map-marker-alt"></i> Map</a></li>
+                <li><a href="{{ url_for('farm') }}"><i class="fas fa-tasks"></i> farm</a></li>
+
+                {% endif %}
+            {% endif %}
+            {% if session['role_id'] in [6, 5] %}
+
+                
+            <li><a href="{{ url_for('add_farm') }}"><i class="fas fa-plus"></i> Add farm</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+    </div>
+
+
     {% else %}
-    <!-- Content for other users or visitors -->
     {% endif %}
 
-    <div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <div class="sub-content">   
+        <div id="farm-list">
+        <h3>Farm Information</h3>
+            {% if farm_data %}
+            <div class="farm-info">
+                <h4>Farm {{ farm_data.farm_name }}</h4>
+                <p>Health Status: {{ farm_data.health_status_name }}</p>
+                <p>Count: {{ farm_data.disease_count }}</p>
+            </div>
+            {% endif %}
+        </div>
+        <div id="map"></div>
+    </div> <!-- sub-content-->
+
+</div> <!--content-->
+
+
+
+
+
+</div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize the map at the specified coordinates and zoom level
+            // Initialize the map
             var map = L.map('map').setView([15.36054945411487, 120.92213630676271], 15);
-
+            
             // Load and display tile layers from OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
-
+    
+            // JavaScript variable to hold coordinates data passed from Flask
             var data = {{ coords | tojson | safe }};
+    
+            data.forEach(function (farm) {
+                var lat = farm.latitude;
+                var lng = farm.longitude;
+                var radius = 1000;
 
-            data.forEach(function (coords) {
-                var lat = coords.latitude;
-                var lng = coords.longitude;
-                var diseaseCount = coords.disease_count;
-                var radius = 400; // Default radius
-
-                // Create a circle with specified radius
-                L.circle([lat, lng], { radius: radius }).addTo(map);
-
+    
                 // Create a marker
-                var marker = L.marker([lat, lng]).addTo(map);
-
-                // Bind a popup with disease count information
-                marker.bindPopup('Disease Count: ' + diseaseCount);
-
-                // Adjust the map view when marker is clicked
+                var marker = L.marker([lat, lng],  { radius: radius, color: 'blue', fillColor: '#blue', fillOpacity: 0.1 }).addTo(map);
+    
+                // Bind a popup with farm name
+                marker.bindPopup(farm.farm_name);
+    
                 marker.on('click', function () {
+                    fetch('/search_farms', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ latitude: lat, longitude: lng })
+                    })
+                    .then(response => response.json())
+                    .then(farmData => {
+                        if (farmData.length > 0) {
+                            // Update the sidebar with the fetched farm data
+                            var farm = farmData[0];
+                            var farmInfo = `<h4>Farm ${farm.farm_name}</h4>
+                                            <p>Health Status: ${farm.health_status_name}</p>
+                                            <p>Count: ${farm.disease_count}</p>`;
+                            document.getElementById('farm-list').innerHTML = farmInfo;
+                        } else {
+                            // Clear the sidebar if no data is found
+                            document.getElementById('farm-list').innerHTML = '<p>No data available</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Optionally clear the sidebar in case of an error
+                        document.getElementById('farm-list').innerHTML = '<p>Error fetching data</p>';
+                    });
+    
+                    // Adjust the map view when marker is clicked
                     map.setView([lat, lng], map.getZoom() + 2); // Adjust zoom level increment as needed
                 });
             });
         });
     </script>
+
 </body>
 </html>
+
+

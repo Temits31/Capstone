@@ -1,17 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Farm - Backyard</title>
 <style>
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
 body {
     margin: 0;
@@ -38,21 +32,21 @@ body {
 
 .navbar nav ul li a {
     text-decoration: none;
-    color: #182e17;
+    color: #19381F;
     font-weight: bold;
 }
 
 .logo{
     font-size: 1.5rem;
     font-weight: bold;
-    color: #182E17;
+    color: #19381F;
     text-decoration: none;
     cursor: pointer;
 }
 
 .logo a {
     text-decoration: none;
-    color: #182E17;
+    color: #19381F;
 }
 
 .burger-icon {
@@ -95,7 +89,7 @@ body {
 
 .dropdown a {
     text-decoration: none; /* Ensure no text decoration */
-    color: #182E17; /* Text color for dropdown links */
+    color: #19381F; /* Text color for dropdown links */
 }
 
 .popup-container {
@@ -103,12 +97,13 @@ body {
     width: 35%;
     height: auto;
     justify-content: center;
-    background: #bbc5ad;
+    background: #FFF;
     align-items: center;
     border-radius: 30px;
     margin: 0 auto;
     margin-bottom: 10px;
     display: flex;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .popup-container .popup {
@@ -118,7 +113,7 @@ body {
 
 
 .popup-container .popup h1 {
-    color: #182E17;
+    color: #53A548;
     font-size: 1.5rem;
     font-weight: bold;
 }
@@ -135,16 +130,20 @@ body {
     padding: 0; /* Remove padding */
 }
 
+.popup-container .popup .buttons h3 {
+    color: #91CB3E;
+}
+
 
 .popup-container .popup .buttons button {
     height: 300px;
     appearance: none;
-    background-color: #FCFCFD;
+    background-color: #fff;
     border-radius: 4px;
     border-width: 0;
-    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#eee82c 0 -3px 0 inset;
     box-sizing: border-box;
-    color: #36395A;
+    color: #19381F;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -166,16 +165,16 @@ body {
 }
 
 .popup-container .popup .buttons button:focus {
-  box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  box-shadow: #eee82c 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
 }
 
 .popup-container .popup .buttons button:hover {
-  box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #eee82c 0 -3px 0 inset;
   transform: translateY(-2px);
 }
 
 .popup-container .popup .buttons button:active {
-  box-shadow: #D6D6E7 0 3px 7px inset;
+  box-shadow: #eee82c 0 3px 7px inset;
   transform: translateY(2px);
 }
 
@@ -332,7 +331,7 @@ body {
             <li><a href="/contact">Contact</a></li>
         </div>
     </div>
-    <div class="popup-container">
+<div class="popup-container">
         <div class="popup">
     <form action="/farmback" method="post">
         <input type="hidden" name="user_id" value="{{ user_id }}">
@@ -387,7 +386,6 @@ body {
     };
     });
 </script>
-    
     
 </body>
 </html>

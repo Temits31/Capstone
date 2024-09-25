@@ -7,6 +7,76 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../static/register_farmer.css">
     <title>Register Form</title>
+        
+    
+
+    <script>
+                function closePopup() {
+            var popup = document.getElementById("popupAlert");
+            popup.classList.remove('visible');
+        }
+    </script>
+
+    <style>
+
+
+
+
+        /* Popup modal background */
+        .popup-overlay {
+            z-index: 999;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Translucent background */
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Popup modal content */
+        .popup-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            max-width: 500px;
+            width: 80%;
+        }
+
+        /* Popup alert message */
+        .popup-alert {
+            background-color: #f8d7da; /* Light red for error messages */
+            color: #721c24;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+        }
+
+        .popup-alert.success {
+            background-color: #d4edda; /* Light green for success messages */
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Popup close button */
+        .popup-content .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Show the popup */
+        .popup-overlay.visible {
+            display: flex; /* Show the popup and center it */
+        }
+    </style>
 </head>
 
 <body>
@@ -36,52 +106,73 @@
         <div class="farmer-container">
         <h1>Register</h1>
         <a href="/register_farmer">Back to Home</a>
-    
-        <form id="registerForm" action="/register_farmer" method="post">
-            <input type="hidden" name="user_id" value="{{user_id}}">
-            <div class="input-cont">
-                <input type="text" id="fname" name="fname" required placeholder=" ">
-                <label for="fname">First Name</label>
-            </div>
-            <div class="input-cont">
-                <input type="text" id="mname" name="mname" class="optional" placeholder=" ">
-                <label for="mname">Middle Name</label>
-            </div>
-            <div class="input-cont">
-                <input type="text" id="lname" name="lname" required placeholder=" ">
-                <label for="lname">Last Name</label>
-            </div>
-            <div class="form-group">
-                <label for="province-dropdown">Province</label>
-                <select id="province-dropdown" name="province-dropdown">
-                    <option value="">Select Province</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="city-dropdown">City</label>
-                <select id="city-dropdown" name="city-dropdown" disabled>
-                    <option value="">Select City</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="barangay-dropdown">Barangay</label>
-                <select id="barangay-dropdown" name="barangay-dropdown" disabled>
-                    <option value="">Select Barangay</option>
-                </select>
-            </div>
-            <div class="input-cont">
-                <input type="text" id="strt_add" name="strt_add" required placeholder=" ">
-                <label for="strt_add">Street Address</label>
-            </div>
-            <span id="error-message" style="color: red;"></span>
-            <div class="input-cont">
-                <input type="num" id="cont_num" name="cont_num" required placeholder=" ">
-                <label for="cont_num">Contact Number</label>
-            </div>
-            <div class="submit">
-                <input type="submit" value="Next">
-            </div>
-        </form>
+
+                <div id="popupAlert" class="popup-overlay {{ 'visible' if text else '' }}">
+                    <div class="popup-content">
+                        <span class="close-btn" onclick="closePopup()">&times;</span>
+                        <div class="popup-alert {{ 'success' if success else '' }}">
+                            {{text}}
+                            <br>
+                            <br>
+                            <a href="{{url_for('register_farmer')}}" class="btn">Back</a>
+                            <a href="{{url_for('login')}}" class="btn"> Go to Login</a>
+                        </div>
+                    </div>
+                </div>
+                <form id="registerForm" action="/register_farmer" method="post">
+                    <input type="hidden" name="user_id" value="{{user_id}}">
+                    <div class="input-cont">
+                        <input type="text" id="fname" name="fname" required placeholder=" ">
+                        <label for="fname">First Name</label>
+                    </div>
+                    <div class="input-cont">
+                        <input type="text" id="mname" name="mname" class="optional" placeholder=" ">
+                        <label for="mname">Middle Name</label>
+                    </div>
+                    <div class="input-cont">
+                        <input type="text" id="lname" name="lname" required placeholder=" ">
+                        <label for="lname">Last Name</label>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="region-dropdown">Region</label>
+                        <select id="region-dropdown" name="region-dropdown">
+                            <option value="">Select Region</option>
+                        </select>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="province-dropdown">Province</label>
+                        <select id="province-dropdown" name="province-dropdown" disabled>
+                            <option value="">Select Province</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="city-dropdown">City</label>
+                        <select id="city-dropdown" name="city-dropdown" disabled>
+                            <option value="">Select City</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="barangay-dropdown">Barangay</label>
+                        <select id="barangay-dropdown" name="barangay-dropdown" disabled>
+                            <option value="">Select Barangay</option>
+                        </select>
+                    </div>
+                    <div class="input-cont">
+                        <input type="text" id="strt_add" name="strt_add" required placeholder=" ">
+                        <label for="strt_add">Street Address</label>
+                    </div>
+                    <span id="error-message" style="color: red;"></span>
+                    <div class="input-cont">
+                        <input type="num" id="cont_num" name="cont_num" required placeholder=" ">
+                        <label for="cont_num">Contact Number</label>
+                    </div>
+                    <div class="submit">
+                        <input type="submit" value="Next">
+                    </div>
+                </form>
+                
     </div>
     </div>
 
@@ -100,78 +191,112 @@
     </footer>
 
 <script>
-     document.addEventListener('DOMContentLoaded', function() {
-            const provinceDropdown = document.getElementById('province-dropdown');
-            const cityDropdown = document.getElementById('city-dropdown');
-            const barangayDropdown = document.getElementById('barangay-dropdown');
-            
-            fetch('../static/dropdown.json')
-                .then(response => response.json())
-                .then(data => {
-                    function populateProvinces() {
-                        data.provinces.forEach(province => {
-                            const option = document.createElement('option');
-                            option.value = province.id;
-                            option.textContent = province.name;
-                            provinceDropdown.appendChild(option);
-                        });
-
-                        // Optionally, set a default province
-                        const defaultProvinceId = data.provinces[0].id;
-                        provinceDropdown.value = defaultProvinceId;
-                        populateCities(defaultProvinceId);
-                    }
-
-                    function populateCities(provinceId) {
-                        const province = data.provinces.find(p => p.id == provinceId);
-                        cityDropdown.innerHTML = '<option value="">Select City</option>';
-                        barangayDropdown.innerHTML = '<option value="">Select Barangay</option>';
-                        barangayDropdown.disabled = true;
-                        if (province) {
-                            province.cities.forEach(city => {
+            document.addEventListener('DOMContentLoaded', function() {
+                const regionDropdown = document.getElementById('region-dropdown');
+                const provinceDropdown = document.getElementById('province-dropdown');
+                const cityDropdown = document.getElementById('city-dropdown');
+                const barangayDropdown = document.getElementById('barangay-dropdown');
+                
+                fetch('../static/locations.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        function populateRegions() {
+                            Object.keys(data).forEach(regionId => {
                                 const option = document.createElement('option');
-                                option.value = city.id;
-                                option.textContent = city.name;
-                                cityDropdown.appendChild(option);
+                                option.value = regionId;
+                                option.textContent = data[regionId].region_name;
+                                regionDropdown.appendChild(option);
                             });
-                            cityDropdown.disabled = false;
-                            // Optionally, set a default city
-                            const defaultCityId = province.cities[0].id;
-                            cityDropdown.value = defaultCityId;
-                            populateBarangays(defaultCityId);
-                        } else {
-                            cityDropdown.disabled = true;
-                        }
-                    }
 
-                    function populateBarangays(cityId) {
-                        const province = data.provinces.find(p => p.cities.some(c => c.id == cityId));
-                        const city = province.cities.find(c => c.id == cityId);
-                        barangayDropdown.innerHTML = '<option value="">Select Barangay</option>';
-                        if (city) {
-                        city.barangays.forEach(barangay => {
-                            const option = document.createElement('option');
-                            option.textContent = barangay;
-                            barangayDropdown.appendChild(option);
+                            // Optionally set a default region
+                            const defaultRegionId = Object.keys(data)[0];
+                            regionDropdown.value = defaultRegionId;
+                            populateProvinces(defaultRegionId);
+                        }
+
+                        function populateProvinces(regionId) {
+                            const region = data[regionId];
+                            provinceDropdown.innerHTML = '<option value="">Select Province</option>';
+                            cityDropdown.innerHTML = '<option value="">Select Municipality</option>';
+                            barangayDropdown.innerHTML = '<option value="">Select Barangay</option>';
+                            barangayDropdown.disabled = true;
+                            
+                            if (region) {
+                                Object.keys(region.province_list).forEach(provinceName => {
+                                    const option = document.createElement('option');
+                                    option.value = provinceName;
+                                    option.textContent = provinceName;
+                                    provinceDropdown.appendChild(option);
+                                });
+                                provinceDropdown.disabled = false;
+
+                                // Optionally, set a default province
+                                const defaultProvinceName = Object.keys(region.province_list)[0];
+                                provinceDropdown.value = defaultProvinceName;
+                                populateMunicipalities(regionId, defaultProvinceName);
+                            } else {
+                                provinceDropdown.disabled = true;
+                            }
+                        }
+
+                        function populateMunicipalities(regionId, provinceName) {
+                            const province = data[regionId].province_list[provinceName];
+                            cityDropdown.innerHTML = '<option value="">Select Municipality</option>';
+                            barangayDropdown.innerHTML = '<option value="">Select Barangay</option>';
+                            barangayDropdown.disabled = true;
+
+                            if (province) {
+                                Object.keys(province.municipality_list).forEach(municipalityName => {
+                                    const option = document.createElement('option');
+                                    option.value = municipalityName;
+                                    option.textContent = municipalityName;
+                                    cityDropdown.appendChild(option);
+                                });
+                                cityDropdown.disabled = false;
+
+                                // Optionally, set a default municipality
+                                const defaultMunicipalityName = Object.keys(province.municipality_list)[0];
+                                cityDropdown.value = defaultMunicipalityName;
+                                populateBarangays(regionId, provinceName, defaultMunicipalityName);
+                            } else {
+                                cityDropdown.disabled = true;
+                            }
+                        }
+
+                        function populateBarangays(regionId, provinceName, municipalityName) {
+                            const municipality = data[regionId].province_list[provinceName].municipality_list[municipalityName];
+                            barangayDropdown.innerHTML = '<option value="">Select Barangay</option>';
+
+                            if (municipality) {
+                                municipality.barangay_list.forEach(barangayName => {
+                                    const option = document.createElement('option');
+                                    option.textContent = barangayName;
+                                    barangayDropdown.appendChild(option);
+                                });
+                                barangayDropdown.disabled = false;
+                            } else {
+                                barangayDropdown.disabled = true;
+                            }
+                        }
+
+                        regionDropdown.addEventListener('change', function() {
+                            populateProvinces(this.value);
                         });
-                        barangayDropdown.disabled = false;
-                        } else {
-                        barangayDropdown.disabled = true;
-                        }
-                    }
 
-                    provinceDropdown.addEventListener('change', function() {
-                        populateCities(this.value);
-                    });
+                        provinceDropdown.addEventListener('change', function() {
+                            populateMunicipalities(regionDropdown.value, this.value);
+                        });
 
-                    cityDropdown.addEventListener('change', function() {
-                        populateBarangays(this.value);
-                    });
+                        cityDropdown.addEventListener('change', function() {
+                            populateBarangays(regionDropdown.value, provinceDropdown.value, this.value);
+                        });
 
-                    populateProvinces();
-                })
-                .catch(error => console.error('Error loading JSON data:', error));
-        });
+                        populateRegions();
+                    })
+                    .catch(error => console.error('Error loading JSON data:', error));
+            });
+
+
 
         const burgerIcon = document.querySelector('.burger-icon');
         const burgerIconIcon = document.querySelector('.burger-icon i');

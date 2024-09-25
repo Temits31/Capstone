@@ -25,7 +25,69 @@
                 return true;
             }
         }
+        function closePopup() {
+            var popup = document.getElementById("popupAlert");
+            popup.classList.remove('visible');
+        }
     </script>
+
+        
+    <style>
+        /* Popup modal background */
+        .popup-overlay {
+            z-index: 999;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Translucent background */
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Popup modal content */
+        .popup-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            max-width: 500px;
+            width: 80%;
+        }
+
+        /* Popup alert message */
+        .popup-alert {
+            background-color: #f8d7da; /* Light red for error messages */
+            color: #721c24;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+        }
+
+        .popup-alert.success {
+            background-color: #d4edda; /* Light green for success messages */
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Popup close button */
+        .popup-content .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Show the popup */
+        .popup-overlay.visible {
+            display: flex; /* Show the popup and center it */
+        }
+    </style>
 </head>
 
 <body>
@@ -64,7 +126,21 @@
         <h1>Register</h1>
         <a href="/register_un" class="bth">Back to Home</a>
         
-        <strong>{{text}}</strong>
+        <!-- Popup for feedback message -->
+        <div id="popupAlert" class="popup-overlay {{ 'visible' if text else '' }}">
+            <div class="popup-content">
+                <span class="close-btn" onclick="closePopup()">&times;</span>
+                <div class="popup-alert {{ 'success' if success else '' }}">
+                    {{text}}
+                    <br>
+                    <br>
+                    <a href="{{url_for('username')}}" class="btn">Back</a>
+                    <a href="{{url_for('login')}}" class="btn"> Go to Login</a>
+                </div>
+            </div>
+        </div>
+
+
         <form id="registerForm" action="/register_un" method="post" onsubmit="return validatePasswords()">
         <div class="input-container">
             <input type="text" id="username" name="username" required>
