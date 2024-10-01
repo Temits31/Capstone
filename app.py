@@ -21,6 +21,7 @@ from geopy.geocoders import get_geocoder_for_service
 import random
 
 import datetime
+from dateutil.relativedelta import relativedelta
 
 import requests
 
@@ -236,20 +237,17 @@ def search_farms():
         AND d.health_status_id IS NOT NULL
         AND d.health_status_id != 8 
         AND d.health_status_id != 9
-        GROUP BY f.farm_name, f.latitude, f.longitude, hs.status_name
         ORDER BY disease_count DESC
-        LIMIT 1
     '''
 
     cursor.execute(query2, (longitude, latitude, search_radius))
     results = cursor.fetchall()
-
+    print(results)
+    farm_data = []
 
     if results:
 
-        farm_data = []
-        if results:
-            row = results[0]
+       for row in results:
             farm_data.append({
                 'farm_name': row[0],
                 'latitude': row[1],
@@ -259,6 +257,9 @@ def search_farms():
             })
     else:
         farm_data = []
+
+
+    print(farm_data)
 
     return jsonify(farm_data)
 
@@ -299,22 +300,22 @@ def ask():
 
 @app.route('/nofarm', methods=['GET', 'POST'])
 def nofarm():
-    user_id = request.args.get('user_id')  # Get user_id from URL parameters
-    farm_id = request.args.get('farm_id')  # Get farm_id from URL parameters
+    user_id = request.args.get('user_id') 
+    farm_id = request.args.get('farm_id') 
 
     if request.method == 'POST':
-        farm_id = request.form['farm_id']  # Get farm_id from the submitted form
+        farm_id = request.form['farm_id'] 
         user_id = request.form.get('user_id', user_id) 
         print('userid', user_id)
 
-        if not user_id:  # Handles both None and empty string cases
-            user_id = session.get('id')  # Safely get the user_id from session
+        if not user_id:  
+            user_id = session.get('id')  
             if user_id:
                 print('User ID is in session:', user_id)
             else:
                 print('User ID not found in session')
 
-        return redirect(url_for('learnmore', user_id=user_id, farm_id=farm_id))  # Pass both IDs to the next route
+        return redirect(url_for('learnmore', user_id=user_id, farm_id=farm_id)) 
 
     cursor.execute('SELECT * FROM farm')
     farm = cursor.fetchall()
@@ -880,6 +881,7 @@ def dashboard_cp():
     if 'id' in session:
         sid = session['id']
         farm_id = session.get('farm_id', None)
+        print("farm_id = ", farm_id)
 
         cursor.execute("SELECT username FROM tbl_user WHERE user_id = %s", (sid,))
         result = cursor.fetchone()
@@ -902,6 +904,7 @@ def dashboard_cp():
         cursor.execute('SELECT u.user_id, u.role_id, tr.role_name FROM tbl_user u INNER JOIN tbl_role tr ON u.role_id = tr.role_id WHERE u.user_id = %s', (sid,))
         result = cursor.fetchone()
         role_name = result[2] if result else None
+        print('this is role name', role_name)
 
 
         if role_name in ['user_farmer', 'farm_owner']:
@@ -911,7 +914,7 @@ def dashboard_cp():
                               WHERE u.user_id = %s''', (sid,))
             result = cursor.fetchone()
             status = result[0] if result else None
-
+            print("this is status", status)
             if status == 'rejected':
                 farm_id = None
                 print(status)
@@ -925,6 +928,7 @@ def dashboard_cp():
                                 GROUP BY d.health_status_id
                                 ORDER BY d.health_status_id DESC""", (sid,))
                 max = cursor.fetchone()
+                print("status is rejected")
 
             else:
                 cursor.execute("""SELECT count(detection_id) FROM detection d
@@ -938,6 +942,10 @@ def dashboard_cp():
                                 GROUP BY d.health_status_id
                                 ORDER BY d.health_status_id DESC""", (farm_id, sid))
                 max = cursor.fetchone()
+                print("status is owner or accepted")
+
+                print('this is count max', ct, max)
+
         else:
             status = None
             cursor.execute("""SELECT count(detection_id) FROM detection d
@@ -950,10 +958,9 @@ def dashboard_cp():
                               GROUP BY d.health_status_id
                               ORDER BY d.health_status_id DESC""", (sid,))
             max = cursor.fetchone()
-
-        max = max[2] if max else ''
-
     
+        max = max[2] if max else ''
+        
         label = ''
         if request.method == 'POST':
             file = request.files['file']
@@ -1093,6 +1100,7 @@ def dashboard_cp():
                                 print(f"No health status found for {health_status_name}")
 
 
+        
         return render_template('dashboard_cp.html', username=username,count = ct[0], status = status,
                                health_status = health_status, 
                                temp_cs=int(temp_cs), temp_fr=int(temp_fr), weather=weather, icon=icon, icon_url=icon_url, 
@@ -1164,6 +1172,7 @@ def check_new_members():
 
 
 
+
 @app.route('/history', methods=['GET', 'POST'])
 def history():
     if 'id' in session:
@@ -1171,7 +1180,7 @@ def history():
         cursor.execute("SELECT username FROM tbl_user WHERE user_id = %s", (sid,))
         username_result = cursor.fetchone()
 
-        cursor.execute('SELECT u.user_id, u.role_id, tr.role_id, tr.role_name FROM tbl_user u INNER JOIN tbl_role tr ON u.role_id = tr.role_id WHERE u.user_id = %s', (sid,))
+        cursor.execute('SELECT u.user_id, u.role_id, tr.role_id, tr.role_name FROM tbl_user u INNER JOIN tbl_role tr ON u.role_id = tr.role_id WHERE u.user_id = %s', (sid,)) 
         result = cursor.fetchone()
 
         status = None
@@ -1199,7 +1208,6 @@ def history():
         else:
             username = "Unknown User"
 
-        # Default query
         query = """SELECT d.img, d.prediction, h.weather_status, h.weather_temp,
                         h.date_recorded, h.time_recorded, hs.solution
                         FROM history h 
@@ -1212,24 +1220,16 @@ def history():
 
         if request.method == 'POST':
             date_filter = request.form.get('date_filter')
+            custom_start_date = request.form.get('start_date')
+            custom_end_date = request.form.get('end_date')
 
             print(date_filter)
-            today = datetime.datetime.today()
 
-            if date_filter == 'today':
-                start_date = today.strftime('%Y-%m-%d')
-                end_date = today.strftime('%Y-%m-%d')
-            elif date_filter == 'last_week':
-                start_date = (today - datetime.timedelta(days=today.weekday() + 7)).strftime('%Y-%m-%d')
-                end_date = today.strftime('%Y-%m-%d')
-            elif date_filter == 'last_month':
-                start_date = (today - datetime.timedelta(days=30)).strftime('%Y-%m-%d')
-                end_date = today.strftime('%Y-%m-%d')
-            elif date_filter == 'last_year':
-                start_date = (today - datetime.timedelta(days=365)).strftime('%Y-%m-%d')
-                end_date = today.strftime('%Y-%m-%d')
+            if custom_start_date and custom_end_date:
+                start_date = custom_start_date
+                end_date = custom_end_date
 
-            print(start_date)
+            print(start_date, end_date)
 
             query = """SELECT d.img, d.prediction, h.weather_status, h.weather_temp,
                             h.date_recorded, h.time_recorded, hs.solution
@@ -1258,14 +1258,15 @@ def history():
 
 
         print(history)
+        if not history:
+            history_message = "No history records found for the selected date range."
+        else:
+            history_message = None
 
-        return render_template('history.html', user_id=sid, username=username, history=history, user_type=role_name, status=status)
+        return render_template('history.html', user_id=sid, username=username, history=history, user_type=role_name, status=status, history_message=history_message)
+
     else:
         return redirect(url_for('login'))
-
-
-
-
 
 
     
@@ -1528,7 +1529,18 @@ def farm():
         farms = cursor.fetchall()
 
         if not farms:
-            return redirect(url_for('dashboard_cp'))
+            cursor.execute('''SELECT uf.farm_id FROM ud_farm uf inner join
+            user_details ud on uf.user_details_id = ud.user_details_id
+            INNER JOIN tbl_user u on u.user_id = ud.user_id  WHERE u.user_id = %s ORDER BY u.user_id DESC LIMIT 1''',(sid,))
+            farm_id = cursor.fetchone()[0]
+            print('not farm_id')
+            if not farm_id:
+                return redirect(url_for('dashboard_cp'))
+            else:
+                session['farm_id'] = farm_id 
+                return redirect(url_for('dashboard_cp'))
+
+
 
      
         if request.method == 'POST':

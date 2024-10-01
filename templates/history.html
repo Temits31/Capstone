@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>History</title>
     <style>
@@ -123,15 +124,7 @@
             font-weight: bold;
         }
 
-        .sub-content {
-            padding: 20px;
-            width: 100%;
-            display: flex;
-            flex: 1;
-            flex-direction: column;
-            justify-content: flex-start;
-            overflow-y: auto;
-        }
+       
 
 .burger-icon {
     font-size: 1.5rem;
@@ -178,6 +171,49 @@
     margin-right: 20px;
 }
 
+.sub-content {
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+}
+
+.form-group input[type="date"] {
+    border: 1px solid #193f18;
+    padding: 6px;
+    font-size: 16px;
+}
+
+.form-control {
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #19cb3e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px;
+    font-size: 15px;
+    width: 70px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+    }
+
+.btn-primary:hover {
+    background-color: #19cb3e;
+    transform: scale(1.05);
+}
+
 .history-table {
     width: 100%;
     border-collapse: collapse;
@@ -191,7 +227,7 @@
 
 /* Table header styling */
 .history-table thead {
-    background-color: #91cb3e;
+    background-color: #54a538;
     color: white;
 }
 
@@ -377,7 +413,29 @@
                     {% endif %}
                     <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
             </div>
+            
+
+            
+
                 <div class="sub-content">
+                  
+            <div id="form">
+                <label for="date_filter">Filter by:</label>
+                <form method="POST" action="/history">
+                    
+                    <div class="form-group">
+                        <label for="start_date">Custom Start Date:</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">Custom End Date:</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control">
+                    </div>
+                    
+                </form>
+                <button type="submit" class="btn-primary">Filter</button>
+            </div>
+                    {% if history %}
                     <table class="history-table">
                         <thead>
                             <tr>
@@ -403,6 +461,11 @@
                             </tr>
                             {% endfor %}
                         </tbody>
+                        {% else %}
+                        <div class="alert alert-info text-center">
+                            {{ history_message }}
+                        </div>
+                        {% endif %}
                     </table>                
                 </div>                
             </div>

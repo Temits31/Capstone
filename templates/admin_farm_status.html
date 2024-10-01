@@ -4,28 +4,184 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Update Farm Status</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100%;
+            background-color: #19381f;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h3 {
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .sidebar nav ul li a i {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #fff;
+            color:#182e17;
+            border-radius: 10px 0px 0px 10px;
+            margin-right: -20px;
+            transform: scale(1.05);
+            box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .limeline img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .flashes {
+            list-style: none;
+            padding: 0;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .flashes li {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+
+        .success {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .error {
+            background-color: #f44336;
+            color: #fff;
+        }
+
+        table {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        form {
+            margin: 0;
+        }
+</style>
 </head>
 <body>
 
 
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="{{url_for('admin_dashboard')}}">dashboard</a></li>
-            <li><a href="{{url_for('admin_crud')}}">admin_crud</a></li>
-            <li><a href="{{url_for('update_farm_status')}}">admin_farm_status</a></li>
-            <li><a href="{{url_for('admin_test')}}">admin_test</a></li>
-            <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-tasks"></i> adminfarm</a></li>
-            <li><a href="{{url_for('map')}}">map</a></li>
+    <div class="sidebar">
+        <div class="limeline">
+            <img src="../static/limelinelogo.png" style="width: 120px; height: 120px;">
+            <h3>LimeLine</h3>
+        </div>
+        <nav id="sidebar">
+            <ul>
+                <li><a href="{{url_for('admin_dashboard')}}"><i class="fas fa-chart-line"></i>Dashboard</a></li>
+                <li><a href="{{url_for('admin_crud')}}"><i class="fas fa-database"></i>Admin CRUD</a></li>
+                <li><a href="{{url_for('update_farm_status')}}"><i class="fas fa-clipboard-list"></i>Admin Farm Status</a></li>
+                <li><a href="{{url_for('admin_test')}}"><i class="fas fa-tools"></i>Admin Test</a></li>
+                <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-seedling"></i>Admin Farm</a></li>
+                <li><a href="{{url_for('map')}}"><i class="fas fa-map"></i>Map</a></li>
+                <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+
+            </ul>
+        </nav>
+    </div>
 
 
-        </ul>
-    </nav>
+    <div class="main-content">
 
+        <h1>Update Farm Status</h1>
 
-
-
-    <h1>Update Farm Status</h1>
-    
+    <!-- Flash messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <ul class="flashes">
@@ -35,8 +191,9 @@
             </ul>
         {% endif %}
     {% endwith %}
-    
-    <table border="1">
+
+    <!-- Farm status update table -->
+    <table>
         <thead>
             <tr>
                 <th>Farm ID</th>
@@ -54,13 +211,11 @@
                 <td>
                     <form method="POST" action="{{ url_for('update_farm_status') }}">
                         <input type="hidden" name="farm_id" value="{{ farm[0] }}">
-                        
                         <select name="farm_status">
                             <option value="Active" {% if farm['farm_status'] == 'Active' %} selected {% endif %}>Active</option>
                             <option value="Pending for Deletion" {% if farm['farm_status'] == 'Pending for Deletion' %} selected {% endif %}>Pending for Deletion</option>
                             <option value="Closed" {% if farm['farm_status'] == 'Closed' %} selected {% endif %}>Closed</option>
                         </select>
-                        
                         <button type="submit">Update</button>
                     </form>
                 </td>
@@ -69,6 +224,7 @@
         </tbody>
     </table>
 
-    <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
 </body>
 </html>
