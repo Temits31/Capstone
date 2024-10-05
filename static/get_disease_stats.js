@@ -4,31 +4,41 @@ document.addEventListener('DOMContentLoaded', function() {
     let diseasePieChart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: [],  // Disease names will be populated from the backend
+            labels: [],
             datasets: [{
                 label: 'Disease Detections',
-                data: [],  // Detection counts will be populated from the backend
+                data: [], 
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    '#19381f', // Color for first disease
+                    '#EEE82C', // Color for second disease
+                    '#91CB3E', // Color for third disease
+                    '#53A548', // Color for fourth disease
+                    '#4C934C'  // Color for fifth disease
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    '#19381f', // Color for first disease
+                    '#EEE82C', // Color for second disease
+                    '#91CB3E', // Color for third disease
+                    '#53A548', // Color for fourth disease
+                    '#4C934C'  // Color for fifth disease
                 ],
-                borderWidth: 1
+                borderWidth: 3
             }]
         },
         options: {
-            responsive: true
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right', // Moves labels to the right of the pie chart
+                    labels: {
+                        usePointStyle: true, // Makes the labels look like points instead of boxes
+                    }
+                }
+            }
+
+
+
+
         }
     });
 
