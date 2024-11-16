@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Statistics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <style>
+             body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100%;
+            background-color: #19381f;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h3 {
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sidebar nav ul li a i {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        .limeline img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #fff;
+            color:#182e17;
+            border-radius: 10px 0px 0px 10px;
+            margin-right: -20px;
+            transform: scale(1.05);
+            box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+
+
+        .report-section {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        canvas {
+            margin: 0 auto;
+            display: block;
+            height: 400px;
+        }
+        #performance-chart{
+            margin: 0 auto;
+            display: block;
+            height: 260px;
+        }
+
+        .btn-primary {
+            background-color: #53a548;
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #3c7d38;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .dashboard-card {
+                width: 100%;
+            }
+        }
+
+        @media print {
+            .report-section {
+                width: 100%;
+                page-break-inside: avoid;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="limeline">
+            <img src="../static/limelinelogo.png" style="width: 120px; height: 120px;">
+            <h3>LimeLine</h3>
+        </div>
+        <nav id="sidebar">
+            <ul>
+                <li><a href="{{url_for('admin_dashboard')}}"><i class="fas fa-chart-line"></i>Dashboard</a></li>
+                <li><a href="{{url_for('admin_statistics')}}"><i class="fas fa-chart-bar"></i>Statistic</a></li>
+
+                <li><a href="{{url_for('admin_crud')}}"><i class="fas fa-database"></i>Admin CRUD</a></li>
+                <li><a href="{{url_for('update_farm_status')}}"><i class="fas fa-clipboard-list"></i>Admin Farm Status</a></li>
+                <li><a href="{{url_for('admin_test')}}"><i class="fas fa-tools"></i>Admin Test</a></li>
+                <li><a href="{{url_for('map')}}"><i class="fas fa-map"></i>Map</a></li>
+                <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div >
+            <h2 style="color: #19381f;">Statistics</h2>
+        </div>
+        <form id="report-filter-form" method="GET" action="/admin_statistics">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="report-type" class="form-label">Report Type</label><br>
+                    <select id="report-type" name="period" class="form-select">
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly" selected>Monthly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="start-date" class="form-label">Start Date</label>
+                    <input type="date" id="start-date" name="start_date" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="end-date" class="form-label">End Date</label>
+                    <input type="date" id="end-date" name="end_date" class="form-control">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Generate Report</button>
+        </form>
+        <br>
+       <div class="text-end mb-4">
+        <button id="print-button" class="btn btn-primary">Download Report</button>
+
+       </div>
+     
+
+
+
+       <!-- Report Section -->
+        <div id="printableArea">
+            <div class="report-section">
+                <h2>Disease Trends</h2>
+                <canvas id="disease-trend-chart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="report-section">
+                <h2>Top Detected Diseases</h2>
+                <canvas id="top-diseases-chart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="report-section">
+                <h2>User Metrics</h2>
+                <p>Total Users: <span id="total-detections">{{total_users}}</span></p>
+                <canvas id="performance-chart" width="400" height="200"></canvas>
+            </div>
+           
+            
+        </div>
+
+        
+    </div>
+
+    <script>
+        document.getElementById('print-button').addEventListener('click', function() {
+            var lineChartCanvas = document.getElementById('disease-trend-chart');
+            var pieChartCanvas = document.getElementById('top-diseases-chart');
+            var performanceChart = document.getElementById('performance-chart');
+
+            
+            var lineChartImage = lineChartCanvas.toDataURL('image/png');
+            var pieChartImage = pieChartCanvas.toDataURL('image/png');
+            var performanceChart = performanceChart.toDataURL('image/png');
+
+            
+        
+            var payload = {
+                line_chart: lineChartImage,
+                pie_chart: pieChartImage,
+                performance_chart: performanceChart,
+
+            };
+        
+            console.log('Payload for report generation:', payload);
+        
+            fetch('/print_chart_admin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'report.docx';  // Name of the downloaded file
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Error downloading the file:', error));
+        });
+        </script>
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to prepare the page for printing
+            function prepareForPrint() {
+                var charts = document.querySelectorAll('canvas');
+                charts.forEach(function (canvas) {
+                    var ctx = canvas.getContext('2d');
+                    var chartInstance = Chart.getChart(canvas);
+                    if (chartInstance) {
+                        chartInstance.update();
+                    }
+                });
+            }
+
+            // Handle beforeprint event
+            window.addEventListener('beforeprint', function () {
+                prepareForPrint();
+            });
+
+            // Example chart rendering code
+            var ctxTrend = document.getElementById('disease-trend-chart').getContext('2d');
+            var trendChart = new Chart(ctxTrend, {
+                type: 'line',
+                data: {{ farm_chart_data|tojson }},
+                options: {
+                    scales: {
+                        x: { title: { display: true, text: 'Farms' } },
+                        y: { title: { display: true, text: 'Disease Detections' } }
+                    },
+                    fill: true
+                }
+            });
+
+            var ctxDiseases = document.getElementById('top-diseases-chart').getContext('2d');
+            var diseaseChart = new Chart(ctxDiseases, {
+                type: 'bar',
+                data: {{ health_data|tojson }},
+                options: {
+                    scales: {
+                        x: { title: { display: true, text: 'Diseases' } },
+                        y: { title: { display: true, text: 'Detection Count' } }
+                    }
+                }
+            });
+
+            var ctxPerformance = document.getElementById('performance-chart').getContext('2d');
+            var performanceChart = new Chart(ctxPerformance, {
+                type: 'pie',
+                data: {{ chart_data|tojson }},
+                options: {
+                    scales: {
+                        x: { title: { display: true, text: 'Farm Types' } },
+                        y: { title: { display: true, text: 'Number of Users' } }
+                    }
+                }
+            });
+
+            document.getElementById('total-farms').innerText = '{{ farms|length }}'; // Example value
+        });
+    </script>
+
+    
+
+</body>
+</html>

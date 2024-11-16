@@ -165,10 +165,11 @@
         <nav id="sidebar">
             <ul>
                 <li><a href="{{url_for('admin_dashboard')}}"><i class="fas fa-chart-line"></i>Dashboard</a></li>
+                <li><a href="{{url_for('admin_statistics')}}"><i class="fas fa-chart-bar"></i>Statistic</a></li>
+
                 <li><a href="{{url_for('admin_crud')}}"><i class="fas fa-database"></i>Admin CRUD</a></li>
                 <li><a href="{{url_for('update_farm_status')}}"><i class="fas fa-clipboard-list"></i>Admin Farm Status</a></li>
                 <li><a href="{{url_for('admin_test')}}"><i class="fas fa-tools"></i>Admin Test</a></li>
-                <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-seedling"></i>Admin Farm</a></li>
                 <li><a href="{{url_for('map')}}"><i class="fas fa-map"></i>Map</a></li>
                 <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
 
@@ -176,55 +177,101 @@
         </nav>
     </div>
 
-
     <div class="main-content">
+        <div >
+            <h2 style="color: #19381f;">Farm Status</h2>
+        </div>
+    
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    
+        <!-- Farm status update table -->
 
-        <h1>Update Farm Status</h1>
+        <input type="text" id="farmSearch" placeholder="Search Farms" onkeyup="searchTable('farmSearch', 'farmTable')" class="form-control mb-3">
 
-    <!-- Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul class="flashes">
-            {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-
-    <!-- Farm status update table -->
-    <table>
-        <thead>
-            <tr>
-                <th>Farm ID</th>
-                <th>Farm Name</th>
-                <th>Current Status</th>
-                <th>Update Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for farm in farms %}
-            <tr>
-                <td>{{ farm[0] }}</td>
-                <td>{{ farm[1] }}</td>
-                <td>{{ farm[2] }}</td>
-                <td>
-                    <form method="POST" action="{{ url_for('update_farm_status') }}">
-                        <input type="hidden" name="farm_id" value="{{ farm[0] }}">
-                        <select name="farm_status">
-                            <option value="Active" {% if farm['farm_status'] == 'Active' %} selected {% endif %}>Active</option>
-                            <option value="Pending for Deletion" {% if farm['farm_status'] == 'Pending for Deletion' %} selected {% endif %}>Pending for Deletion</option>
-                            <option value="Closed" {% if farm['farm_status'] == 'Closed' %} selected {% endif %}>Closed</option>
-                        </select>
-                        <button type="submit">Update</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
+        <table class="table table-striped" id="farmTable">
+            <thead>
+                <tr>
+                    <th>Farm Image</th>
+                    <th>Farm ID</th>
+                    <th>Farm Name</th>
+                    <th>Current Status</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for farm in farms %}
+                <tr>
+                    <td>
+                        {% if farm.image_url %}
+                        <p>{{ farm.image_url }}</p>
+                            <img src="../static/upload_folder/{{farm.image_url}}" alt="Image" style="height: 200px; width: 200px;">
+                        {% else %}
+                            <p>No Image Available</p>
+                        {% endif %}
+                    </td>
+                    <td>{{ farm.farm_id }}</td>
+                    <td>{{ farm.farm_name }}</td>
+                    <td>{{ farm.farm_status }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('update_farm_status') }}">
+                            <input type="hidden" name="farm_id" value="{{ farm.farm_id }}">
+                            <select name="farm_status">
+                                <option value="Active" {% if farm.farm_status == 'Active' %} selected {% endif %}>Active</option>
+                                <option value="Pending for Deletion" {% if farm.farm_status == 'Pending for Deletion' %} selected {% endif %}>Pending for Deletion</option>
+                            </select>
+                            <button type="submit">Update</button>
+                        </form>
+                        <form method="POST" action="{{ url_for('delete_farm') }}">
+                            <input type="hidden" name="farm_id" value="{{ farm.farm_id }}">
+                            <input type="hidden" name="farm_status" value="Deleted">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    
 
 </body>
+
+
+<script>
+    function searchTable(inputId, tableId) {
+        let input = document.getElementById(inputId);
+        let filter = input.value.toLowerCase();
+        
+        let table = document.getElementById(tableId);
+        let rows = table.getElementsByTagName("tr");
+    
+        for (let i = 1; i < rows.length; i++) { 
+            let cells = rows[i].getElementsByTagName("td");
+            let rowContainsSearchTerm = false;
+    
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j].innerText.toLowerCase().includes(filter)) {
+                    rowContainsSearchTerm = true;
+                    break; 
+                }
+            }
+    
+            if (rowContainsSearchTerm) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+    </script>
 </html>

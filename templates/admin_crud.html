@@ -150,10 +150,12 @@
         <nav id="sidebar">
             <ul>
                 <li><a href="{{url_for('admin_dashboard')}}"><i class="fas fa-chart-line"></i>Dashboard</a></li>
+                <li><a href="{{url_for('admin_statistics')}}"><i class="fas fa-chart-bar"></i>Statistic</a></li>
+
+
                 <li><a href="{{url_for('admin_crud')}}"><i class="fas fa-database"></i>Admin CRUD</a></li>
                 <li><a href="{{url_for('update_farm_status')}}"><i class="fas fa-clipboard-list"></i>Admin Farm Status</a></li>
                 <li><a href="{{url_for('admin_test')}}"><i class="fas fa-tools"></i>Admin Test</a></li>
-                <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-seedling"></i>Admin Farm</a></li>
                 <li><a href="{{url_for('map')}}"><i class="fas fa-map"></i>Map</a></li>
                 <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
 
@@ -162,10 +164,12 @@
     </div>
 
     <div class="main-content">
-        <h1>{{text}}</h1>
-
-    <form action="/admin_update_all" method="post">
-        <table>
+        <div >
+            <h2 style="color: #19381f;">Admin CRUD</h2>
+        </div>
+        <h1>{{textt if text else ''}}</h1>
+        <input type="text" id="userSearch" placeholder="Search" onkeyup="searchTable('userSearch', 'userTable')" class="form-control mb-3">
+        <table  id="userTable">
             <thead>
                 <tr>
                     <th>Username</th>
@@ -179,61 +183,111 @@
                     <th>Street Address</th>
                     <th>Contact Number</th>
                     <th>Actions</th>
+
                 </tr>
             </thead>
             <tbody>
-            {% for res in results %}
+                {% for res in results %}
                 <tr>
-                    <td>
-                        <input type="text" name="username_{{ res[10] }}" value="{{ res[0] }}" class="input-field" required>
-                    </td>
-                    <td>
-                        <input type="password" name="password_{{ res[10] }}" value="{{ res[1] }}" class="input-field" required>
-                    </td>
-                    <td>
-                        <input type="text" name="fname_{{ res[10] }}" value="{{ res[2] }}" class="input-field" required>
-                    </td>
-                    <td>
-                        <input type="text" name="mname_{{ res[10] }}" value="{{ res[3] }}" class="input-field">
-                    </td>
-                    <td>
-                        <input type="text" name="lname_{{ res[10] }}" value="{{ res[4] }}" class="input-field" required>
-                    </td>
-                    <td>
-                        <input type="text" name="province_{{ res[10] }}" value="{{ res[5] }}" class="input-field" required>
-                    </td>
-                    <td>
-                        <input type="text" name="city_{{ res[10] }}" value="{{ res[6] }}" class="input-field" required>
-                    </td>
-                    <td>
-                        <input type="text" name="brgy_{{ res[10] }}" value="{{ res[7] }}" class="input-field" required>
-                    </td>
-                    <td>
-                        <input type="text" name="strt_add_{{ res[10] }}" value="{{ res[8] }}" class="input-field" required>
-                    </td>
-                    <td>
-                        <input type="text" name="cont_num_{{ res[10] }}" value="{{ res[9] }}" class="input-field" required>
-                    </td>
-                    <td>
-                        <!-- Update button for each user -->
-                        <button type="submit" formaction="/admin_update" formmethod="post" name="user_id" value="{{ res[10] }}" class="btn-update">Update</button>
-                        <!-- Delete button for each user -->
-                        <form action="/admin_delete" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');" style="margin-top: 5px;">
+                    <form action="/admin_update" method="post">
+                        <td>
+                            <input type="text" name="username" value="{{ res[0] }}" class="input-field" required>
                             <input type="hidden" name="user_id" value="{{ res[10] }}">
                             <input type="hidden" name="user_details_id" value="{{ res[11] }}">
-                            <button type="submit" class="btn-delete">Delete</button>
+                        </td>
+                        <td>
+                            <input type="password" name="password" value="{{ res[1] }}" class="input-field" required>
+                        </td>
+                        <td>
+                            <input type="text" name="fname" value="{{ res[2] }}" class="input-field" required>
+                        </td>
+                        <td>
+                            <input type="text" name="mname" value="{{ res[3] }}" class="input-field">
+                        </td>
+                        <td>
+                            <input type="text" name="lname" value="{{ res[4] }}" class="input-field" required>
+                        </td>
+                        <td>
+                            <input type="text" name="province" value="{{ res[5] }}" class="input-field" required>
+                        </td>
+                        <td>
+                            <input type="text" name="city" value="{{ res[6] }}" class="input-field" required>
+                        </td>
+                        <td>
+                            <input type="text" name="brgy" value="{{ res[7] }}" class="input-field" required>
+                        </td>
+                        <td>
+                            <input type="text" name="strt_add" value="{{ res[8] }}" class="input-field" required>
+                        </td>
+                        <td>
+                            <input type="text" name="cont_num" value="{{ res[9] }}" class="input-field" required>
+                        </td>   
+                        <td>
+                            <button type="button" onclick="toggleEdit(this)">Edit</button>
+                
+                            <div class="edit-actions" style="display: none;">
+                                <button type="submit" class="btn-update">Update</button>
+                            </div>
+                        
+                        
+                    </form>
+                    
+                        <form action="/admin_delete" method="post" class="form-delete" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                            <input type="hidden" name="user_id" value="{{ res[10] }}">
+                            <input type="hidden" name="user_details_id" value="{{ res[11] }}">
+                            
+                            <!-- Delete button, initially hidden -->
+                            <div class="edit-actions" style="display: none;">
+                                <button type="submit" class="btn-delete">Delete</button>
+                            </div>
                         </form>
                     </td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
+                
+            
             </tbody>
         </table>
-    </form>
     </div>
+    <script>
+        function toggleEdit(button) {
+            const row = button.closest('tr');
+            const editActions = row.querySelectorAll('.edit-actions');
     
-
-
-
+            editActions.forEach(div => {
+                if (div.style.display === 'none' || div.style.display === '') {
+                    div.style.display = 'inline-block';
+                    button.innerText = 'Cancel';  
+                } else {
+                    div.style.display = 'none';
+                    button.innerText = 'Edit';  
+                }
+            });
+        }
+    </script>
+    
+    <script>
+        function searchTable() {
+            let input = document.getElementById("userSearch");
+            let filter = input.value.toLowerCase();
+            let table = document.getElementById("userTable");
+            let rows = table.getElementsByTagName("tr");
+    
+            for (let i = 1; i < rows.length; i++) { 
+                let cells = rows[i].getElementsByTagName("input");
+                let rowContainsSearchTerm = false;
+    
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].value.toLowerCase().includes(filter)) {
+                        rowContainsSearchTerm = true;
+                        break; 
+                    }
+                }
+    
+                rows[i].style.display = rowContainsSearchTerm ? "" : "none";
+            }
+        }
+    </script>
     
 </body>
 </html>

@@ -3,33 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Admin CRUD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #e6ecde;
+        }
+
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100%;
+            background-color: #19381f;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h3 {
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .sidebar nav ul li a i {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #e6ecde;
+            color:#182e17;
+            border-radius: 10px 0px 0px 10px;
+            margin-right: -20px;
+            transform: scale(1.05);
+            box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.2), -4px 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .limeline img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            background-color: #e6ecde;
+        }
+
+        .main-content h1 {
+            font-size: 28px;
+            color: #19381f;
+            margin-bottom: 20px;
+        }
+
+        .prediction {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Increased gap between sections */
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .upload-container{
+            width: 100%;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .upload-ins {
+            margin-top: 20px;
+        }
+
+        .upload-box {
+            border: 2px dashed #91cb3e;
+            padding: 20px;
+            border-radius: 10px;
+            color: #91cb3e;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .upload-box:hover {
+            background-color: #f8f7db;
+        }
+
+        .upload-box i {
+            font-size: 3em;
+        }
+
+        .upload-box p {
+            margin-top: 10px;
+        }
+
+        .upload-box span {
+            color: #eee82c;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .upload-button {
+            background-color: #91cb3e;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            font-size: 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: transform 0.3s;
+            z-index: 1; /* Ensure button stays on top */
+        }
+
+        .upload-button:hover {
+            transform: scale(1.05);
+        }
+
+        .result {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px; /* Increased space in the result section */
+            padding: 20px;
+        }
+
+        .result img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .placeholder i {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .placeholder p {
+            font-size: 16px;
+            color: #555;
+            margin-top: 10px;
+        }
+    </style>
 </head>
-<body>
-    
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="{{url_for('admin_dashboard')}}">dashboard</a></li>
-            <li><a href="{{url_for('admin_crud')}}">admin_crud</a></li>
-            <li><a href="{{url_for('update_farm_status')}}">admin_farm_status</a></li>
-            <li><a href="{{url_for('admin_test')}}">admin_test</a></li>
-            <li><a href="{{ url_for('adminfarm') }}"><i class="fas fa-tasks"></i> adminfarm</a></li>
-            <li><a href="{{url_for('map')}}">map</a></li>
+<body> 
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="limeline">
+            <img src="../static/limelinelogo.png" style="width: 120px; height: 120px;">
+            <h3>LimeLine</h3>
+        </div>
+        <nav id="sidebar">
+            <ul>
+                <li><a href="{{url_for('admin_dashboard')}}"><i class="fas fa-chart-line"></i>Dashboard</a></li>
+                <li><a href="{{url_for('admin_statistics')}}"><i class="fas fa-chart-bar"></i>Statistic</a></li>
 
 
-        </ul>
-    </nav>
-
-    <div class="prediction">
-        <form action="{{ url_for('admin_test') }}" method="post" enctype="multipart/form-data">
-            <label for="file">Upload File:</label>
-            <input type="file" name="file" id="file" accept="image/*" capture="camera">
-            <button type="submit">Upload</button>
-        </form>
-        <p>{{ formatted_labels }}</p>
-        <img src="{{image_url}}" alt="">
+                <li><a href="{{url_for('admin_crud')}}"><i class="fas fa-database"></i>Admin CRUD</a></li>
+                <li><a href="{{url_for('update_farm_status')}}"><i class="fas fa-clipboard-list"></i>Admin Farm Status</a></li>
+                <li><a href="{{url_for('admin_test')}}"><i class="fas fa-tools"></i>Admin Test</a></li>
+                <li><a href="{{url_for('map')}}"><i class="fas fa-map"></i>Map</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Log Out</a></li>
+            </ul>
+        </nav>
     </div>
 
+<div class="main-content">
+    <h1>Test</h1>
+    <div class="prediction">
+        <div class="upload-container">
+        <form action="{{ url_for('admin_test') }}" method="post" enctype="multipart/form-data">
+            <p>Upload a clear image of calamansi here for disease detection.</p>
+            <div class="upload-ins">
+                <div class="upload-box" id="upload-box">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p id="upload-text">Click here <br> or <span id="browse">browse</span></p>
+                    <input type="file" name="file" id="file-upload" accept="image/*" capture="camera" hidden>
+                </div>
+            </div>
+             
+            <button class="upload-button" type="submit">Submit</button>
+        </form>
+        
+        <div class="result">
+            {% if image_url %}
+                <img src="{{ image_url }}" alt=" ">
+                <div>
+                    {%for label in labels%}
+                    <h3>Prediction|Confidence</h3>
+                    <h3> {{label}}</h3>
+                    {%endfor%}
+                </div>
+            {% else %}
+                <div class="placeholder">
+                    <i class="fas fa-image fa-3x"></i> <!-- Font Awesome camera icon -->
+                    <p>No image uploaded yet.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        </div>
+</div>
 
 </body>
+<script>
+    
+    const fileInput = document.getElementById('file-upload');
+        const uploadBox = document.getElementById('upload-box');
+        const uploadText = document.getElementById('upload-text');
+        const browseText = document.getElementById('browse');
+
+        uploadBox.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        browseText.addEventListener('click', (event) => {
+            event.stopPropagation(); 
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                uploadText.innerHTML = `Selected file: ${fileInput.files[0].name}`;
+            }
+        });
+</script>
 </html>
